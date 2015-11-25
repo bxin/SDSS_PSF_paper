@@ -66,7 +66,7 @@
 %% one line. However, you may use \\ to force a line break if
 %% you desire.
 
-\title{A Study of the Point Spread Function at SDSS}    %line break \\ is allowed in title
+\title{A Study of the Point Spread Function in SDSS Images}    %line break \\ is allowed in title
 
 
 %% Use \author, \affil, and the \and command to format
@@ -93,7 +93,14 @@
 %% editorial office after submission.
 
 \begin{abstract}
-This is a preliminary report on 
+We use SDSS imaging data in $ugriz$ passbands to study the shape of
+point spread function (PSF) profile and the variation of its width with 
+wavelength and time. We find that the PSF profile is well described by 
+theoretical predictions based on von Karman's turbulence theory and
+can be parametrized by a single parameter, the profile's FWHM (full width
+at half maximum). The FWHM variation with wavelength folows the
+$\lambda^{-0.3}$ power law. We also measure the temporal and angular
+structure functions for FWHM and find lots of interesting results \dots
 \end{abstract}
 
 %% Keywords should appear after the \end{abstract} command. The uncommented
@@ -101,7 +108,7 @@ This is a preliminary report on
 %% for the journal to which you are submitting your paper to determine
 %% what keyword punctuation is appropriate.
 
-\keywords{PSF --- SDSS}
+\keywords{imaging point spread function --- SDSS}
 
 %% From the front matter, we move on to the body of the paper.
 %% In the first two sections, notice the use of the natbib \citep
@@ -130,11 +137,34 @@ This is a preliminary report on
 
 \section{Introduction}
 
-A 
 
-\section{B}
 
-\subsection{QA plots from SDSS Postage Stamp Pipeline (PSP)}
+ZI write a brief overview of SDSS and motivation for analysis 
+
+Bo or ZI: add a brief summary with a few references (e.g. Young, Tyson, Roddier,
+Tokovinin papers; can also recruit George for this part!) about what is known 
+regarding:  PSF profile shape (e.g. Kolmogorov vs. von Karman), 
+the dependence of FWHM on wavelength, and angular and temporal 
+structure functions. 
+
+Paper layout here.
+
+
+\section{Data Overview} 
+
+ZI's to do... 
+
+\subsection{Stripe 82 dataset} 
+
+Why S82, what we used, data size...
+
+
+\subsection{The treatment of seeing in SDSS}
+
+Steal the relevant text from the EDR and photo papers
+
+
+\subsubsection{QA plots from SDSS Postage Stamp Pipeline (PSP)}
 
 For each run, camera column and filter, PSP makes three QA plots, 
 Figs.\ref{fig:PSPplot1}--\ref{fig:PSPplot3}. 
@@ -143,7 +173,7 @@ Figs.\ref{fig:PSPplot1}--\ref{fig:PSPplot3}.
 
 \begin{figure}
 \centering
-\includegraphics[width=0.9\textwidth]{psPlots1-005360-r1.pdf}
+\includegraphics[width=0.9\textwidth]{FIGURES/psPlots1-005360-r1.pdf}
 \caption{The plot 1 (psPlots1-005360-r1) produced by PSP for SDSS run 5306, 
 camera column 1, in the $r$ band. The middle right panel shows the FWHM for
 the measured seeing, as a function of field number (that is, as  function of time, 
@@ -155,7 +185,7 @@ of seeing between fields 130 and 300, lasting a bit under 2 hours.
 
 \begin{figure}
 \centering
-\includegraphics[width=0.9\textwidth]{psPlots2-005360-r1.pdf}
+\includegraphics[width=0.9\textwidth]{FIGURES/psPlots2-005360-r1.pdf}
 \caption{Similar to Fig~\ref{fig:PSPplot1}, except that here the plot 2 is shown.
 Except for the top left panel, the best-fit PSF parameters (a double Gaussian
 plus a power-law wing) are shown (see text for their description). 
@@ -165,12 +195,46 @@ plus a power-law wing) are shown (see text for their description).
 
 \begin{figure}
 \centering
-\includegraphics[width=0.9\textwidth]{psPlots3-005360-r1.pdf}
+\includegraphics[width=0.9\textwidth]{FIGURES/psPlots3-005360-r1.pdf}
 \caption{Similar to Fig~\ref{fig:PSPplot1}, except that here the plot 3 is shown.
 The top four panels show the values of composite PSF profile (data).
 \label{fig:PSPplot3}}
 \end{figure}
 
+
+\section{The PSF profile analysis}
+
+Compare to SDSS, emphasize superiority of 1 parameter vs. 6 parameters fit
+
+Discuss profile shape stability when the seeing is rapidly  changing 
+
+
+\section{The analysis of FWHM behavior} 
+
+Now that we understand (heopfully) that the seeing is by and large described by 
+a single parameter, FWHM, we study three aspects of its variation
+
+
+\subsection{The FWHM dependence on wavelength} 
+
+What is alpha distribution? 
+
+
+\subsection{Angular structure function} 
+
+Cross-correlation of FWHM for 6 camera columns and the measurement of structure function
+(that is, the covariance vs. angular distance) 
+
+
+\subsection{Temporal auto-correlation function}
+
+Study the temporal power spectrum:
+\begin{itemize}
+\item Let's start with plain Fourier transform and look at power spectra (we can 
+    play games with co-addition, 6 columns for a given run, or all runs)
+\item Potentially, we could also look at  Kelly and Becker code  (2014, ApJ 788, 33) 
+\item Here we can compare to Chuck's CP measurements (in opsim db) 
+\end{itemize} 
 
 
 
@@ -197,12 +261,8 @@ The top four panels show the values of composite PSF profile (data).
 \end{table}
 
 
-
-
 \acknowledgments
 We are grateful to George A. for buying us tamales and drinks. 
-
-
 
 
 %% To help institutions obtain information on the effectiveness of their
@@ -259,10 +319,19 @@ We are grateful to George A. for buying us tamales and drinks.
 %% delimit the year from the author name used in the citation.
 %% See the natbib documentation for more details and options.
 
-\begin{thebibliography}{}
-\bibitem[Ivezi\'c et al. (2008)]{ivezic08} Ivezi\'c et al. 
-arXiv: 0805.2366v4, 2008
 
+SDSS PSF is described in \cite{Lupton2001} and \cite{Lupton2002}. 
+
+\bibliographystyle{aj}
+\bibliography{sdsspsf}
+
+
+\end{document}
+
+
+
+\begin{thebibliography}{}
+\bibitem[Ivezi\'c et al. (2008)]{ivezic08} Ivezi\'c et al. 2008, arXiv:0805.2366v4
 \end{thebibliography}
 
 
@@ -273,3 +342,49 @@ arXiv: 0805.2366v4, 2008
 
 %%
 %% End of file `sample.tex'.
+
+
+1)  make files, one per run, as a function of field number, with
+- field, camera column, bandpass, 
+- one-parameter fit FWHM from fitting von Karman profile
+- other SDSS params: psf_width, airmass, mjd, psf_nstar, neff_psf, sky_frames 
+
+
+E.g. for some run
+#  field  camCol  filter   FWHMvK    (other SDSS params)
+
+
+2) plot FWHMvK vs. psf_width for 30 panels 
+
+3) plot alpha (index for lambda dep.) histograms for all data and for 
+    two realizations of ``longest stretch'' selection
+
+4) plot profiles for a range of fields when the seeing is rapidly changing (is profile shape changing?) 
+
+
+
+
+
+ZI:  find exact definition of neff_psf (is it based on fit or input data?) 
+Bo: add analysis directory and py code 
+
+
+Analysis structure:
+
+1) profile discussion
+- compare to SDSS, emphasize 1 parameter vs. 6 parameters
+- discuss profile shape stability when seeing is changing rapidly
+
+2) dependence on wavelength
+
+- what is alpha distribution? 
+
+3) cross-correlation of camera columns and measurement of structure function
+    (that is, the covariance vs. angular distance) 
+
+4) auto-correlation function (and power spectrum) for temporal variation
+
+- let's start with plain Fourier transform and look at power spectra (we can 
+    play games with co-addition, 6 columns for a given run, or all runs)
+- potentially, we could also look at  Kelly and Becker code  (2014, ApJ 788, 33) 
+- here we can compare to Chuck's CP measurements (in opsim db) 
