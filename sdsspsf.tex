@@ -76,15 +76,18 @@
 %% anywhere in the paper, not just in the front matter.
 %% As in the title, use \\ to force line breaks.
 
-\author{B. Xin}
-\affil{Large Synoptic Survey Telescope, Tucson, AZ 85719}
-
+\author{B. Xin$^1$, \v{Z}. Ivezi\'{c}$^2$, R.H. Lupton$^3$, P. Yoachim$^2$, R.L. Jones$^2$, C. Claver$^1$, G. Angeli$^1$}
 \and
-\author{\v{Z}. Ivezi\'{c}}
-\affil{Department of Astronomy, University of Washington, Seattle, WA 98195
-}
+\author{Other Contributors}
+
+\affil{$^1$Large Synoptic Survey Telescope, Tucson, AZ 85719}
+\affil{$^2$Department of Astronomy, University of Washington, Seattle, WA 98195}
+\affil{$^3$Department of Astrophysical Sciences, Princeton University, Princeton, NJ 08544}
+
+
 
 %\email{aastex-help@aas.org}
+
 
 %% Mark off your abstract in the ``abstract'' environment. In the manuscript
 %% style, abstract will output a Received/Accepted line after the
@@ -139,7 +142,11 @@ structure functions for FWHM and find lots of interesting results \dots
 
 
 
-ZI write a brief overview of SDSS and motivation for analysis 
+ZI write a brief overview of SDSS and motivation for analysis (e.g. performance optimization
+for LSST, \citealt{LSSToverview}): this shouldn't be hard and can be done in about a day. 
+
+Hey Bo! Here is an example of using bibtex and cite call: SDSS PSF algorithm is described 
+in \cite{Lupton2001}, \cite{Lupton2002}, and \citet[][see \S4.3]{SDSSEDR}.
 
 Bo or ZI: add a brief summary with a few references (e.g. Young, Tyson, Roddier,
 Tokovinin papers; can also recruit George for this part!) about what is known 
@@ -156,19 +163,19 @@ ZI's to do...
 
 \subsection{Stripe 82 dataset} 
 
-Why S82, what we used, data size...
+ZI: why S82, what we used, data size...
 
 
 \subsection{The treatment of seeing in SDSS}
 
-Steal the relevant text from the EDR and photo papers
+ZI: steal the relevant text from the EDR paper (\citet{SDSSEDR}) and photo papers by \cite{Lupton2001} 
+and \cite{Lupton2002}. 
 
 
 \subsubsection{QA plots from SDSS Postage Stamp Pipeline (PSP)}
 
-For each run, camera column and filter, PSP makes three QA plots, 
+Testing (will probably be removed later): for each run, camera column and filter, PSP makes three QA plots, 
 Figs.\ref{fig:PSPplot1}--\ref{fig:PSPplot3}. 
-
 
 
 \begin{figure}
@@ -212,18 +219,19 @@ Discuss profile shape stability when the seeing is rapidly  changing
 \section{The analysis of FWHM behavior} 
 
 Now that we understand (heopfully) that the seeing is by and large described by 
-a single parameter, FWHM, we study three aspects of its variation
+a single parameter, FWHM, we study three aspects of its variation, as follows.
 
 
 \subsection{The FWHM dependence on wavelength} 
 
-What is alpha distribution? 
+Asumming a power law, FWHM$\propto \lambda^{-\alpha}$, what can we say 
+about $\alpha$ distribution? 
 
 
 \subsection{Angular structure function} 
 
-Cross-correlation of FWHM for 6 camera columns and the measurement of structure function
-(that is, the covariance vs. angular distance) 
+Cross-correlation of FWHM for 6 camera columns and the measurement of the angular
+structure function (that is, the covariance vs. angular distance). 
 
 
 \subsection{Temporal auto-correlation function}
@@ -320,8 +328,6 @@ We are grateful to George A. for buying us tamales and drinks.
 %% See the natbib documentation for more details and options.
 
 
-SDSS PSF is described in \cite{Lupton2001} and \cite{Lupton2002}. 
-
 \bibliographystyle{aj}
 \bibliography{sdsspsf}
 
@@ -362,9 +368,7 @@ E.g. for some run
 4) plot profiles for a range of fields when the seeing is rapidly changing (is profile shape changing?) 
 
 
-
-
-
+Also: 
 ZI:  find exact definition of neff_psf (is it based on fit or input data?) 
 Bo: add analysis directory and py code 
 
