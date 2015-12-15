@@ -1,0 +1,47 @@
+------------------sdsspsf.py
+class for sdss psf
+functions():
+getSDSSprofRadii()	get the radii for which we have the radial profile data points
+fit2vonK_curve_fit()	fit the radial profile to von Karman, using curve_fit() in scipy.optimize
+fit2vonK_fminbound()	fit the radial profile to von Karman, using fminbound() in scipy.optimize
+			    	       based on tests using draw_1run_1field_vK_2G.py,
+				       this takes 15 times longer than fit2vonK_curve_fit()
+
+------------------sdssinst.py
+class for sdss instrument
+
+------------------sdssrun.py
+class for sdss run
+getBCFtable():		get Band-Column-Field table
+findStretch():		find the longest stretch of a variable in the run
+
+------------------myTools.py
+functions():
+savetxt3d()		save 3d np array in easy-to-read txt file
+
+------------------
+downloadSDSS.py	download all Stripe 82 data by looping through Stripe82RunList.dat
+psFieldGetter.py	 an example script demonstrate how to download 6 files for 6 camcol
+			    	    	 of run#4872, then plot the PSF data and parameters related to the
+					 2Gau fit. output: SDSSpsf_*Band.png
+draw_1run_1field.py	This takes the first run in Stripe82RunList.dat, make a 5x6 format plot
+			     	   (5 bands x 6 camcols). output: run94psf.png
+draw_1run_1field_vK_2G.py	   on top of draw_1run_1field.py, we make fits to the psf radial
+				      	     			  profiles using a von Karman template.
+								  output: run94psf_vK_2G.png
+variation_by_run.py	for a given run# and variable name, make the 5x6 format plots,
+			      	    with field as the x-axis on each subplot
+find_stretch_all_runs.py	    find longest stretch of a variable (e.g. psf_width) from all runs.
+				    	 	 output: maxStretch_psf_width.png
+
+------------------- data/
+Stripe82RunList.dat		list of Stripe82 runs, 3 columns: # run minFld maxFld
+r_vonK_Kolm.txt		radial profiles of von Karman and Kolmogorov atmosphere PSFs
+			       		all profiles have FWHM=1.0 arcsec. L0=30m.
+			       		format: col#1: radii in arcsec, (0-50, step size=0.1)
+					col#2: von Karman, with peak intensity=1
+					col#3: Kolm, with peak intensity=1
+r_vonK_Kolm_4.txt		same as r_vonK_Kolm.txt, with 2 additional profiles added
+				     	(a total of 4 profiles, therefore the "_4")
+					col#4: von Karman, with L0=10m
+					col#5: von Karman, with L0=5m

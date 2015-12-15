@@ -2,4 +2,7 @@
 *.log
 *.synctex.gz
 *.pdf
-
+template/
+__pycache__
+SDSSdata
+output
