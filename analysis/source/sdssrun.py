@@ -76,4 +76,44 @@ class sdssrun(object):
             dataTable[ifield, :] = [self.runNo, ifield, endfield, endfield - ifield + 1]
         return dataTable
     
+    def writeMasterTXT(self, sdss, filename):
+
+        vdata = np.loadtxt('data/r_vonK_Kolm.txt',
+                            unpack='True')
+        radius = vdata[0]
+        vonK = vdata[1]
+        vonK1arcsec = np.vstack((radius, vonK))
+        
+        fid = open(filename, 'w')
+        fid.write('#field \t camCol  filter FWHMvK ')
+        otherParams=[['psf_width', '%5.3f'],
+                     ['airmass', '%5.3f'],
+                     ['mjd\t\t', '%12.6f'],
+                     ['psf_nstar ', '%d'],
+                     ['neff_psf\t', '%7.3f'],
+                     ['sky_frames\t', '%5.3f']]
+        for i in range(len(otherParams)):
+            fid.write('%s '%otherParams[i][0])
+        fid.write('\n')
+        
+        for camcol in range(1, sdss.nCamcol + 1):
+            print('running on camcol#%d' % camcol)
+            datafile = self.fitsdir + "photoField-%06d-%d.fits" % (self.runNo, camcol)
+
+            hdulist = fits.open(datafile)
+            hdu1 = hdulist[1].data
+            for ifield in range(0, self.nfields):
+                if ifield % 100 == 0:
+                    print('field No. = %d/%d' % (ifield, self.nfields))
+                for iBand in range(0, sdss.nBand):
+                    psf = sdsspsf(hdu1, ifield, iBand)
+                    psf.fit2vonK_curve_fit(vonK1arcsec)
+                    
+                    fid.write('%d \t %d \t %d \t %5.3f \t'%(
+                        ifield, camcol, iBand, psf.scaleR))
+                    for i in range(len(otherParams)):
+                        fid.write('%s \t'%otherParams[i][1]%(
+                            hdu1[ifield][otherParams[i][0].strip()][iBand]))
+                    fid.write('\n')
+        fid.close()
 

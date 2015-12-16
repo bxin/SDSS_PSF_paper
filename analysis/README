@@ -12,9 +12,13 @@ class for sdss instrument
 
 ------------------sdssrun.py
 class for sdss run
-getBCFtable():		get Band-Column-Field table
+getBCFtable():		get Band-Column-Field table, returns a 5x6xnField 3d array
+			    		      these arrays are written to output/temp/
+					      for each variable, the data file is 30 rows.
 findStretch():		find the longest stretch of a variable in the run
-
+			     	 this returns of nFieldx4 table. For each field# in the run,
+				 this lists the longest stretch that starts at that run.
+				 col#1: run#; col#2: startRun#; col#3: endRun#; col#4 length
 ------------------myTools.py
 functions():
 savetxt3d()		save 3d np array in easy-to-read txt file
