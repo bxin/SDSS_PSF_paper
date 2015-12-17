@@ -58,6 +58,9 @@ class sdsspsf(object):
         self.LpsfModel = np.log10(self.psfModel + 1.0e-300)
         #print('p0=%5.3e, sigP=%5.3e, beta=%5.3e' % (p0, sigP, beta))
 
+        f = interpolate.interp1d(self.psfModel, self.r)
+        self.my_psf_width = 2*f(0.5) #fwhm of (2G+W)
+        
     def getSDSSprofRadii(self):
 
         self.profRadii = np.linspace(0, 15, 16)

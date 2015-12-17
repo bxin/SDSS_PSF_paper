@@ -37,7 +37,9 @@ variation_by_run.py	for a given run# and variable name, make the 5x6 format plot
 			      	    with field as the x-axis on each subplot
 find_stretch_all_runs.py	    find longest stretch of a variable (e.g. psf_width) from all runs.
 				    	 	 output: maxStretch_psf_width.png
-
+makeMasterTXT.py	extract data we need for each run, write it into a txt file,
+				so that we don't need to open the fit files all the time.
+				
 ------------------- data/
 Stripe82RunList.dat		list of Stripe82 runs, 3 columns: # run minFld maxFld
 r_vonK_Kolm.txt		radial profiles of von Karman and Kolmogorov atmosphere PSFs

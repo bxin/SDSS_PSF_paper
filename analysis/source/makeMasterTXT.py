@@ -21,10 +21,11 @@ objlist = np.loadtxt('data/Stripe82RunList.dat')
 
 sdss = sdssinst()
 
+start = time.time()
+
 runcount = 0
 for line in objlist:
 
-    start = time.time()
     run = int(line[0])
     runcount += 1
     print('-- running on run# %d (seq.# %d)---------' % (run, runcount))
@@ -32,3 +33,6 @@ for line in objlist:
     myRun = sdssrun(run)
     txtfile = 'SDSSdata/masterTXT/run%d.txt' % (myRun.runNo)
     myRun.writeMasterTXT(sdss, txtfile)
+    
+end = time.time()
+print('time = %8.2fs'%(end-start))
