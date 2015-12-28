@@ -19,7 +19,8 @@ class sdsspsf(object):
         beta = data['psf_beta'][bandIndex]
         sigP = data['psf_sigmap'][bandIndex]
         nprof = data['prof_nprof'][bandIndex]
-
+        pixScale = data['pixScale'][bandIndex]
+        
         # these are nprof long arrays
         self.getSDSSprofRadii()
         # better than mean at large radii
@@ -41,9 +42,9 @@ class sdsspsf(object):
         self.OKprofileErr = self.OKprofileErrLinear/ np.log(10)
 
         # best-fit model: double gaussian plus power law
-        self.r = np.linspace(0, 30, 300)
+        self.r = np.linspace(0, 30, 301)
         # for fits, radius must be in pixels
-        r2 = (self.r * 2.5)**2
+        r2 = (self.r/pixScale)**2
         psfG1 = np.exp(-0.5 * r2 / (sigG1 * sigG1))
         psfG2 = b * np.exp(-0.5 * r2 / (sigG2 * sigG2))
         # note division by beta! below:
@@ -58,8 +59,7 @@ class sdsspsf(object):
         self.LpsfModel = np.log10(self.psfModel + 1.0e-300)
         #print('p0=%5.3e, sigP=%5.3e, beta=%5.3e' % (p0, sigP, beta))
 
-        f = interpolate.interp1d(self.psfModel, self.r)
-        self.my_psf_width = 2*f(0.5) #fwhm of (2G+W)
+        # self.OKprofileErrLinear[-1] *= 20
         
     def getSDSSprofRadii(self):
 
