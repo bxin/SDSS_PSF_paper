@@ -89,9 +89,10 @@ psf_sigma2, airmass, neff_psf, psf_nstar, psf_width')
     runSeq = np.arange(1, nrun + 1)
     for irun in maxRun: #mostly likely there is only 1 number in maxRun
         idx = tableData[:, 0] == irun
-        print('longest run with largest seeing variation: run %d (seq# %d), \
+        print('longest run with largest %s variation: run %d (seq# %d), \
         nfield = %d, \n\
         averaged over band and camcol: PV = %9.6f, RMS = %9.6f' % (
+            args.vname,
             irun,
             runSeq[irun == runNo],
             np.mean(tableData[idx, 1]) ,
