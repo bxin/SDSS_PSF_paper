@@ -7,7 +7,7 @@ from scipy import interpolate
 
 class sdsspsf(object):
 
-    def __init__(self, hdu1, ifield, bandIndex):
+    def __init__(self, hdu1, ifield, bandIndex, fE=0):
 
         data = hdu1[ifield]
 
@@ -39,6 +39,9 @@ class sdsspsf(object):
         self.OKprofile = np.log10(self.OKprofileLinear)
         # error for the log10 of profile
         self.OKprofileErrLinear = self.profileErr[:nprof] / self.profile[0]
+        if not (isinstance(fE, int) and fE == 0 ):
+            self.OKprofileErrLinear = np.sqrt(
+                self.OKprofileErrLinear**2 + (fE[:nprof]*self.OKprofileLinear)**2)
         self.OKprofileErr = self.OKprofileErrLinear/ np.log(10)
 
         # best-fit model: double gaussian plus power law

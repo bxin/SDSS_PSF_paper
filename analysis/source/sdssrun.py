@@ -75,7 +75,20 @@ class sdssrun(object):
                     break
             dataTable[ifield, :] = [self.runNo, ifield, endfield, endfield - ifield + 1]
         return dataTable
-    
+
+    def findLongWild(self, sdss, a3d):
+        # 6 columns: run#, nfields, band, camcol, pv, rms
+        dataTable = np.zeros((sdss.nBand*sdss.nCamcol, 6))
+        pv = np.ptp(a3d, axis=2) #5 x 6 np array
+        rms = np.std(a3d, axis=2) #5 x 6 np array
+        for camcol in range(1, sdss.nCamcol + 1):
+            for iBand in range(0, sdss.nBand):
+                iRow = iBand*sdss.nCamcol + camcol - 1
+                dataTable[iRow, :] = [self.runNo, self.nfields, iBand, camcol,
+                                     pv[iBand , camcol-1], rms[iBand, camcol-1] ]
+        
+        return dataTable
+        
     def writeMasterTXT(self, sdss, filename):
 
         vdata = np.loadtxt('data/r_vonK_Kolm.txt',

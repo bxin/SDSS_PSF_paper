@@ -50,13 +50,32 @@ def main():
         hdulist = fits.open(datafile)
         nfields = hdulist[0].header['NFIELDS']
         hdu1 = hdulist[1].data
-        for ifield in range(0, 1): #nfields):
-            if ifield%10 == 0:
-                print('field No. = %d'%ifield)
-            for iBand in range(0, nBand):
-                kk = iBand * nCamcol + camcol
 
-                psf = sdsspsf(hdu1, ifield, iBand)
+        for iBand in range(0, nBand):
+            kk = iBand * nCamcol + camcol
+            print('iBand = %d'%iBand)
+
+            nprofMax = 20
+            rE = np.zeros((nfields, nprofMax))*np.nan
+            mrE = np.zeros(nprofMax)*np.nan
+            for ifield in range(0, nfields):
+                data = hdu1[ifield]
+                nprof = data['prof_nprof'][iBand]
+                profile = data['prof_med_nmgy'][iBand]
+                profileErr = data['prof_sig_nmgy'][iBand]
+                rE[ifield][:nprof] = profileErr[:nprof] / profile[:nprof]
+            for iRad in range(0, nprofMax):
+                col = rE[:, iRad]
+                idx = ~np.isnan(col)
+                if np.any(idx):
+                    mrE[iRad] = np.median(col[idx])
+            fE=mrE[~np.isnan(mrE)]/3
+            
+            for ifield in range(0, 1): #nfields):
+                if ifield%100 == 0:
+                    print('field No. = %d'%ifield)
+
+                psf = sdsspsf(hdu1, ifield, iBand, fE)
                 psf.fit2vonK_curve_fit(vonK1arcsec)
                 # psf.fit2vonK_fminbound(vonK1arcsec)
 

@@ -74,15 +74,15 @@ psf_sigma2, airmass, neff_psf, psf_nstar, psf_width')
         prodbyrun[i] = nfieldsbyrun[i] * pvbyrun[i] * rmsbyrun[i]
     plt.plot(runNo, nfieldsbyrun,  label='nfields',
              marker='.', color='g', markersize=10)
-    plt.plot(runNo, prodbyrun,  label='product',
+    plt.plot(runNo, prodbyrun,  label='nfields*PV*RMS (arcsec$^2$)',
              marker='o', color='k', markersize=5)
-    plt.plot(runNo, pvbyrun*100,  label='PV x 100',
+    plt.plot(runNo, pvbyrun*100,  label='PV (arcsec) x 100',
              marker='v', color='b', markersize=5)
-    plt.plot(runNo, rmsbyrun*100,  label='RMS x 100',
+    plt.plot(runNo, rmsbyrun*100,  label='RMS (arcsec) x 100',
              marker='*', color='r', markersize=10)
     plt.xlabel('Run No.')
-    plt.ylabel('runs & seeing variations')
-    plt.legend(loc="upper right")
+    plt.ylabel('runs & psf_width variations')
+    plt.legend(loc="upper right", fontsize=10)
 
     plt.savefig('output/longWildRun_%s.png' % (args.vname))
     maxRun = runNo[np.where(prodbyrun == np.max(prodbyrun))]

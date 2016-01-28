@@ -19,6 +19,7 @@ findStretch():		find the longest stretch of a variable in the run
 			     	 this returns of nFieldx4 table. For each field# in the run,
 				 this lists the longest stretch that starts at that run.
 				 col#1: run#; col#2: startRun#; col#3: endRun#; col#4 length
+findLongWild():		find a long run with a lot of variation in psf_width				 
 ------------------myTools.py
 functions():
 savetxt3d()		save 3d np array in easy-to-read txt file
