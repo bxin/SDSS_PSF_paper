@@ -100,8 +100,8 @@ class sdsspsf(object):
 
         self.scaleR = popt[0]
         self.scaleV = popt[1]
-        print(self.OKprofileErrLinear/self.OKprofileLinear)
-        print('scaleR = %7.5f, scaleV=%7.5f\n'%(self.scaleR, self.scaleV))
+        # print(self.OKprofileErrLinear/self.OKprofileLinear)
+        # print('scaleR = %7.5f, scaleV=%7.5f\n'%(self.scaleR, self.scaleV))
 
     def fit2vonK_fminbound(self, vonK1arcsec):
         myfunc = lambda scaleR, scaleV: scaleVonKRChi2(

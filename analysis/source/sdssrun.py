@@ -121,9 +121,10 @@ class sdssrun(object):
                 for iBand in range(0, sdss.nBand):
                     psf = sdsspsf(hdu1, ifield, iBand)
                     psf.fit2vonK_curve_fit(vonK1arcsec)
-                    
+
+                    # fwhmeff of the vonK1arcsec = 1.2224 arcsec
                     fid.write('%d \t %d \t %d \t %5.3f \t'%(
-                        ifield, camcol, iBand, psf.scaleR))
+                        ifield, camcol, iBand, psf.scaleR*1.2224))
                     for i in range(len(otherParams)):
                         fid.write('%s \t'%otherParams[i][1]%(
                             hdu1[ifield][otherParams[i][0].strip()][iBand]))
