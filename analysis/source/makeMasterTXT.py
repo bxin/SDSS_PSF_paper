@@ -25,7 +25,7 @@ parser.add_argument('-p', dest='numproc', default=1, type=int,
 args = parser.parse_args()
 
 objlist = np.loadtxt('data/Stripe82RunList.dat')
-objlist = objlist[0:2,:]
+# objlist = objlist[0:2,:] #for test
 
 sdss = sdssinst()
 
