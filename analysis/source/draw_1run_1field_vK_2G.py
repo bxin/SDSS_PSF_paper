@@ -61,8 +61,8 @@ def main():
                 # psf.fit2vonK_fminbound(vonK1arcsec)
 
                 if args.yscale == 'log':
-                    ax1[iBand, camcol - 1].plot(radius*psf.scaleR, np.log10(vonK), 'b')
-                    ax1[iBand, camcol - 1].plot(psf.r, psf.LpsfModel, 'r')
+                    ax1[iBand, camcol - 1].plot(radius*psf.scaleR, np.log10(vonK*psf.scaleV), 'b')
+                    ax1[iBand, camcol - 1].plot(psf.r, psf.LpsfModel+np.log10(psf.scaleV), 'r')
                     ax1[iBand, camcol - 1].errorbar(psf.OKprofRadii, psf.OKprofile,
                                                     psf.OKprofileErr, fmt='ok')
                     ax1[iBand, camcol - 1].set_xlim(0, 30.0)
@@ -72,8 +72,8 @@ def main():
                         ax1[iBand, camcol -
                             1].text(10, -2, text, fontsize=15, ha='left', va='center')
                 elif args.yscale == 'linear':
-                    ax1[iBand, camcol - 1].plot(radius*psf.scaleR, vonK, 'b')
-                    ax1[iBand, camcol - 1].plot(psf.r, psf.psfModel, 'r')
+                    ax1[iBand, camcol - 1].plot(radius*psf.scaleR, vonK*psf.scaleV, 'b')
+                    ax1[iBand, camcol - 1].plot(psf.r, psf.psfModel*psf.scaleV, 'r')
                     ax1[iBand, camcol - 1].errorbar(psf.OKprofRadii, psf.OKprofileLinear,
                                                     psf.OKprofileErrLinear, fmt='ok')
                     ax1[iBand, camcol - 1].set_xlim(0, 2.)

@@ -18,7 +18,7 @@ class sdsspsf(object):
         p0 = data['psf_p0'][bandIndex]
         beta = data['psf_beta'][bandIndex]
         sigP = data['psf_sigmap'][bandIndex]
-        nprof = data['prof_nprof'][bandIndex]
+        self.nprof = data['prof_nprof'][bandIndex]
         pixScale = data['pixScale'][bandIndex]
         
         # these are nprof long arrays
@@ -30,15 +30,15 @@ class sdsspsf(object):
         # mean root square radius for this annulus (that's how profiles are
         # defined)
         profRadiiMS = np.sqrt(
-            (self.profRadii[:nprof]**2 + self.profRadii[1:nprof + 1]**2) / 2)
-        self.OKprofRadii = profRadiiMS[:nprof]
+            (self.profRadii[:self.nprof]**2 + self.profRadii[1:self.nprof + 1]**2) / 2)
+        self.OKprofRadii = profRadiiMS[:self.nprof]
         # renormalize to 1 at r~0, and take log10
         # (not exactly at zero because of the mrs radius
         #  but the difference is tiny)
-        self.OKprofileLinear = self.profile[:nprof] / self.profile[0]
+        self.OKprofileLinear = self.profile[:self.nprof] / self.profile[0]
         self.OKprofile = np.log10(self.OKprofileLinear)
         # error for the log10 of profile
-        self.OKprofileErrLinear = self.profileErr[:nprof] / self.profile[0]
+        self.OKprofileErrLinear = self.profileErr[:self.nprof] / self.profile[0]
         self.OKprofileErr = self.OKprofileErrLinear/ np.log(10)
 
         # best-fit model: double gaussian plus power law
@@ -58,7 +58,15 @@ class sdsspsf(object):
         self.LpsfW = np.log10(psfW + 1.0e-300)
         self.LpsfModel = np.log10(self.psfModel + 1.0e-300)
         #print('p0=%5.3e, sigP=%5.3e, beta=%5.3e' % (p0, sigP, beta))
-        
+
+        # i = self.nprof
+        # while (abs(self.OKprofileErrLinear[i-1]/self.OKprofileLinear[i-1]
+        #           -0.02)<1e-5 and i-1>=0):
+        #     print('i=%d, ratio=%e\n'%(i, self.OKprofileErrLinear[i-1]/self.OKprofileLinear[i-1]))
+        #     i -= 1
+        # self.nprofErr = i
+        self.nprofErr = 4 #i #use 4 points: 0,1,2,3
+
     def getSDSSprofRadii(self):
 
         self.profRadii = np.linspace(0, 15, 16)
@@ -83,13 +91,17 @@ class sdsspsf(object):
         self.profRadii[15] = 263.00
 
     def fit2vonK_curve_fit(self, vonK1arcsec):
+        errLinear = self.OKprofileErrLinear.copy()
+        errLinear[self.nprofErr:] = 100 
         popt, pcov = optimize.curve_fit(
             lambda r, scaleR, scaleV: scaleVonKR(vonK1arcsec, r, scaleR, scaleV),
             self.OKprofRadii, self.OKprofileLinear, p0=[1.5, 1],
-            sigma=self.OKprofileErrLinear, absolute_sigma=True)
+            sigma=errLinear, absolute_sigma=True)
 
         self.scaleR = popt[0]
         self.scaleV = popt[1]
+        print(self.OKprofileErrLinear/self.OKprofileLinear)
+        print('scaleR = %7.5f, scaleV=%7.5f\n'%(self.scaleR, self.scaleV))
 
     def fit2vonK_fminbound(self, vonK1arcsec):
         myfunc = lambda scaleR, scaleV: scaleVonKRChi2(
