@@ -7,7 +7,7 @@ from scipy import interpolate
 
 class sdsspsf(object):
 
-    def __init__(self, hdu1, ifield, bandIndex, fE=0):
+    def __init__(self, hdu1, ifield, bandIndex):
 
         data = hdu1[ifield]
 
@@ -39,9 +39,6 @@ class sdsspsf(object):
         self.OKprofile = np.log10(self.OKprofileLinear)
         # error for the log10 of profile
         self.OKprofileErrLinear = self.profileErr[:nprof] / self.profile[0]
-        if not (isinstance(fE, int) and fE == 0 ):
-            self.OKprofileErrLinear = np.sqrt(
-                self.OKprofileErrLinear**2 + (fE[:nprof]*self.OKprofileLinear)**2)
         self.OKprofileErr = self.OKprofileErrLinear/ np.log(10)
 
         # best-fit model: double gaussian plus power law
@@ -61,8 +58,6 @@ class sdsspsf(object):
         self.LpsfW = np.log10(psfW + 1.0e-300)
         self.LpsfModel = np.log10(self.psfModel + 1.0e-300)
         #print('p0=%5.3e, sigP=%5.3e, beta=%5.3e' % (p0, sigP, beta))
-
-        # self.OKprofileErrLinear[-1] *= 20
         
     def getSDSSprofRadii(self):
 
@@ -89,30 +84,32 @@ class sdsspsf(object):
 
     def fit2vonK_curve_fit(self, vonK1arcsec):
         popt, pcov = optimize.curve_fit(
-            lambda r, scaleR: scaleVonKR(vonK1arcsec, r, scaleR),
-            self.OKprofRadii, self.OKprofileLinear, p0=1.5,
+            lambda r, scaleR, scaleV: scaleVonKR(vonK1arcsec, r, scaleR, scaleV),
+            self.OKprofRadii, self.OKprofileLinear, p0=[1.5, 1],
             sigma=self.OKprofileErrLinear, absolute_sigma=True)
 
-        self.scaleR = popt
+        self.scaleR = popt[0]
+        self.scaleV = popt[1]
 
     def fit2vonK_fminbound(self, vonK1arcsec):
-        myfunc = lambda scaleR: scaleVonKRChi2(
-                vonK1arcsec, self.OKprofRadii, scaleR,
+        myfunc = lambda scaleR, scaleV: scaleVonKRChi2(
+                vonK1arcsec, self.OKprofRadii, scaleR, scaleV,
             self.OKprofileLinear, self.OKprofileErrLinear)
         xopt = optimize.fminbound(
             myfunc, 0, 3,  xtol=1e-6, maxfun=500, disp=0)
 
-        self.scaleR = xopt
+        self.scaleR = xopt[0]
+        self.scaleV = xopt[1]
 
 
-def scaleVonKR(vonK1arcsec, r, scaleR):
+def scaleVonKR(vonK1arcsec, r, scaleR, scaleV):
     vR = scaleR * vonK1arcsec[0, :]
     vv = vonK1arcsec[1, :]
-    stepR = vR[1] - vR[0]
+    # stepR = vR[1] - vR[0]
     p = np.zeros(len(r))
     if scaleR > 0:
         f = interpolate.interp1d(vR, vv)
-        p = f(r)
+        p = f(r) * scaleV
 #        for i in np.arange(len(r)):
 #            x1=np.nonzero(vR<r[i])[0][-1]
 #            x2=x1+1
@@ -124,7 +121,7 @@ def scaleVonKR(vonK1arcsec, r, scaleR):
     return p
 
 
-def scaleVonKRChi2(vonK1arcsec, r, scaleR,  y, err):
+def scaleVonKRChi2(vonK1arcsec, r, scaleR, scaleV, y, err):
     vR = scaleR * vonK1arcsec[0, :]
     vv = vonK1arcsec[1, :]
     stepR = vR[1] - vR[0]
@@ -132,7 +129,7 @@ def scaleVonKRChi2(vonK1arcsec, r, scaleR,  y, err):
     # f = interpolate.interp1d(vR, vv, kind='linear')
     # f = interpolate.interp1d(vR, vv, kind='quadratic')
     f = interpolate.interp1d(vR, vv, kind='cubic')
-    p = f(r)
+    p = f(r) * scaleV
 
     chi2 = np.sum(((p - y)/err)**2)
     # print('---', vonK1arcsec)
