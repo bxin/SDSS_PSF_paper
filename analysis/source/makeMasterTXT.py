@@ -1,6 +1,6 @@
 import time
-import multiprocessing
 import argparse
+import multiprocessing
 
 import numpy as np
 
@@ -25,38 +25,37 @@ parser.add_argument('-p', dest='numproc', default=1, type=int,
 args = parser.parse_args()
 
 objlist = np.loadtxt('data/Stripe82RunList.dat')
-objlist = objlist[0:2,:]
+# objlist = objlist[0:3,:] #for test
 
 sdss = sdssinst()
 
 start = time.time()
 
-def write1run(sdss, run, runcount):
+def write1run(argList):
+
+    sdss = argList[0]
+    run = argList[1]
+    runcount = argList[2]
     print('-- running on run# %d (seq.# %d)---------' % (run, runcount))
     myRun = sdssrun(run)
     txtfile = 'SDSSdata/masterTXT/run%d.txt' % (myRun.runNo)
     myRun.writeMasterTXT(sdss, txtfile)
-    
 
-jobs = []
-counter = 0
 
+argList = []
 runcount = 0
 for line in objlist:
 
     run = int(line[0])
     runcount += 1
-    p = multiprocessing.Process(
-        target=write1run, args=(sdss, run, runcount))
-    jobs.append(p)
-    p.start()
-    counter += 1
-    if (counter == args.numproc) or (run == objlist[-1, 0]):
-        for p in jobs:
-            p.join()
-        counter = 0
-        jobs = []
+    argList.append((sdss, run, runcount))
     
+pool = multiprocessing.Pool(args.numproc)
+
+pool.map(write1run, argList)
+pool.close()
+pool.join()
+
 end = time.time()
 print('time = %8.2fs'%(end-start))
 
