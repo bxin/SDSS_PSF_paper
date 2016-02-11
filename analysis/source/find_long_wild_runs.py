@@ -76,9 +76,9 @@ psf_sigma2, airmass, neff_psf, psf_nstar, psf_width')
              marker='.', color='g', markersize=10)
     plt.plot(runNo, prodbyrun,  label='nfields*PV*RMS (arcsec$^2$)',
              marker='o', color='k', markersize=5)
-    plt.plot(runNo, pvbyrun*100,  label='PV (arcsec) x 100',
+    plt.plot(runNo, pvbyrun * 100,  label='PV (arcsec) x 100',
              marker='v', color='b', markersize=5)
-    plt.plot(runNo, rmsbyrun*100,  label='RMS (arcsec) x 100',
+    plt.plot(runNo, rmsbyrun * 100,  label='RMS (arcsec) x 100',
              marker='*', color='r', markersize=10)
     plt.xlabel('Run No.')
     plt.ylabel('runs & psf_width variations')
@@ -87,7 +87,7 @@ psf_sigma2, airmass, neff_psf, psf_nstar, psf_width')
     plt.savefig('output/longWildRun_%s.png' % (args.vname))
     maxRun = runNo[np.where(prodbyrun == np.max(prodbyrun))]
     runSeq = np.arange(1, nrun + 1)
-    for irun in maxRun: #mostly likely there is only 1 number in maxRun
+    for irun in maxRun:  # mostly likely there is only 1 number in maxRun
         idx = tableData[:, 0] == irun
         print('longest run with largest %s variation: run %d (seq# %d), \
         nfield = %d, \n\
@@ -95,7 +95,7 @@ psf_sigma2, airmass, neff_psf, psf_nstar, psf_width')
             args.vname,
             irun,
             runSeq[irun == runNo],
-            np.mean(tableData[idx, 1]) ,
+            np.mean(tableData[idx, 1]),
             np.mean(tableData[idx, 4]),
             np.mean(tableData[idx, 5])))
     # sys.exit()

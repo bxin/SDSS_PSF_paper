@@ -9,9 +9,9 @@ from sdssinst import sdssinst
 
 """
 make files, one per run, as a function of field number, with
-- field, camera column, bandpass, 
+- field, camera column, bandpass,
 - one-parameter fit FWHM from fitting von Karman profile
-- other SDSS params: psf_width, airmass, mjd, psf_nstar, neff_psf, sky_frames 
+- other SDSS params: psf_width, airmass, mjd, psf_nstar, neff_psf, sky_frames
 
 
 E.g. for some run
@@ -31,12 +31,13 @@ sdss = sdssinst()
 
 start = time.time()
 
+
 def write1run(sdss, run, runcount):
     print('-- running on run# %d (seq.# %d)---------' % (run, runcount))
     myRun = sdssrun(run)
     txtfile = 'SDSSdata/masterTXT/run%d.txt' % (myRun.runNo)
     myRun.writeMasterTXT(sdss, txtfile)
-    
+
 
 jobs = []
 counter = 0
@@ -56,7 +57,6 @@ for line in objlist:
             p.join()
         counter = 0
         jobs = []
-    
-end = time.time()
-print('time = %8.2fs'%(end-start))
 
+end = time.time()
+print('time = %8.2fs' % (end - start))

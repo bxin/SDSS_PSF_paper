@@ -33,7 +33,7 @@ def fetchSDSSphotoField(outdir, run, camcol):
             run, run, camcol)
         # Download the fits file
         outfile = outdir + "/%d/photoField-%06d-%d.fits" % (run, run, camcol)
-        print("retrieving:%s"%outfile)
+        print("retrieving:%s" % outfile)
         urllib.request.urlretrieve(infile, outfile)
     except:
         print("some problem with run=%06d camCol=%d" % (run, camcol))
@@ -122,17 +122,17 @@ def plotPSF(data, bandIndex, plotTheory=0):
     LpsfW = np.log10(psfW)
     LpsfModel = np.log10(psfModel)
 
-    #get the 2D profile
-    xx,yy = np.meshgrid(r,r)
-    rr2 = (xx*xx+yy*yy) * 2.5**2
-    rrpsfG1 = np.exp(-0.5 * rr2 / (sigG1 * sigG1))
-    rrpsfG2 = b * np.exp(-0.5 * rr2 / (sigG2 * sigG2))
-    # note division by beta! below:
-    rrpsfW = p0 * (1 + rr2 / (sigP * sigP) / beta)**(-0.5 * beta)
-    rrpsfG = rrpsfG1 + rrpsfG2
-    # normalized to 1 at r=0 by definition
-    rrpsfModel = (rrpsfG + rrpsfW) / (1 + b + p0)
-    
+    # get the 2D profile
+#    xx,yy = np.meshgrid(r,r)
+#    rr2 = (xx*xx+yy*yy) * 2.5**2
+#    rrpsfG1 = np.exp(-0.5 * rr2 / (sigG1 * sigG1))
+#    rrpsfG2 = b * np.exp(-0.5 * rr2 / (sigG2 * sigG2))
+#    # note division by beta! below:
+#    rrpsfW = p0 * (1 + rr2 / (sigP * sigP) / beta)**(-0.5 * beta)
+#    rrpsfG = rrpsfG1 + rrpsfG2
+#    # normalized to 1 at r=0 by definition
+#    rrpsfModel = (rrpsfG + rrpsfW) / (1 + b + p0)
+
     # ------------------------------------------------------------
     # Plot the data and the psf model
     fig1 = plt.figure(figsize=(5, 3.95))
@@ -203,12 +203,12 @@ def plotPSF(data, bandIndex, plotTheory=0):
         radiusScaled4 = radiusK * (radiusMatch / radiusSame4)
         LPK4 = np.log10(PK4)
         ax1.plot(radiusScaled4, LPK4, 'm-')
-                
+
     # figure saved in local directory
     plotName = 'output/SDSSpsf_' + band[bandIndex] + 'Band.png'
     plt.savefig(plotName)
 
-    #plt.show()
+    # plt.show()
     return r, psfModel, OKprofRadii, OKprofile, OKprofileErr
 
 
@@ -247,6 +247,6 @@ hdulist = pyfits.open(datafile)
 alldata = hdulist[1].data
 for ifield in range(0, 1):
     data = alldata[ifield]
-    for iBand in range(1, 2): #g band only, which includes 500nm
+    for iBand in range(1, 2):  # g band only, which includes 500nm
         radius, psfModel, profRadii, profile, profileErr = plotPSF(
             data, iBand, 1)

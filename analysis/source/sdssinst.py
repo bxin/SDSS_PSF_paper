@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+
 class sdssinst(object):
 
     def __init__(self):
@@ -12,4 +13,3 @@ class sdssinst(object):
         self.band[2] = "r"
         self.band[3] = "i"
         self.band[4] = "z"
-

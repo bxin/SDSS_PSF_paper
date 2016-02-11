@@ -9,9 +9,9 @@ from sdssinst import sdssinst
 
 """
 make files, one per run, as a function of field number, with
-- field, camera column, bandpass, 
+- field, camera column, bandpass,
 - one-parameter fit FWHM from fitting von Karman profile
-- other SDSS params: psf_width, airmass, mjd, psf_nstar, neff_psf, sky_frames 
+- other SDSS params: psf_width, airmass, mjd, psf_nstar, neff_psf, sky_frames
 
 
 E.g. for some run
@@ -31,6 +31,7 @@ sdss = sdssinst()
 
 start = time.time()
 
+
 def write1run(argList):
 
     sdss = argList[0]
@@ -49,7 +50,7 @@ for line in objlist:
     run = int(line[0])
     runcount += 1
     argList.append((sdss, run, runcount))
-    
+
 pool = multiprocessing.Pool(args.numproc)
 
 pool.map(write1run, argList)
@@ -57,5 +58,4 @@ pool.close()
 pool.join()
 
 end = time.time()
-print('time = %8.2fs'%(end-start))
-
+print('time = %8.2fs' % (end - start))

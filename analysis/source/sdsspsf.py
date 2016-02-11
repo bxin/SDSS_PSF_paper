@@ -8,9 +8,13 @@ from scipy import interpolate
 
 class sdsspsf(object):
 
-    def __init__(self, hdu1, ifield, bandIndex):
+    def __init__(self, hdu1, ifield, bandIndex, runNo, camcol):
 
         data = hdu1[ifield]
+        self.runNo = runNo
+        self.camcol = camcol
+        self.field = ifield
+        self.band = bandIndex
 
         # all these are arrays (ugriz), units for sig* are pixels
         sigG1 = data['psf_sigma1'][bandIndex]
@@ -21,7 +25,7 @@ class sdsspsf(object):
         sigP = data['psf_sigmap'][bandIndex]
         self.nprof = data['prof_nprof'][bandIndex]
         pixScale = data['pixScale'][bandIndex]
-        
+
         # these are nprof long arrays
         self.getSDSSprofRadii()
         # better than mean at large radii
@@ -31,7 +35,8 @@ class sdsspsf(object):
         # mean root square radius for this annulus (that's how profiles are
         # defined)
         profRadiiMS = np.sqrt(
-            (self.profRadii[:self.nprof]**2 + self.profRadii[1:self.nprof + 1]**2) / 2)
+            (self.profRadii[:self.nprof]**2 +
+             self.profRadii[1:self.nprof + 1]**2) / 2)
         self.OKprofRadii = profRadiiMS[:self.nprof]
         # renormalize to 1 at r~0, and take log10
         # (not exactly at zero because of the mrs radius
@@ -39,13 +44,14 @@ class sdsspsf(object):
         self.OKprofileLinear = self.profile[:self.nprof] / self.profile[0]
         self.OKprofile = np.log10(self.OKprofileLinear)
         # error for the log10 of profile
-        self.OKprofileErrLinear = self.profileErr[:self.nprof] / self.profile[0]
-        self.OKprofileErr = self.OKprofileErrLinear/ np.log(10)
+        self.OKprofileErrLinear = self.profileErr[
+            :self.nprof] / self.profile[0]
+        self.OKprofileErr = self.OKprofileErrLinear / np.log(10)
 
         # best-fit model: double gaussian plus power law
         self.r = np.linspace(0, 30, 301)
         # for fits, radius must be in pixels
-        r2 = (self.r/pixScale)**2
+        r2 = (self.r / pixScale)**2
         psfG1 = np.exp(-0.5 * r2 / (sigG1 * sigG1))
         psfG2 = b * np.exp(-0.5 * r2 / (sigG2 * sigG2))
         # note division by beta! below:
@@ -53,20 +59,21 @@ class sdsspsf(object):
         psfG = psfG1 + psfG2
         # normalized to 1 at r=0 by definition
         self.psfModel = (psfG + psfW) / (1 + b + p0)
-        LpsfG1 = np.log10(psfG1 + 1.0e-300)  # avoid log10(0)
-        LpsfG2 = np.log10(psfG2 + 1.0e-300)
+        # LpsfG1 = np.log10(psfG1 + 1.0e-300)  # avoid log10(0)
+        # LpsfG2 = np.log10(psfG2 + 1.0e-300)
         self.LpsfG = np.log10(psfG + 1.0e-300)
         self.LpsfW = np.log10(psfW + 1.0e-300)
         self.LpsfModel = np.log10(self.psfModel + 1.0e-300)
-        #print('p0=%5.3e, sigP=%5.3e, beta=%5.3e' % (p0, sigP, beta))
+        # print('p0=%5.3e, sigP=%5.3e, beta=%5.3e' % (p0, sigP, beta))
 
         # i = self.nprof
         # while (abs(self.OKprofileErrLinear[i-1]/self.OKprofileLinear[i-1]
         #           -0.02)<1e-5 and i-1>=0):
-        #     print('i=%d, ratio=%e\n'%(i, self.OKprofileErrLinear[i-1]/self.OKprofileLinear[i-1]))
+        #     print('i=%d, ratio=%e\n'%(i,
+        # self.OKprofileErrLinear[i-1]/self.OKprofileLinear[i-1]))
         #     i -= 1
         # self.nprofErr = i
-        self.nprofErr = 4 #i #use 4 points: 0,1,2,3
+        self.nprofErr = 4  # i #use 4 points: 0,1,2,3
 
     def getSDSSprofRadii(self):
 
@@ -96,26 +103,30 @@ class sdsspsf(object):
         errLinear[self.nprofErr:] = 100
         try:
             popt, pcov = optimize.curve_fit(
-                lambda r, scaleR, scaleV: scaleVonKR(vonK1arcsec, r, scaleR, scaleV),
+                lambda r, scaleR, scaleV: scaleVonKR(
+                    vonK1arcsec, r, scaleR, scaleV),
                 self.OKprofRadii, self.OKprofileLinear, p0=[1.5, 1],
                 sigma=errLinear, absolute_sigma=True)
         except RuntimeError:
             print('RuntimeError in fit2vonK_curve_fit\n')
+            print('run#=%d, camcol=%d, field=%d, band=%d\n' % (
+                self.runNo, self.camcol, self.field, self.band))
             print(self.OKprofileLinear)
             print(errLinear)
             sys.exit()
-            
+
         self.scaleR = popt[0]
         self.scaleV = popt[1]
         # print(self.OKprofileErrLinear/self.OKprofileLinear)
         # print('scaleR = %7.5f, scaleV=%7.5f\n'%(self.scaleR, self.scaleV))
 
     def fit2vonK_fminbound(self, vonK1arcsec):
-        myfunc = lambda scaleR, scaleV: scaleVonKRChi2(
-                vonK1arcsec, self.OKprofRadii, scaleR, scaleV,
-            self.OKprofileLinear, self.OKprofileErrLinear)
+
         xopt = optimize.fminbound(
-            myfunc, 0, 3,  xtol=1e-6, maxfun=500, disp=0)
+            lambda scaleR, scaleV: scaleVonKRChi2(
+                vonK1arcsec, self.OKprofRadii, scaleR, scaleV,
+                self.OKprofileLinear, self.OKprofileErrLinear),
+            0, 3,  xtol=1e-6, maxfun=500, disp=0)
 
         self.scaleR = xopt[0]
         self.scaleV = xopt[1]
@@ -143,14 +154,14 @@ def scaleVonKR(vonK1arcsec, r, scaleR, scaleV):
 def scaleVonKRChi2(vonK1arcsec, r, scaleR, scaleV, y, err):
     vR = scaleR * vonK1arcsec[0, :]
     vv = vonK1arcsec[1, :]
-    stepR = vR[1] - vR[0]
+    # stepR = vR[1] - vR[0]
     p = np.zeros(len(r))
     # f = interpolate.interp1d(vR, vv, kind='linear')
     # f = interpolate.interp1d(vR, vv, kind='quadratic')
     f = interpolate.interp1d(vR, vv, kind='cubic')
     p = f(r) * scaleV
 
-    chi2 = np.sum(((p - y)/err)**2)
+    chi2 = np.sum(((p - y) / err)**2)
     # print('---', vonK1arcsec)
     # print(r)
     # print(y)
