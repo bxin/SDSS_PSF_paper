@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import sys
 import numpy as np
 from scipy import optimize
 from scipy import interpolate
@@ -92,12 +93,18 @@ class sdsspsf(object):
 
     def fit2vonK_curve_fit(self, vonK1arcsec):
         errLinear = self.OKprofileErrLinear.copy()
-        errLinear[self.nprofErr:] = 100 
-        popt, pcov = optimize.curve_fit(
-            lambda r, scaleR, scaleV: scaleVonKR(vonK1arcsec, r, scaleR, scaleV),
-            self.OKprofRadii, self.OKprofileLinear, p0=[1.5, 1],
-            sigma=errLinear, absolute_sigma=True)
-
+        errLinear[self.nprofErr:] = 100
+        try:
+            popt, pcov = optimize.curve_fit(
+                lambda r, scaleR, scaleV: scaleVonKR(vonK1arcsec, r, scaleR, scaleV),
+                self.OKprofRadii, self.OKprofileLinear, p0=[1.5, 1],
+                sigma=errLinear, absolute_sigma=True)
+        except RuntimeError:
+            print('RuntimeError in fit2vonK_curve_fit\n')
+            print(self.OKprofileLinear)
+            print(errLinear)
+            sys.exit()
+            
         self.scaleR = popt[0]
         self.scaleV = popt[1]
         # print(self.OKprofileErrLinear/self.OKprofileLinear)
