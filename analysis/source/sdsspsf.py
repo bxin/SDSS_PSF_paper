@@ -113,11 +113,14 @@ class sdsspsf(object):
             # print(self.OKprofileErrLinear/self.OKprofileLinear)
             # print('scaleR = %7.5f, scaleV=%7.5f\n'%(self.scaleR, self.scaleV))
 
-        except RuntimeError:
-            print('RuntimeError in fit2vonK_curve_fit\n')
+        except (RuntimeError, ValueError) as e:
+            print('in fit2vonK_curve_fit\n')
+            print(e)
             print('run#=%d, camcol=%d, field=%d, band=%d\n' % (
                 self.runNo, self.camcol, self.field, self.band))
+            print('y=\n')
             print(self.OKprofileLinear)
+            print('err=\n')
             print(errLinear)
             self.scaleR = -999
             self.scaleV = -999
