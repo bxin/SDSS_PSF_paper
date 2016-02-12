@@ -118,6 +118,8 @@ class sdsspsf(object):
             print(e)
             print('run#=%d, camcol=%d, field=%d, band=%d\n' % (
                 self.runNo, self.camcol, self.field, self.band))
+            print('x=\n')
+            print(self.OKprofRadii)
             print('y=\n')
             print(self.OKprofileLinear)
             print('err=\n')
@@ -131,14 +133,32 @@ class sdsspsf(object):
     # tried fmin_cg(), but our gradient can only be calculated numerically
     def fit2vonK_fmin(self, vonK1arcsec):
 
-        xopt = optimize.fmin(
-            lambda scaleRV: scaleVonKRChi2(
-                vonK1arcsec, self.OKprofRadii, scaleRV,
-                self.OKprofileLinear, self.OKprofileErrLinear),
-            [1.5, 1], disp=1)
+        errLinear = self.OKprofileErrLinear.copy()
+        errLinear[self.nprofErr:] = 100
 
-        self.scaleR = xopt[0]
-        self.scaleV = xopt[1]
+        try:
+            xopt = optimize.fmin(
+                lambda scaleRV: scaleVonKRChi2(
+                    vonK1arcsec, self.OKprofRadii, scaleRV,
+                    self.OKprofileLinear, errLinear),
+                [1.5, 1], disp=1)
+
+            self.scaleR = xopt[0]
+            self.scaleV = xopt[1]
+        except (RuntimeError, ValueError) as e:
+            print('in fit2vonK_curve_fit\n')
+            print(e)
+            print('run#=%d, camcol=%d, field=%d, band=%d\n' % (
+                self.runNo, self.camcol, self.field, self.band))
+            print('x=\n')
+            print(self.OKprofRadii)
+            print('y=\n')
+            print(self.OKprofileLinear)
+            print('err=\n')
+            print(errLinear)
+            self.scaleR = -999
+            self.scaleV = -999
+            # sys.exit()
 
 
 def scaleVonKR(vonK1arcsec, r, scaleR, scaleV):
@@ -148,7 +168,7 @@ def scaleVonKR(vonK1arcsec, r, scaleR, scaleV):
     # stepR = vR[1] - vR[0]
     p = np.zeros(len(r))
     if scaleR > 0:
-        f = interpolate.interp1d(vR, vv)
+        f = interpolate.interp1d(vR, vv, bounds_error = False)
         p = f(r) * scaleV
 #        for i in np.arange(len(r)):
 #            x1=np.nonzero(vR<r[i])[0][-1]
@@ -171,7 +191,7 @@ def scaleVonKRChi2(vonK1arcsec, r, scaleRV, y, err):
     p = np.zeros(len(r))
     # f = interpolate.interp1d(vR, vv, kind='linear')
     # f = interpolate.interp1d(vR, vv, kind='quadratic')
-    f = interpolate.interp1d(vR, vv, kind='cubic')
+    f = interpolate.interp1d(vR, vv, kind='cubic', bounds_error = False)
     p = f(r) * scaleV
 
     chi2 = np.sum(((p - y) / err)**2)

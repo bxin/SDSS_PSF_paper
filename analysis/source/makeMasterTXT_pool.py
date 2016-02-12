@@ -19,9 +19,11 @@ E.g. for some run
 
 """
 parser = argparse.ArgumentParser(
-    description='-----makeMasterTXT.py------')
+    description='-----makeMasterTXT_pool.py------')
 parser.add_argument('-p', dest='numproc', default=1, type=int,
-                    help='Number of Processors Phosim uses')
+                    help='Number of Processors to use')
+parser.add_argument('-run', dest='run', type=int, default=-1,
+                    help='run number. use -1 to run over all runs. default=-1')
 args = parser.parse_args()
 
 objlist = np.loadtxt('data/Stripe82RunList.dat')
@@ -48,8 +50,9 @@ runcount = 0
 for line in objlist:
 
     run = int(line[0])
-    runcount += 1
-    argList.append((sdss, run, runcount))
+    if args.run == -1 or args.run == run:
+        runcount += 1
+        argList.append((sdss, run, runcount))
 
 pool = multiprocessing.Pool(args.numproc)
 
