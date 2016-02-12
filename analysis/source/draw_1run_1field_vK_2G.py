@@ -23,7 +23,7 @@ def main():
 
     start = time.time()
     objlist = np.loadtxt('data/Stripe82RunList.dat')
-    if args.run not in objlist[0]:
+    if args.run not in objlist[:, 0]:
         print('run# %d is not in Stripe82RunList.dat\n' % args.run)
         sys.exit()
 
@@ -67,7 +67,8 @@ def main():
 
             psf = sdsspsf(hdu1, args.field, iBand, run, camcol)
             psf.fit2vonK_curve_fit(vonK1arcsec)
-            # psf.fit2vonK_fminbound(vonK1arcsec)
+            if psf.scaleR < -1:
+                psf.fit2vonK_fmin(vonK1arcsec)
 
             if args.yscale == 'log':
                 ax1[iBand, camcol -

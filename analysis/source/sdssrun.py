@@ -40,6 +40,8 @@ class sdssrun(object):
                     if vname == 'vkfwhm':
                         psf = sdsspsf(hdu1, ifield, iBand, self.runNo, camcol)
                         psf.fit2vonK_curve_fit(vonK1arcsec)
+                        if psf.scaleR < -1:
+                            psf.fit2vonK_fmin(vonK1arcsec)
                         a3d[iBand, camcol - 1, ifield] = psf.scaleR
                     else:
                         # a3d[iBand, camcol - 1, ifield] =
@@ -126,6 +128,8 @@ class sdssrun(object):
                 for iBand in range(0, sdss.nBand):
                     psf = sdsspsf(hdu1, ifield, iBand, self.runNo, camcol)
                     psf.fit2vonK_curve_fit(vonK1arcsec)
+                    if psf.scaleR < -1:
+                        psf.fit2vonK_fmin(vonK1arcsec)
 
                     # fwhmeff of the vonK1arcsec = 1.222 arcsec
                     fid.write('%d \t %d \t %d \t %5.3f \t' % (

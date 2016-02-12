@@ -107,32 +107,39 @@ class sdsspsf(object):
                     vonK1arcsec, r, scaleR, scaleV),
                 self.OKprofRadii, self.OKprofileLinear, p0=[1.5, 1],
                 sigma=errLinear, absolute_sigma=True)
+
+            self.scaleR = popt[0]
+            self.scaleV = popt[1]
+            # print(self.OKprofileErrLinear/self.OKprofileLinear)
+            # print('scaleR = %7.5f, scaleV=%7.5f\n'%(self.scaleR, self.scaleV))
+
         except RuntimeError:
             print('RuntimeError in fit2vonK_curve_fit\n')
             print('run#=%d, camcol=%d, field=%d, band=%d\n' % (
                 self.runNo, self.camcol, self.field, self.band))
             print(self.OKprofileLinear)
             print(errLinear)
-            sys.exit()
+            self.scaleR = -999
+            self.scaleV = -999
+            # sys.exit()
 
-        self.scaleR = popt[0]
-        self.scaleV = popt[1]
-        # print(self.OKprofileErrLinear/self.OKprofileLinear)
-        # print('scaleR = %7.5f, scaleV=%7.5f\n'%(self.scaleR, self.scaleV))
 
-    def fit2vonK_fminbound(self, vonK1arcsec):
+    # used to use fminbound(), but it is for 1D optimization
+    # tried fmin_cg(), but our gradient can only be calculated numerically
+    def fit2vonK_fmin(self, vonK1arcsec):
 
-        xopt = optimize.fminbound(
-            lambda scaleR, scaleV: scaleVonKRChi2(
-                vonK1arcsec, self.OKprofRadii, scaleR, scaleV,
+        xopt = optimize.fmin(
+            lambda scaleRV: scaleVonKRChi2(
+                vonK1arcsec, self.OKprofRadii, scaleRV,
                 self.OKprofileLinear, self.OKprofileErrLinear),
-            0, 3,  xtol=1e-6, maxfun=500, disp=0)
+            [1.5, 1], disp=1)
 
         self.scaleR = xopt[0]
         self.scaleV = xopt[1]
 
 
 def scaleVonKR(vonK1arcsec, r, scaleR, scaleV):
+
     vR = scaleR * vonK1arcsec[0, :]
     vv = vonK1arcsec[1, :]
     # stepR = vR[1] - vR[0]
@@ -151,7 +158,10 @@ def scaleVonKR(vonK1arcsec, r, scaleR, scaleV):
     return p
 
 
-def scaleVonKRChi2(vonK1arcsec, r, scaleR, scaleV, y, err):
+def scaleVonKRChi2(vonK1arcsec, r, scaleRV, y, err):
+
+    scaleR = scaleRV[0]
+    scaleV = scaleRV[1]    
     vR = scaleR * vonK1arcsec[0, :]
     vv = vonK1arcsec[1, :]
     # stepR = vR[1] - vR[0]
