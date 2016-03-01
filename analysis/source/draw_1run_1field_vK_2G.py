@@ -14,7 +14,7 @@ def main():
     parser = argparse.ArgumentParser(
         description='----- draw_1run_1field_vK_2G.py ---------')
     parser.add_argument('yscale', choices=(
-        'log', 'linear'), help='yscale of the plots')
+        'log', 'linear', 'logzoom'), help='yscale of the plots')
     parser.add_argument('-run', dest='run', type=int, default=94,
                         help='run number we want to look at default=94')
     parser.add_argument('-field', dest='field', type=int, default=0,
@@ -70,7 +70,7 @@ def main():
             if psf.scaleR < -1:
                 psf.fit2vonK_fmin(vonK1arcsec)
 
-            if args.yscale == 'log':
+            if args.yscale == 'log' or args.yscale == 'logzoom':
                 ax1[iBand, camcol -
                     1].plot(radius * psf.scaleR, np.log10(vonK * psf.scaleV),
                             'b')
@@ -78,13 +78,17 @@ def main():
                     1].plot(psf.r, psf.LpsfModel + np.log10(psf.scaleV), 'r')
                 ax1[iBand, camcol - 1].errorbar(psf.OKprofRadii, psf.OKprofile,
                                                 psf.OKprofileErr, fmt='ok')
-                ax1[iBand, camcol - 1].set_xlim(0, 30.0)
-                ax1[iBand, camcol - 1].set_ylim(-6, 0.5)
-                if camcol == 1:
-                    text = 'band: %s' % band[iBand]
-                    ax1[iBand, camcol -
-                        1].text(10, -2, text, fontsize=15, ha='left',
-                                va='center')
+                if args.yscale == 'log':                
+                    ax1[iBand, camcol - 1].set_xlim(0, 30.0)
+                    ax1[iBand, camcol - 1].set_ylim(-6, 0.5)
+                    if camcol == 1:
+                        text = 'band: %s' % band[iBand]
+                        ax1[iBand, camcol -
+                            1].text(10, -2, text, fontsize=15, ha='left',
+                                    va='center')
+                elif args.yscale == 'logzoom':
+                    ax1[iBand, camcol - 1].set_xlim(0, 2)
+                    ax1[iBand, camcol - 1].set_ylim(-1.5, 0.1)
             elif args.yscale == 'linear':
                 ax1[iBand, camcol -
                     1].plot(radius * psf.scaleR, vonK * psf.scaleV, 'b')
@@ -108,7 +112,7 @@ def main():
     plt.suptitle('run %d, field %d, blue: vK, Red: 2G ' % (run, args.field))
     # plt.tight_layout()
     # plt.show()
-    plt.savefig('output/run%dpsf_vK_2G_%s.png' % (run, args.yscale))
+    plt.savefig('output/run%d_fld%d_psf_vK_2G_%s.png' % (run, args.field, args.yscale))
     end = time.time()
     print('time = %8.2fs' % (end - start))
     sys.exit()

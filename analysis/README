@@ -43,7 +43,10 @@ makeMasterTXT.py	extract data we need for each run, write it into a txt file,
 fwhm_check_eff.py	check the effective FWHM or neff as in the fits files;
 			      	  we calculate psf_width and neff_psf using the double Gaussian profile
 				  output: run94_check_fwhmeff.png, or run94_check_neff.png
-fwhm_vk_psfwidth.py		  plot FWHMvK vs. psf_width, both are effective width				  
+fwhm_vk_psfwidth.py		  plot FWHMvK vs. psf_width, both are effective width
+fwhm_lambda.py		for each run (or all runs), each column, draw fwhm(actually fwhmvk)
+			    	 as a function of wavelength. Overlay all fields in that run.
+
 ------------------- data/
 Stripe82RunList.dat		list of Stripe82 runs, 3 columns: # run minFld maxFld
 r_vonK_Kolm.txt		radial profiles of von Karman and Kolmogorov atmosphere PSFs
