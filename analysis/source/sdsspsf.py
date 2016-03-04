@@ -111,7 +111,7 @@ class sdsspsf(object):
             self.scaleR = popt[0]
             self.scaleV = popt[1]
             # print(self.OKprofileErrLinear/self.OKprofileLinear)
-            # print('scaleR = %7.5f, scaleV=%7.5f\n'%(self.scaleR, self.scaleV))
+            # print('scaleR= %7.5f, scaleV=%7.5f\n'%(self.scaleR, self.scaleV))
 
         except (RuntimeError, ValueError) as e:
             print('in fit2vonK_curve_fit\n')
@@ -127,7 +127,6 @@ class sdsspsf(object):
             self.scaleR = -999
             self.scaleV = -999
             # sys.exit()
-
 
     # used to use fminbound(), but it is for 1D optimization
     # tried fmin_cg(), but our gradient can only be calculated numerically
@@ -168,7 +167,7 @@ def scaleVonKR(vonK1arcsec, r, scaleR, scaleV):
     # stepR = vR[1] - vR[0]
     p = np.zeros(len(r))
     if scaleR > 0:
-        f = interpolate.interp1d(vR, vv, bounds_error = False)
+        f = interpolate.interp1d(vR, vv, bounds_error=False)
         p = f(r) * scaleV
 #        for i in np.arange(len(r)):
 #            x1=np.nonzero(vR<r[i])[0][-1]
@@ -184,14 +183,14 @@ def scaleVonKR(vonK1arcsec, r, scaleR, scaleV):
 def scaleVonKRChi2(vonK1arcsec, r, scaleRV, y, err):
 
     scaleR = scaleRV[0]
-    scaleV = scaleRV[1]    
+    scaleV = scaleRV[1]
     vR = scaleR * vonK1arcsec[0, :]
     vv = vonK1arcsec[1, :]
     # stepR = vR[1] - vR[0]
     p = np.zeros(len(r))
     # f = interpolate.interp1d(vR, vv, kind='linear')
     # f = interpolate.interp1d(vR, vv, kind='quadratic')
-    f = interpolate.interp1d(vR, vv, kind='cubic', bounds_error = False)
+    f = interpolate.interp1d(vR, vv, kind='cubic', bounds_error=False)
     p = f(r) * scaleV
 
     chi2 = np.sum(((p - y) / err)**2)

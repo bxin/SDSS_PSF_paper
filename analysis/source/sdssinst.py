@@ -14,4 +14,3 @@ class sdssinst(object):
         self.band[3] = "i"
         self.band[4] = "z"
         self.Leff = [355.1, 468.6, 616.6, 748.0, 893.2]
-        

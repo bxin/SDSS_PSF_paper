@@ -78,7 +78,7 @@ def main():
                     1].plot(psf.r, psf.LpsfModel + np.log10(psf.scaleV), 'r')
                 ax1[iBand, camcol - 1].errorbar(psf.OKprofRadii, psf.OKprofile,
                                                 psf.OKprofileErr, fmt='ok')
-                if args.yscale == 'log':                
+                if args.yscale == 'log':
                     ax1[iBand, camcol - 1].set_xlim(0, 30.0)
                     ax1[iBand, camcol - 1].set_ylim(-6, 0.5)
                     if camcol == 1:
@@ -112,7 +112,8 @@ def main():
     plt.suptitle('run %d, field %d, blue: vK, Red: 2G ' % (run, args.field))
     # plt.tight_layout()
     # plt.show()
-    plt.savefig('output/run%d_fld%d_psf_vK_2G_%s.png' % (run, args.field, args.yscale))
+    plt.savefig('output/run%d_fld%d_psf_vK_2G_%s.png' %
+                (run, args.field, args.yscale))
     end = time.time()
     print('time = %8.2fs' % (end - start))
     sys.exit()

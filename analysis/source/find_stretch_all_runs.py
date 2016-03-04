@@ -78,15 +78,18 @@ default=0.1')
     plt.ylabel('Longest Stretch')
 
     plt.savefig('output/maxStretch_%s.png' % (args.vname))
-    maxRow = np.where(tableData[:, -1] == np.max(tableData[:, -1]))
-    runSeq = np.arange(1, nrun + 1)
-    for irow in maxRow[0]:
-        irun = tableData[irow, 0]
-        print('longest stretch found in run %d (seq# %d), \
-field range = (%d, %d), %d runs' % (
-            irun,
-            runSeq[irun == runNo],
-            tableData[irow, 1], tableData[irow, 2], tableData[irow, 3]))
+    for iRecord in range(0,2): #number of records to print out
+        maxRow = np.where(tableData[:, -1] == np.max(tableData[:, -1]))
+        runSeq = np.arange(1, nrun + 1)
+        for irow in maxRow[0]:
+            irun = tableData[irow, 0]
+            print('longest stretch found in run %d (seq# %d), \
+    field range = (%d, %d), %d runs' % (
+                irun,
+                runSeq[irun == runNo],
+                tableData[irow, 1], tableData[irow, 2], tableData[irow, 3]))
+        rmRow = np.where(tableData[:, 0] == irun)
+        tableData[rmRow[0], -1] = 0
     # sys.exit()
     end1 = time.time()
     print('--- Total time elapsed: %8.2fs---' % ((end1 - start1)))
