@@ -46,6 +46,7 @@ fwhm_check_eff.py	check the effective FWHM or neff as in the fits files;
 fwhm_vk_psfwidth.py		  plot FWHMvK vs. psf_width, both are effective width
 fwhm_lambda.py		for each run (or all runs), each column, draw fwhm(actually fwhmvk)
 			    	 as a function of wavelength. Overlay all fields in that run.
+fwhm_lambda.m		use the output of fwhm_lambda.py, draw histograms for all runs
 
 ------------------- data/
 Stripe82RunList.dat		list of Stripe82 runs, 3 columns: # run minFld maxFld
