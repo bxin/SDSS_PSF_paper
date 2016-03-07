@@ -130,6 +130,8 @@ class sdsspsf(object):
 
     # used to use fminbound(), but it is for 1D optimization
     # tried fmin_cg(), but our gradient can only be calculated numerically
+    # fmin() takes longer and should be more accurate,
+    # we only use it when curve_fit() fails.
     def fit2vonK_fmin(self, vonK1arcsec):
 
         errLinear = self.OKprofileErrLinear.copy()
@@ -145,7 +147,7 @@ class sdsspsf(object):
             self.scaleR = xopt[0]
             self.scaleV = xopt[1]
         except (RuntimeError, ValueError) as e:
-            print('in fit2vonK_curve_fit\n')
+            print('in fit2vonK_fmin\n')
             print(e)
             print('run#=%d, camcol=%d, field=%d, band=%d\n' % (
                 self.runNo, self.camcol, self.field, self.band))

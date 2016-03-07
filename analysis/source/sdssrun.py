@@ -18,7 +18,7 @@ class sdssrun(object):
         self.nfields = hdulist[0].header['NFIELDS']
 
     def getBCFtable(self, sdss, vname):
-        if vname == 'vkfwhm':
+        if vname == 'fwhmvk':
             vdata = np.loadtxt('data/r_vonK_Kolm.txt',
                                unpack='True')
             radius = vdata[0]
@@ -37,7 +37,7 @@ class sdssrun(object):
                 if ifield % 100 == 0:
                     print('field No. = %d/%d' % (ifield, self.nfields))
                 for iBand in range(0, sdss.nBand):
-                    if vname == 'vkfwhm':
+                    if vname == 'fwhmvk':
                         psf = sdsspsf(hdu1, ifield, iBand, self.runNo, camcol)
                         psf.fit2vonK_curve_fit(vonK1arcsec)
                         if psf.scaleR < -1:

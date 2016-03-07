@@ -15,6 +15,8 @@ def main():
         description='----- fwhm_check_eff.py ---------')
     parser.add_argument('vname', choices=('fwhmeff', 'neff'),
                         help='variable we want to look at')
+    parser.add_argument('irun', type=int,
+                        help='Run Number')
     args = parser.parse_args()
 
     objlist = np.loadtxt('data/Stripe82RunList.dat')
@@ -29,6 +31,8 @@ def main():
     for line in objlist:
 
         run = int(line[0])
+        if run != args.irun:
+            continue
         runcount += 1
         print('-- running on run# %d (seq.# %d)---------' % (run, runcount))
         myRun = sdssrun(run)
@@ -42,6 +46,8 @@ def main():
             myv = txtdata[:, 8]
         if (1):
             icount = 0
+            # the loops below need to conform with masterTXT files
+            # filter changes first, then field, then camcol
             for camcol in range(1, sdss.nCamcol + 1):
                 print('running on camcol#%d' % camcol)
                 datafile = myRun.fitsdir + \
@@ -81,7 +87,8 @@ def main():
         for camcol in range(1, sdss.nCamcol + 1):
 
             for iBand in range(0, sdss.nBand):
-                ax1[iBand, camcol - 1].plot(myv, calc,
+                idx = (txtdata[:, 1] == camcol) & (txtdata[:, 2] == iBand) 
+                ax1[iBand, camcol - 1].plot(myv[idx], calc[idx],
                                             'r', marker='.', linestyle='None')
                 if iBand == 0 and runcount == 1:
                     ax1[iBand, camcol - 1].set_title('camcol=%d' % camcol)
@@ -113,7 +120,6 @@ def main():
         plt.tight_layout()
         # plt.show()
         plt.savefig('output/run%d_check_%s.png' % (run, args.vname))
-        sys.exit()
 
 if __name__ == "__main__":
     main()

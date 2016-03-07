@@ -15,16 +15,16 @@ def main():
         description='----- draw_1run_1field_vK_2G.py ---------')
     parser.add_argument('yscale', choices=(
         'log', 'linear', 'logzoom'), help='yscale of the plots')
-    parser.add_argument('-run', dest='run', type=int, default=94,
-                        help='run number we want to look at default=94')
-    parser.add_argument('-field', dest='field', type=int, default=0,
-                        help='field number we want to look at default=0')
+    parser.add_argument('irun', type=int,
+                        help='Run Number')
+    parser.add_argument('ifield', type=int,
+                        help='Field Number')
     args = parser.parse_args()
 
     start = time.time()
     objlist = np.loadtxt('data/Stripe82RunList.dat')
-    if args.run not in objlist[:, 0]:
-        print('run# %d is not in Stripe82RunList.dat\n' % args.run)
+    if args.irun not in objlist[:, 0]:
+        print('run# %d is not in Stripe82RunList.dat\n' % args.irun)
         sys.exit()
 
     rootName = "SDSSdata"
@@ -45,7 +45,7 @@ def main():
     vonK = vdata[1]
     vonK1arcsec = np.vstack((radius, vonK))
 
-    run = args.run
+    run = args.irun
     print('------ running on run# %d ---------' % run)
     f, ax1 = plt.subplots(nBand, nCamcol, sharex='col',
                           sharey='row', figsize=(12, 8))  # a plot is for a run
@@ -57,15 +57,15 @@ def main():
 
         hdulist = fits.open(datafile)
         nfields = hdulist[0].header['NFIELDS']
-        if args.field > nfields:
-            print('given field# = %d is too big\n' % args.field)
-            print('run# %d has %d fields in total\n' % args.run)
+        if args.ifield > nfields:
+            print('given field# = %d is too big\n' % args.ifield)
+            print('run# %d has %d fields in total\n' % args.irun)
             sys.exit()
         hdu1 = hdulist[1].data
 
         for iBand in range(0, nBand):
 
-            psf = sdsspsf(hdu1, args.field, iBand, run, camcol)
+            psf = sdsspsf(hdu1, args.ifield, iBand, run, camcol)
             psf.fit2vonK_curve_fit(vonK1arcsec)
             if psf.scaleR < -1:
                 psf.fit2vonK_fmin(vonK1arcsec)
@@ -109,11 +109,11 @@ def main():
             if iBand == 0:
                 ax1[iBand, camcol - 1].set_title('camcol=%d' % camcol)
 
-    plt.suptitle('run %d, field %d, blue: vK, Red: 2G ' % (run, args.field))
+    plt.suptitle('run %d, field %d, blue: vK, Red: 2G ' % (run, args.ifield))
     # plt.tight_layout()
     # plt.show()
     plt.savefig('output/run%d_fld%d_psf_vK_2G_%s.png' %
-                (run, args.field, args.yscale))
+                (run, args.ifield, args.yscale))
     end = time.time()
     print('time = %8.2fs' % (end - start))
     sys.exit()
