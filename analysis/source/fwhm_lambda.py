@@ -27,6 +27,8 @@ def main():
     parser.add_argument('-endfield', dest='endfield', default=99999, type=int,
                         help='field# to end with (note indexing \
                         starts from 0)')
+    parser.add_argument('-doubleG', help='use psf_width from the double Gau fits',
+                        action='store_true')
     args = parser.parse_args()
 
     if args.ugri == 1:
@@ -61,7 +63,12 @@ def main():
         idx = (txtdata[:, 0] >= args.startfield) & (
             txtdata[:, 0] < args.endfield)
         txtdata = txtdata[idx, :]
-        fwhm = txtdata[:, 3] / 1.222  # convert FWHMeff into FWHM
+        if args.doubleG:
+            fwhmStr = 'fwhm2G'
+            fwhm = txtdata[:, 4]
+        else:
+            fwhmStr = 'fwhm'
+            fwhm = txtdata[:, 3] / 1.222  # convert FWHMeff into FWHM
         airmass = txtdata[:, 5]
         fwhm = fwhm/airmass**0.6
         startfield = args.startfield
@@ -153,7 +160,7 @@ def main():
             ax1[iRow, iCol].plot(xlambda, yfit, '-k')
 
             ax1[iRow, iCol].set_xlabel('Effective wavelength (nm)')
-            ax1[iRow, iCol].set_ylabel('FWHM')
+            ax1[iRow, iCol].set_ylabel(fwhmStr)
             ax1[iRow, iCol].legend(loc="upper right", fontsize=10)
 
             if args.yscale == 'log':
@@ -165,18 +172,18 @@ def main():
 
         if runNo < 0:
             # plt.tight_layout()
-            plt.savefig('output/fwhm_lambda/run%d_fwhm_lambda_%s_%s.png' %
-                        (run, bands, args.yscale))
+            plt.savefig('output/fwhm_lambda/run%d_%s_lambda_%s_%s.png' %
+                        (run, fwhmStr, bands, args.yscale))
             plt.close()
     if runNo > 0:
         # plt.tight_layout()
         if (args.startfield == 0 and args.endfield == 99999):
-            plt.savefig('output/fwhm_lambda/run%d_fwhm_lambda_%s_%s.png' %
-                        (runNo, bands, args.yscale))
+            plt.savefig('output/fwhm_lambda/run%d_%s_lambda_%s_%s.png' %
+                        (runNo, fwhmStr, bands, args.yscale))
         else:
             plt.savefig(
-                'output/fwhm_lambda/run%d_fwhm_lambda_%s_%s_%d_%d.png' %
-                (runNo, bands, args.yscale, args.startfield, args.endfield))
+                'output/fwhm_lambda/run%d_%s_lambda_%s_%s_%d_%d.png' %
+                (runNo, fwhmStr, bands, args.yscale, args.startfield, args.endfield))
 
         plt.close()
 
