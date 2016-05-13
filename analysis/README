@@ -25,6 +25,8 @@ functions():
 savetxt3d()		save 3d np array in easy-to-read txt file
 
 ------------------
+analyze_all_psf.py	this is a general purpose analysis testing ground. Once a code is ready,
+			     it is renamed/copied to its designated name
 downloadSDSS.py	download all Stripe 82 data by looping through Stripe82RunList.dat
 psFieldGetter.py	 an example script demonstrate how to download 6 files for 6 camcol
 			    	    	 of run#4872, then plot the PSF data and parameters related to the
@@ -34,10 +36,15 @@ draw_1run_1field.py	This takes the first run in Stripe82RunList.dat, make a 5x6 
 draw_1run_1field_vK_2G.py	   on top of draw_1run_1field.py, we make fits to the psf radial
 				      	     			  profiles using a von Karman template.
 								  output: run94psf_vK_2G.png
+changing_shape.py	for the wild run found using find_long_wild_runs.py, plot the psf profiles (data and fit)
+			    	for the max and min of seeing (actually psf_width).
+				modified from draw_1run_1field_vK_2G.py
 variation_by_run.py	for a given run# and variable name, make the 5x6 format plots,
 			      	    with field as the x-axis on each subplot
 find_stretch_all_runs.py	    find longest stretch of a variable (e.g. psf_width) from all runs.
 				    	 	 output: maxStretch_psf_width.png
+find_long_wild_runs.py 	find a fairly long run with a lot of variation in a variable, e.g. fwhm
+			       	      for each run, we look at the (Nfields)x(average RMS)x(average PV)
 makeMasterTXT.py	extract data we need for each run, write it into a txt file,
 				so that we don't need to open the fit files all the time.
 fwhm_check_eff.py	check the effective FWHM or neff as in the fits files;
