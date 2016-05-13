@@ -63,18 +63,23 @@ def main():
                         sigG1 = data['psf_sigma1'][iBand]
                         sigG2 = data['psf_sigma2'][iBand]
                         b = data['psf_b'][iBand]
+                        p0 = data['psf_p0'][iBand]
+                        beta = data['psf_beta'][iBand]
+                        sigP = data['psf_sigmap'][iBand]
                         pixScale = data['pixScale'][iBand]
 
-                        grid1d = np.linspace(-30, 30, 601)  # arcsec
+                        #grid1d = np.linspace(-30, 30, 601)  # arcsec
+                        grid1d = np.linspace(-50, 50, 1001)
                         x, y = np.meshgrid(grid1d, grid1d)
                         # for fits, radius must be in pixels
                         r2 = (x * x + y * y) * (1 / pixScale)**2
                         psfG1 = np.exp(-0.5 * r2 / (sigG1 * sigG1))
                         psfG2 = b * np.exp(-0.5 * r2 / (sigG2 * sigG2))
                         # note division by beta! below:
+                        psfW = p0 * (1 + r2 / (sigP * sigP) / beta)**(-0.5 * beta)
                         psfG = psfG1 + psfG2
                         # normalized to 1 at r=0 by definition
-                        psfModel = psfG
+                        psfModel = (psfG + psfW) / (1 + b + p0)
                         psfModel = psfModel / np.sum(psfModel)
                         neff = 1 / np.sum(psfModel**2) / (pixScale / 0.1)**2
                         if args.vname == 'neff':
