@@ -113,13 +113,14 @@ class sdsspsf(object):
         errLinear[self.nprofErr:] = 100
         try:
             popt, pcov = optimize.curve_fit(
-                lambda r, scaleR, scaleV: scaleVonKR(
-                    vonK1arcsec, r, scaleR, scaleV),
-                self.OKprofRadii, self.OKprofileLinear, p0=[1.5, 1],
+                lambda r, scaleR, scaleV, sigma: scaleVonKR(
+                    vonK1arcsec, r, scaleR, scaleV, sigma),
+                self.OKprofRadii, self.OKprofileLinear, p0=[1.5, 1, 0.5],
                 sigma=errLinear, absolute_sigma=True)
 
             self.scaleR = popt[0]
             self.scaleV = popt[1]
+            self.sigma = popt[2]
             # print(self.OKprofileErrLinear/self.OKprofileLinear)
             # print('scaleR= %7.5f, scaleV=%7.5f\n'%(self.scaleR, self.scaleV))
 
@@ -186,7 +187,7 @@ class sdsspsf(object):
             # sys.exit()
 
 
-def scaleVonKR(vonK1arcsec, r, scaleR, scaleV):
+def scaleVonKR(vonK1arcsec, r, scaleR, scaleV, sigma):
 
     vR = scaleR * vonK1arcsec[0, :]
     vv = vonK1arcsec[1, :]
@@ -195,12 +196,12 @@ def scaleVonKR(vonK1arcsec, r, scaleR, scaleV):
     if scaleR > 0:
         f = interpolate.interp1d(vR, vv, bounds_error=False)
         p = f(r) * scaleV
-#        for i in np.arange(len(r)):
-#            x1=np.nonzero(vR<r[i])[0][-1]
-#            x2=x1+1
-#            w1=(vR[x2]-r[i])/stepR
-#            w2=(r[i]-vR[x1])/stepR
-#            p[i]=vv[x1]*w1+vv[x2]*w2
+        idx = r>5
+        p[idx] = p[idx]*(sigma*(r[idx]-5)+1)
+#        idx = ~np.isnan(p1)
+#        p = p1.copy()
+#        for i in range(sum(idx)):
+#            p[i] = np.sum(np.exp(-(r[idx]-r[i])**2/2/sigma**2)*p1[idx])
 
 #    print('scaleR = %7.4f, f0=%7.4f' % (scaleR, p[0]))
     return p

@@ -8,7 +8,9 @@ from astropy.io import fits
 from matplotlib import pyplot as plt
 
 from sdsspsf import sdsspsf
+from sdsspsf import scaleVonKR
 
+from scipy import interpolate
 
 def main():
     parser = argparse.ArgumentParser(
@@ -72,9 +74,11 @@ def main():
             print('chi2=%4.1f/%4.1f, chi2lr = %4.1f/%4.1f, chi2hr=%4.1e/%4.1e' %(
                 psf.chi2, psf.G2chi2, psf.chi2lr, psf.G2chi2lr, psf.chi2hr, psf.G2chi2hr))
 
+            #f = interpolate.interp1d(radius*psf.scaleR, vonK*psf.scaleV, bounds_error=False)
+            #p = f(psf.OKprofRadii)
             if args.yscale == 'log' or args.yscale == 'logzoom':
                 ax1[iBand, camcol -
-                    1].plot(radius * psf.scaleR, np.log10(vonK * psf.scaleV),
+                    1].plot(radius, np.log10(scaleVonKR(vonK1arcsec, radius, psf.scaleR, psf.scaleV, psf.sigma)),
                             'b')
                 ax1[iBand, camcol -
                     1].plot(psf.r, psf.LpsfModel + np.log10(psf.scaleV), 'r')
@@ -83,6 +87,8 @@ def main():
                 if args.yscale == 'log':
                     ax1[iBand, camcol - 1].set_xlim(0, 30.0)
                     ax1[iBand, camcol - 1].set_ylim(-6, 0.5)
+                    #ax1[iBand, camcol - 1].plot(psf.OKprofRadii, np.log10(psf.OKprofileLinear)-np.log10(p), '-g.')
+                    #ax1[iBand, camcol - 1].grid()
                     if camcol == 1:
                         text = 'band: %s' % band[iBand]
                         ax1[iBand, camcol -
@@ -93,13 +99,15 @@ def main():
                     ax1[iBand, camcol - 1].set_ylim(-1.5, 0.1)
             elif args.yscale == 'linear':
                 ax1[iBand, camcol -
-                    1].plot(radius * psf.scaleR, vonK * psf.scaleV, 'b')
+                    1].plot(radius, scaleVonKR(vonK1arcsec, radius, psf.scaleR, psf.scaleV, psf.sigma), 'b')
                 ax1[iBand, camcol - 1].plot(psf.r,
                                             psf.psfModel * psf.scaleV, 'r')
                 ax1[iBand, camcol - 1].errorbar(psf.OKprofRadii,
                                                 psf.OKprofileLinear,
                                                 psf.OKprofileErrLinear,
                                                 fmt='ok')
+                #ax1[iBand, camcol - 1].plot(psf.OKprofRadii, psf.OKprofileLinear-p, 'g')
+                #ax1[iBand, camcol - 1].set_xlim(0, np.max(psf.OKprofRadii))
                 ax1[iBand, camcol - 1].set_xlim(0, 2.)
                 ax1[iBand, camcol - 1].grid()
                 if camcol == 1:

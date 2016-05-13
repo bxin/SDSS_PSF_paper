@@ -27,7 +27,7 @@ psf_sigma2, airmass, neff_psf, psf_nstar, psf_width')
 
     sdss = sdssinst()
 
-    outTable = 'output/longWildRuns.txt'
+    outTable = 'output/longWildRuns_%s.txt' % args.vname
 
     if (not args.tableoff):
         if os.path.isfile(outTable):
