@@ -69,6 +69,8 @@ def main():
             psf.fit2vonK_curve_fit(vonK1arcsec)
             if psf.scaleR < -1:
                 psf.fit2vonK_fmin(vonK1arcsec)
+            print('chi2=%4.1f/%4.1f, chi2lr = %4.1f/%4.1f, chi2hr=%4.1e/%4.1e' %(
+                psf.chi2, psf.G2chi2, psf.chi2lr, psf.G2chi2lr, psf.chi2hr, psf.G2chi2hr))
 
             if args.yscale == 'log' or args.yscale == 'logzoom':
                 ax1[iBand, camcol -

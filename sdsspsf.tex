@@ -367,15 +367,30 @@ E.g. for some run
 
 2) plot FWHMvK vs. psf_width for 30 panels 
 
-----------to do ----------------
-
-3) plot alpha (index for lambda dep.) histograms for all data and for 
-    two realizations of ``longest stretch'' selection
-
-4) plot profiles for a range of fields when the seeing is rapidly changing (is profile shape changing?) 
+-----use a Gaussian as convolution kernel, remake fits -------
 
 Bo:
 check neff_psf from the vK fit and compare to 2G fit.
+(checked fwhmeff, i.e., fwhmvk, and compared to psf_width from the 2G
+fit. Generally the agreement is good. When they don't agree very well,
+visually checking the vK fit vs the 2G fit shows that the vK fit often
+gives the more reasonalble agreement between data and fit.)
+------make RMS (x - data) plots to quantify -----------
+            /n(-1?) for 1-4, 5+ separately
+            exclude bad 2G fits
+
+3) plot alpha (index for lambda dep.) histograms for all data and for 
+    two realizations of ``longest stretch'' selection
+(not very conclusive, due to z-band tipping upward. The i-band could
+be problematic too)
+
+----------to do ----------------
+
+---alpha vs seeing, col#6, col#3
+??? masterTXT, a column to flag failed 2D fits?
+???(in the master txt file for alpha, add seeing as a column)
+
+4) plot profiles for a range of fields when the seeing is rapidly changing (is profile shape changing?) 
 
 
 -------------Analysis structure: -----------------
@@ -391,9 +406,15 @@ check neff_psf from the vK fit and compare to 2G fit.
 3) cross-correlation of camera columns and measurement of structure function
     (that is, the covariance vs. angular distance) 
 
+---for each run, each filter, make plot of cov vs separation
+----fit through (0,1), plot slope as a function of seeing
+
 4) auto-correlation function (and power spectrum) for temporal variation
 
 - let's start with plain Fourier transform and look at power spectra (we can 
     play games with co-addition, 6 columns for a given run, or all runs)
 - potentially, we could also look at  Kelly and Becker code  (2014, ApJ 788, 33) 
 - here we can compare to Chuck's CP measurements (in opsim db) 
+
+---for each run, each filter, camcol (#2,3), make D vs frequency.
+

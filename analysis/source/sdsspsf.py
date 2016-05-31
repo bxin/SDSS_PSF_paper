@@ -75,6 +75,16 @@ class sdsspsf(object):
         # self.nprofErr = i
         self.nprofErr = 4  # i #use 4 points: 0,1,2,3
 
+        errLinear = self.OKprofileErrLinear.copy()
+        errLinear[self.nprofErr:] = 100
+        f = interpolate.interp1d(self.r, self.psfModel, bounds_error=False)
+        yy = f(self.OKprofRadii)
+        self.G2chi2 = sum(((yy-self.OKprofileLinear)/errLinear)**2)/(len(self.OKprofRadii)-2)
+        idx = self.OKprofRadii<2
+        self.G2chi2lr = sum(((yy[idx]-self.OKprofileLinear[idx])/errLinear[idx])**2)/(sum(idx))
+        idx = self.OKprofRadii>=2
+        self.G2chi2hr =sum(((yy[idx]-self.OKprofileLinear[idx])/errLinear[idx])**2)/sum(idx)
+        
     def getSDSSprofRadii(self):
 
         self.profRadii = np.linspace(0, 15, 16)
@@ -113,6 +123,13 @@ class sdsspsf(object):
             # print(self.OKprofileErrLinear/self.OKprofileLinear)
             # print('scaleR= %7.5f, scaleV=%7.5f\n'%(self.scaleR, self.scaleV))
 
+            yy = scaleVonKR(vonK1arcsec, self.OKprofRadii, self.scaleR, self.scaleV)
+            self.chi2 = sum(((yy-self.OKprofileLinear)/errLinear)**2)/(len(self.OKprofRadii)-2)
+            idx = self.OKprofRadii<2
+            self.chi2lr = sum(((yy[idx]-self.OKprofileLinear[idx])/errLinear[idx])**2)/(sum(idx))
+            idx = self.OKprofRadii>=2
+            self.chi2hr =sum(((yy[idx]-self.OKprofileLinear[idx])/errLinear[idx])**2)/sum(idx)
+            
         except (RuntimeError, ValueError) as e:
             print('in fit2vonK_curve_fit\n')
             print(e)
@@ -146,6 +163,13 @@ class sdsspsf(object):
 
             self.scaleR = xopt[0]
             self.scaleV = xopt[1]
+            
+            self.chi2 = sum(scaleVonKRChi2(vonK1arcsec, self.OKprofRadii, xopt))/(len(self.OKprofRadii)-2)
+            idx = self.OKprofRadii<2
+            self.chi2lr = sum(scaleVonKRChi2(vonK1arcsec, self.OKprofRadii[idx], xopt))/(sum(idx))
+            idx = self.OKprofRadii>=2
+            self.chi2hr = sum(scaleVonKRChi2(vonK1arcsec, self.OKprofRadii[idx], xopt))/sum(idx)
+            
         except (RuntimeError, ValueError) as e:
             print('in fit2vonK_fmin\n')
             print(e)
