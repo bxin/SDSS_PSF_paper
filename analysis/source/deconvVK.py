@@ -72,12 +72,25 @@ for ip in range(2):
     if ip == 0:
         A1=5e-4
         sigma1 = 2
+        G1 = A1*np.exp(-x*x/2/sigma1**2)
+        G12d = A1*np.exp(-(xm*xm+ym*ym)/2/sigma1**2)
     else:
-        A1=2e-5
-        sigma1 = 12
-    G1 = A1*np.exp(-x*x/2/sigma1**2)
+        #A1=1.2e-5
+        #sigma1 = 1200
+        #G1 = A1*np.exp(-x*x/2/sigma1**2)
+        #G12d = A1*np.exp(-(xm*xm+ym*ym)/2/sigma1**2)
+
+        #A1=4e-5
+        #G1 = A1-A1*(0.99)/20*x
+        #G12d = A1-A1*(0.99)/20*np.sqrt(xm*xm+ym*ym)
+        #G12d[G12d<0]=0
+        
+        A1=4e-5
+        A1=np.log10(A1)
+        G1=10**(A1-(A1-(-6))/30*x)
+        G12d = 10**(A1-(A1-(-6))/30*np.sqrt(xm*xm+ym*ym))
+        
     g = np.exp(-x*x/2/sigma**2)+G1
-    G12d = A1*np.exp(-(xm*xm+ym*ym)/2/sigma1**2)
     g2d = np.exp(-(xm*xm+ym*ym)/2/sigma**2)+G12d
 
     #convolve back and check
@@ -90,7 +103,7 @@ for ip in range(2):
     ax1[ip+1, 0].semilogy(x, psfN[500, 500:],'-ro',label='psf deconvolved')
     ax1[ip+1, 0].semilogy(x, g,'-b',label='psf modeled with doubleG')
     ax1[ip+1, 0].semilogy(x, G1,'-g',label='the wider Gaussian')
-    ax1[ip+1, 0].set_xlim(0, 10)
+    ax1[ip+1, 0].set_xlim(0, 30)
     ax1[ip+1, 0].set_ylim(1e-6, 10)
     ax1[ip+1, 0].grid()
     ax1[ip+1, 0].legend(loc="upper right", fontsize=10)
