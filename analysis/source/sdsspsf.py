@@ -76,7 +76,7 @@ class sdsspsf(object):
         self.nprofErr = 4  # i #use 4 points: 0,1,2,3
 
         errLinear = self.OKprofileErrLinear.copy()
-        errLinear[self.nprofErr:] = 100
+        errLinear[self.nprofErr:] = self.OKprofileLinear[self.nprofErr:]
         f = interpolate.interp1d(self.r, self.psfModel, bounds_error=False)
         yy = f(self.OKprofRadii)
         self.G2chi2 = sum(((yy-self.OKprofileLinear)/errLinear)**2)/(len(self.OKprofRadii)-2)
@@ -108,14 +108,14 @@ class sdsspsf(object):
         self.profRadii[14] = 168.20
         self.profRadii[15] = 263.00
 
-    def fit2vonK_curve_fit(self, vonK1arcsec):
+    def fit2vonK_curve_fit(self, vonK1arcsec, grid1d):
         errLinear = self.OKprofileErrLinear.copy()
-        errLinear[self.nprofErr:] = 100
+        errLinear[self.nprofErr:] = self.OKprofileLinear[self.nprofErr:]
         try:
             popt, pcov = optimize.curve_fit(
-                lambda r, scaleR, scaleV, sigma: scaleVonKR(
-                    vonK1arcsec, r, scaleR, scaleV, sigma),
-                self.OKprofRadii, self.OKprofileLinear, p0=[1.5, 1, 0.5],
+                lambda r, scaleR, scaleV, sigma, a, b: convVonK(
+                    vonK1arcsec, grid1d, r, scaleR, scaleV, sigma, a, b),
+                self.OKprofRadii, self.OKprofileLinear, p0=[1.5, 1, 0.3, -0.05, -4.4],
                 sigma=errLinear, absolute_sigma=True)
 
             self.scaleR = popt[0]
@@ -124,7 +124,7 @@ class sdsspsf(object):
             # print(self.OKprofileErrLinear/self.OKprofileLinear)
             # print('scaleR= %7.5f, scaleV=%7.5f\n'%(self.scaleR, self.scaleV))
 
-            yy = scaleVonKR(vonK1arcsec, self.OKprofRadii, self.scaleR, self.scaleV)
+            yy = convVonK(vonK1arcsec, self.OKprofRadii, self.scaleR, self.scaleV)
             self.chi2 = sum(((yy-self.OKprofileLinear)/errLinear)**2)/(len(self.OKprofRadii)-2)
             idx = self.OKprofRadii<2
             self.chi2lr = sum(((yy[idx]-self.OKprofileLinear[idx])/errLinear[idx])**2)/(sum(idx))
@@ -157,7 +157,7 @@ class sdsspsf(object):
 
         try:
             xopt = optimize.fmin(
-                lambda scaleRV: scaleVonKRChi2(
+                lambda scaleRV: convVonKChi2(
                     vonK1arcsec, self.OKprofRadii, scaleRV,
                     self.OKprofileLinear, errLinear),
                 [1.5, 1], disp=1)
@@ -165,11 +165,11 @@ class sdsspsf(object):
             self.scaleR = xopt[0]
             self.scaleV = xopt[1]
             
-            self.chi2 = sum(scaleVonKRChi2(vonK1arcsec, self.OKprofRadii, xopt))/(len(self.OKprofRadii)-2)
+            self.chi2 = sum(convVonKChi2(vonK1arcsec, self.OKprofRadii, xopt))/(len(self.OKprofRadii)-2)
             idx = self.OKprofRadii<2
-            self.chi2lr = sum(scaleVonKRChi2(vonK1arcsec, self.OKprofRadii[idx], xopt))/(sum(idx))
+            self.chi2lr = sum(convVonKChi2(vonK1arcsec, self.OKprofRadii[idx], xopt))/(sum(idx))
             idx = self.OKprofRadii>=2
-            self.chi2hr = sum(scaleVonKRChi2(vonK1arcsec, self.OKprofRadii[idx], xopt))/sum(idx)
+            self.chi2hr = sum(convVonKChi2(vonK1arcsec, self.OKprofRadii[idx], xopt))/sum(idx)
             
         except (RuntimeError, ValueError) as e:
             print('in fit2vonK_fmin\n')
@@ -187,27 +187,37 @@ class sdsspsf(object):
             # sys.exit()
 
 
-def scaleVonKR(vonK1arcsec, r, scaleR, scaleV, sigma):
+def convVonK(vonK1arcsec, grid1d, r, scaleR, scaleV, sigma, a, b):
 
-    vR = scaleR * vonK1arcsec[0, :]
-    vv = vonK1arcsec[1, :]
+    x1=grid1d*scaleR
+    f=interpolate.RectBivariateSpline(x1, x1, vonK1arcsec, kx=1, ky=1)
+    vk = f(grid1d, grid1d)
+    vkfft = np.fft.fftshift(np.fft.fft2(np.fft.fftshift(vk), s=vk.shape))
+
+    xm, ym = np.meshgrid(grid1d, grid1d)
+    G12d = 10**(a*np.sqrt(xm*xm+ym*ym) +b )
+    g2d = np.exp(-(xm*xm+ym*ym)/2/sigma**2)+G12d
+    psffft = np.fft.fftshift(np.fft.fft2(np.fft.fftshift(g2d), s=g2d.shape))
+    prodfft = psffft*vkfft
+    
+    new = np.absolute(np.fft.fftshift(np.fft.ifft2(np.fft.fftshift(prodfft),
+                                                        s=prodfft.shape)))
+    newN = new/np.max(new)
+    m = (len(grid1d)-1)/2
+    vR = x1[m:]
+    vv = newN[m, m:]
+    
     # stepR = vR[1] - vR[0]
     p = np.zeros(len(r))
     if scaleR > 0:
         f = interpolate.interp1d(vR, vv, bounds_error=False)
         p = f(r) * scaleV
-        idx = r>5
-        p[idx] = p[idx]*(sigma*(r[idx]-5)+1)
-#        idx = ~np.isnan(p1)
-#        p = p1.copy()
-#        for i in range(sum(idx)):
-#            p[i] = np.sum(np.exp(-(r[idx]-r[i])**2/2/sigma**2)*p1[idx])
 
-#    print('scaleR = %7.4f, f0=%7.4f' % (scaleR, p[0]))
+        print('scaleR = %7.4f, f0=%7.4f' % (scaleR, p[0]))
     return p
 
 
-def scaleVonKRChi2(vonK1arcsec, r, scaleRV, y, err):
+def convVonKChi2(vonK1arcsec, r, scaleRV, y, err):
 
     scaleR = scaleRV[0]
     scaleV = scaleRV[1]

@@ -8,7 +8,7 @@ from astropy.io import fits
 from matplotlib import pyplot as plt
 
 from sdsspsf import sdsspsf
-from sdsspsf import scaleVonKR
+from sdsspsf import convVonK
 
 from scipy import interpolate
 
@@ -41,11 +41,8 @@ def main():
     band[3] = "i"
     band[4] = "z"
 
-    vdata = np.loadtxt('data/r_vonK_Kolm.txt',
-                       unpack='True')
-    radius = vdata[0]
-    vonK = vdata[1]
-    vonK1arcsec = np.vstack((radius, vonK))
+    grid1d = np.linspace(-50, 50, 1001)
+    vonK1arcsec = np.loadtxt('data/vonK1.0.txt')
 
     run = args.irun
     print('------ running on run# %d ---------' % run)
@@ -68,7 +65,7 @@ def main():
         for iBand in range(0, nBand):
 
             psf = sdsspsf(hdu1, args.ifield, iBand, run, camcol)
-            psf.fit2vonK_curve_fit(vonK1arcsec)
+            psf.fit2vonK_curve_fit(vonK1arcsec, grid1d)
             if psf.scaleR < -1:
                 psf.fit2vonK_fmin(vonK1arcsec)
             print('chi2=%4.1f/%4.1f, chi2lr = %4.1f/%4.1f, chi2hr=%4.1e/%4.1e' %(
@@ -78,7 +75,7 @@ def main():
             #p = f(psf.OKprofRadii)
             if args.yscale == 'log' or args.yscale == 'logzoom':
                 ax1[iBand, camcol -
-                    1].plot(radius, np.log10(scaleVonKR(vonK1arcsec, radius, psf.scaleR, psf.scaleV, psf.sigma)),
+                    1].plot(radius, np.log10(convVonK(vonK1arcsec, radius, psf.scaleR, psf.scaleV, psf.sigma)),
                             'b')
                 ax1[iBand, camcol -
                     1].plot(psf.r, psf.LpsfModel + np.log10(psf.scaleV), 'r')
@@ -99,7 +96,7 @@ def main():
                     ax1[iBand, camcol - 1].set_ylim(-1.5, 0.1)
             elif args.yscale == 'linear':
                 ax1[iBand, camcol -
-                    1].plot(radius, scaleVonKR(vonK1arcsec, radius, psf.scaleR, psf.scaleV, psf.sigma), 'b')
+                    1].plot(radius, convVonK(vonK1arcsec, radius, psf.scaleR, psf.scaleV, psf.sigma), 'b')
                 ax1[iBand, camcol - 1].plot(psf.r,
                                             psf.psfModel * psf.scaleV, 'r')
                 ax1[iBand, camcol - 1].errorbar(psf.OKprofRadii,
