@@ -53,17 +53,22 @@ g2recN = g2rec/np.max(g2rec)*scaleV
 
 #proper normalization in order to reproduce the plots
 
-f, ax1 = plt.subplots(3,3, figsize=(12, 8))
+f, ax1 = plt.subplots(3,4, figsize=(12, 8))
 ax1[0, 0].imshow(vk, origin='lower')
 ax1[0, 0].set_title('von Karman')
 ax1[0, 1].imshow(g2, origin='lower');
-ax1[0, 1].set_title('Double Gaussian')
+ax1[0, 1].set_title('Double Gau.')
 ax1[0, 2].semilogy(x, vkN[500, 500:],'-b', label='vonK')
 ax1[0, 2].semilogy(x,g2N[500,500:],'-r',label='G2')
-ax1[0, 2].semilogy(x,g2recN[500,500:],'-g',label='G2 reconstructed')
+ax1[0, 2].semilogy(x,g2recN[500,500:],'-g',label='G2 rec.')
 ax1[0, 2].set_xlim(0, 30)
 ax1[0, 2].set_ylim(1e-6, 10)
 ax1[0, 2].legend(loc="upper right", fontsize=10)
+ax1[0, 3].plot(x, vkN[500, 500:],'-b', label='vonK')
+ax1[0, 3].plot(x,g2N[500,500:],'-r',label='G2')
+ax1[0, 3].plot(x,g2recN[500,500:],'-g',label='G2 rec.')
+ax1[0, 3].set_xlim(0, 2)
+ax1[0, 3].legend(loc="upper right", fontsize=10)
 
 # Now we check how double G as psf performs
 sigma = 0.3 #for the core
@@ -101,25 +106,31 @@ for ip in range(2):
     newN = new/np.max(new)*scaleV
     
     ax1[ip+1, 0].semilogy(x, psfN[500, 500:],'-ro',label='psf deconvolved')
-    ax1[ip+1, 0].semilogy(x, g,'-b',label='psf modeled with doubleG')
-    ax1[ip+1, 0].semilogy(x, G1,'-g',label='the wider Gaussian')
+    ax1[ip+1, 0].semilogy(x, g,'-b',label='doubleG psf')
+    ax1[ip+1, 0].semilogy(x, G1,'-g',label='the wider Gau.')
     ax1[ip+1, 0].set_xlim(0, 30)
     ax1[ip+1, 0].set_ylim(1e-6, 10)
     ax1[ip+1, 0].grid()
     ax1[ip+1, 0].legend(loc="upper right", fontsize=10)
     ax1[ip+1, 1].plot(x, psfN[500, 500:],'-ro',label='psf deconvolved')
-    ax1[ip+1, 1].plot(x, g,'-b',label='psf modeled with doubleG')
-    ax1[ip+1, 1].plot(x, G1,'-g',label='the wider Gaussian')
+    ax1[ip+1, 1].plot(x, g,'-b',label='doubleG psf')
+    ax1[ip+1, 1].plot(x, G1,'-g',label='the wider Gau.')
     ax1[ip+1, 1].set_xlim(0, 3)
     ax1[ip+1, 1].grid()
     ax1[ip+1, 1].legend(loc="upper right", fontsize=10)
     ax1[ip+1, 2].semilogy(x, vkN[500, 500:],'-b', label='vonK')
     ax1[ip+1, 2].semilogy(x,g2N[500,500:],'-r',label='G2')
-    ax1[ip+1, 2].semilogy(x,newN[500,500:],'-g',label='G2 reconstructed')
+    ax1[ip+1, 2].semilogy(x,newN[500,500:],'-g',label='G2 rec.')
     ax1[ip+1, 2].set_xlim(0, 30)
     ax1[ip+1, 2].set_ylim(1e-6, 10)
     ax1[ip+1, 2].legend(loc="upper right", fontsize=10)
-    
+
+    ax1[ip+1, 3].plot(x, vkN[500, 500:],'-b', label='vonK')
+    ax1[ip+1, 3].plot(x,g2N[500,500:],'-r',label='G2')
+    ax1[ip+1, 3].plot(x,newN[500,500:],'-g',label='G2 rec.')
+    ax1[ip+1, 3].set_xlim(0, 3)
+    ax1[ip+1, 3].legend(loc="upper right", fontsize=10)
+        
 #plt.show()
 plt.savefig('output/deconvVK%d.png' % 94)
 
