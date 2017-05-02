@@ -126,15 +126,16 @@ class sdssrun(object):
             hdulist = fits.open(datafile)
             hdu1 = hdulist[1].data
             for ifield in range(0, self.nfields):
-                if ifield % 100 == 0:
-                    print('field No. = %d/%d' % (ifield, self.nfields))
+                # if ifield % 100 == 0:
+                print('field No. = %d/%d' % (ifield, self.nfields))
                 for iBand in range(0, sdss.nBand):
                     psf = sdsspsf(hdu1, ifield, iBand, self.runNo, camcol)
                     psf.tailP = tailPar[iBand*sdss.nCamcol + camcol-1]
-                    psf.fit2vonK_curve_fit(vonK1arcsec, vonK2D, grid1d)
+                    psf.fit2vonK_curve_fit(vonK1arcsec) #, vonK2D, grid1d)
                     if psf.scaleR < -1:
                         psf.fit2vonK_fmin(vonK1arcsec, vonK2D, grid1d)
                     psf.fit2convEta_curve_fit(vonK2D, grid1d)
+                    # psf.tailEta = -999
 
                     # fwhmeff of the vonK1arcsec = 1.222 arcsec
                     fid.write('%d \t %d \t %d \t %5.3f \t %.3f \t ' % (
