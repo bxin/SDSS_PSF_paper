@@ -58,7 +58,7 @@ def main():
         datafile = datadir + "photoField-%06d-%d.fits" % (run, camcol)
 
         hdulist = fits.open(datafile)
-        nfields = hdulist[0].header['NFIELDS']
+        # nfields = hdulist[0].header['NFIELDS']
         hdu1 = hdulist[1].data
 
         fieldlist[camcol-1, 0]= np.where(np.max(hdu1[:]['psf_width'])==hdu1[:]['psf_width'])[0][0]

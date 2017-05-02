@@ -21,7 +21,7 @@ E.g. for some run
 parser = argparse.ArgumentParser(
     description='-----makeMasterTXT.py------')
 parser.add_argument('-p', dest='numproc', default=1, type=int,
-                    help='Number of Processors Phosim uses')
+                    help='Number of Processors used')
 args = parser.parse_args()
 
 objlist = np.loadtxt('data/Stripe82RunList.dat')
@@ -47,6 +47,8 @@ for line in objlist:
 
     run = int(line[0])
     runcount += 1
+    # for testing purposes
+    # write1run(sdss, run, runcount)
     p = multiprocessing.Process(
         target=write1run, args=(sdss, run, runcount))
     jobs.append(p)

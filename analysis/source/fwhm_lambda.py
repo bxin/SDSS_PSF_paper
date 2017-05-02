@@ -79,46 +79,59 @@ def main():
             f, ax1 = plt.subplots(nRow, nCol, sharex='col',
                                   sharey='row', figsize=(12, 8))
 
+        idxm = np.zeros(txtdata.shape[0])
+        for ii in range(txtdata.shape[0]):
+            # scanning order is r-i-u-z-g
+            # u, normalize using fwhm[r-band]
+            if ((txtdata[ii, 2] == 0) & (txtdata[ii, 0] > startfield + 3) & (
+                    txtdata[ii, 0] < endfield - 4)):
+                rx = (txtdata[:, 2] == 2) & (txtdata[:, 0] == txtdata[ii, 0]+4)& (txtdata[:, 1] == txtdata[ii, 1])
+                fwhm[ii] = fwhm[ii]/fwhm[rx]
+                idxm[ii]= txtdata[ii, 1]
+            # g
+            elif ((txtdata[ii, 2] == 1) & (txtdata[ii, 0] < endfield - 8)):
+                rx = (txtdata[:, 2] == 2) & (txtdata[:, 0] == txtdata[ii, 0]+8) & (txtdata[:, 1] == txtdata[ii, 1])
+                fwhm[ii] = fwhm[ii]/fwhm[rx]
+                idxm[ii]= txtdata[ii, 1]
+            # r
+            elif ((txtdata[ii, 2] == 2) & (txtdata[ii, 0] > startfield + 7)):
+                fwhm[ii] = 1
+                idxm[ii]= txtdata[ii, 1]
+            # i
+            elif ((txtdata[ii, 2] == 3) & (txtdata[ii, 0] > startfield + 5) & (
+                     txtdata[ii, 0] < endfield - 2)):
+                rx = (txtdata[:, 2] == 2) & (txtdata[:, 0] == txtdata[ii, 0]+2) & (txtdata[:, 1] == txtdata[ii, 1])
+                fwhm[ii] = fwhm[ii]/fwhm[rx]
+                idxm[ii]= txtdata[ii, 1]
+            # z
+            elif ((txtdata[ii, 2] == 4) & (txtdata[ii, 0] > startfield + 1) & (
+                      txtdata[ii, 0] < endfield - 6)):
+                rx = (txtdata[:, 2] == 2) & (txtdata[:, 0] == txtdata[ii, 0]+6) & (txtdata[:, 1] == txtdata[ii, 1])
+                fwhm[ii] = fwhm[ii]/fwhm[rx]
+                idxm[ii]= txtdata[ii, 1]
+                
         for camcol in range(1, sdss.nCamcol + 1):
             iRow = np.uint8(np.ceil(camcol / nCol)) - 1
             iCol = np.mod(camcol - 1, nCol)
             # print(iRow, iCol)
 
-            # scanning order is r-i-u-z-g
-            idx = (txtdata[:, 1] == camcol) & \
-                (((txtdata[:, 2] == 0) & (txtdata[:, 0] > startfield + 3) & (
-                    txtdata[:, 0] < endfield - 4)) |
-                    ((txtdata[:, 2] == 1) & (txtdata[:, 0] < endfield - 8)) |
-                 ((txtdata[:, 2] == 2) & (txtdata[:, 0] > startfield + 7)) |
-                 ((txtdata[:, 2] == 3) & (txtdata[:, 0] > startfield + 5) & (
-                     txtdata[:, 0] < endfield - 2)) |
-                 ((txtdata[:, 2] == 4) & (txtdata[:, 0] > startfield + 1) & (
-                     txtdata[:, 0] < endfield - 6)))
+            idx = (idxm == camcol) 
             if args.ugri == 1:
                 idx = idx & (txtdata[:, 2] != 4)  # remove z band data
             fwhmfit = fwhm[idx]
             Leffnparray = np.array(sdss.Leff)
             Lefffit = Leffnparray[np.uint8(txtdata[idx, 2])]
-            popt, pcov = optimize.curve_fit(
-                lambda Leff, norm: fwhm_lambda_dep(Leff, norm, -0.2),
-                Lefffit, fwhmfit, p0=[5])
-            norm02 = popt[0]
-            y02 = fwhm_lambda_dep(xlambda, norm02, -0.2)
+            y02 = fwhm_lambda_dep1(xlambda, -0.2)
             ax1[iRow, iCol].plot(xlambda, y02, '-b', label='power = -0.2')
 
-            popt, pcov = optimize.curve_fit(
-                lambda Leff, norm: fwhm_lambda_dep(Leff, norm, -0.3),
-                Lefffit, fwhmfit, p0=[5])
-            norm03 = popt[0]
-            y03 = fwhm_lambda_dep(xlambda, norm03, -0.3)
+            y03 = fwhm_lambda_dep1(xlambda, -0.3)
             ax1[iRow, iCol].plot(xlambda, y03, '-g', label='power = -0.3')
 
             popt, pcov = optimize.curve_fit(
-                fwhm_lambda_dep,
-                Lefffit, fwhmfit, p0=[5, -0.25])
-            normfit = popt[0]
-            powerfit = popt[1]
-            yfit = fwhm_lambda_dep(xlambda, normfit, powerfit)
+                fwhm_lambda_dep1,
+                Lefffit, fwhmfit, p0=[-0.25])
+            powerfit = popt[0]
+            yfit = fwhm_lambda_dep1(xlambda, powerfit)
             ax1[iRow, iCol].plot(xlambda, yfit, '-k',
                                  label='power (fit) = %5.2f' % powerfit)
             print('camcol=%d, power (fit) = %5.2f' % (camcol, powerfit))
@@ -129,30 +142,14 @@ def main():
                 if camcol == sdss.nCamcol:
                     fidw.write('\n')
 
-            # scanning order is r-i-u-z-g
-            for ufield in range(startfield + 4, endfield - 4 + 1):
-                gfield = ufield - 4
-                rfield = ufield + 4
-                ifield = ufield + 2
-                zfield = ufield - 2
-                idxu = (txtdata[:, 0] == ufield) & (
-                    txtdata[:, 1] == camcol) & (txtdata[:, 2] == 0)
-                idxg = (txtdata[:, 0] == gfield) & (
-                    txtdata[:, 1] == camcol) & (txtdata[:, 2] == 1)
-                idxr = (txtdata[:, 0] == rfield) & (
-                    txtdata[:, 1] == camcol) & (txtdata[:, 2] == 2)
-                idxi = (txtdata[:, 0] == ifield) & (
-                    txtdata[:, 1] == camcol) & (txtdata[:, 2] == 3)
-                idxz = (txtdata[:, 0] == zfield) & (
-                    txtdata[:, 1] == camcol) & (txtdata[:, 2] == 4)
-                if args.ugri == 1:
-                    fwhmt = np.hstack(
-                        (fwhm[idxu], fwhm[idxg], fwhm[idxr], fwhm[idxi]))
-                    ax1[iRow, iCol].plot(sdss.Leff[0:4], fwhmt, '-ro')
-                else:
-                    fwhmt = np.hstack((fwhm[idxu], fwhm[idxg], fwhm[
-                                      idxr], fwhm[idxi], fwhm[idxz]))
-                    ax1[iRow, iCol].plot(sdss.Leff, fwhmt, '-ro')
+            fwhmt = np.zeros(sdss.nBand)
+            fwhmerr = np.zeros(sdss.nBand)
+            for iBand in range(sdss.nBand):
+                idx = (Lefffit == sdss.Leff[iBand])
+                aa = fwhm[(idxm == camcol)]
+                fwhmt[iBand] = np.mean(aa[idx])
+                fwhmerr[iBand] = np.std(aa[idx])
+            ax1[iRow, iCol].errorbar(sdss.Leff, fwhmt, fwhmerr, fmt='ok')
             ax1[iRow, iCol].grid()
             ax1[iRow, iCol].set_title('camcol=%d' % camcol)
             ax1[iRow, iCol].plot(xlambda, y02, '-b')
@@ -193,6 +190,9 @@ def main():
 
 def fwhm_lambda_dep(Leff, norm, power):
     return norm * Leff**power
+
+def fwhm_lambda_dep1(Leff, power):
+    return  (Leff/616.6)**power
 
 if __name__ == "__main__":
     main()

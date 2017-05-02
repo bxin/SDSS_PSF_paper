@@ -102,9 +102,12 @@ class sdssrun(object):
         radius = vdata[0]
         vonK = vdata[1]
         vonK1arcsec = np.vstack((radius, vonK))
-
+        grid1d = np.linspace(-50, 50, 1001)
+        vonK2D = np.loadtxt('data/vonK1.0.txt')
+        tailPar = np.loadtxt('data/tailPar.txt')
+        
         fid = open(filename, 'w')
-        fid.write('#field \t camCol  filter FWHMvK ')
+        fid.write('#field \t camCol  filter FWHMvK eta ')
         otherParams = [['psf_width', '%5.3f'],
                        ['airmass', '%5.3f'],
                        ['mjd\t\t', '%12.6f'],
@@ -127,13 +130,16 @@ class sdssrun(object):
                     print('field No. = %d/%d' % (ifield, self.nfields))
                 for iBand in range(0, sdss.nBand):
                     psf = sdsspsf(hdu1, ifield, iBand, self.runNo, camcol)
-                    psf.fit2vonK_curve_fit(vonK1arcsec)
+                    psf.tailP = tailPar[iBand*sdss.nCamcol + camcol-1]
+                    psf.fit2vonK_curve_fit(vonK1arcsec, vonK2D, grid1d)
                     if psf.scaleR < -1:
-                        psf.fit2vonK_fmin(vonK1arcsec)
+                        psf.fit2vonK_fmin(vonK1arcsec, vonK2D, grid1d)
+                    psf.fit2convEta_curve_fit(vonK2D, grid1d)
 
                     # fwhmeff of the vonK1arcsec = 1.222 arcsec
-                    fid.write('%d \t %d \t %d \t %5.3f \t' % (
-                        ifield, camcol, iBand, psf.scaleR * 1.222))
+                    fid.write('%d \t %d \t %d \t %5.3f \t %.3f \t ' % (
+                        ifield, camcol, iBand, psf.scaleR * 1.222,
+                        psf.tailEta))
                     for i in range(len(otherParams)):
                         fid.write('%s \t' % otherParams[i][1] % (
                             hdu1[ifield][otherParams[i][0].strip()][iBand]))

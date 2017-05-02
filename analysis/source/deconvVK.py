@@ -1,5 +1,5 @@
 import argparse
-import sys
+# import sys
 import numpy as np
 from scipy import interpolate
 from matplotlib import pyplot as plt
@@ -37,6 +37,13 @@ def main():
     f=interpolate.RectBivariateSpline(x1, x1, vk*scaleV, kx=1, ky=1)
     vk = f(grid1d, grid1d)
     # vk[np.sqrt(xm**2+ym**2)>3] = 0
+
+    # make the atm narrow by pNarrow %
+    # pNarrow = 10
+    # grid1dp = grid1d * (1+pNarrow / 100.)
+    # f= interpolate.interp2d(grid1d, grid1d, vk)
+    # vk = f(grid1dp, grid1dp)
+    
     vk = vk/np.sum(vk)
     vkN = vk/np.max(vk)*scaleV
     
@@ -67,6 +74,12 @@ def main():
 
     m1=max(np.argmax(g2recN==np.max(g2recN), axis=0))
     m2=max(np.argmax(g2recN==np.max(g2recN), axis=1))
+
+    vdata = np.loadtxt('output/run94_data_points.txt')
+    deliverR = vdata[0]
+    deliverY = vdata[1]
+    deliverE = vdata[2]
+    
     # 
     # f, ax1 = plt.subplots(1,2, figsize=(12, 8))
     # ax1[0].semilogy(x, vkN[500, 500:],'-b', label='vonK')
@@ -97,14 +110,16 @@ def main():
     ax1[0, 2].set_xlim(0, 30)
     ax1[0, 2].set_ylim(1e-6, 10)
     ax1[0, 2].legend(loc="upper right", fontsize=10)
+    ax1[0, 2].errorbar(deliverR, deliverY, deliverE, fmt='ko')
     ax1[0, 3].plot(x, vkN[500, 500:],'-b', label='vonK')
     ax1[0, 3].plot(x,g2N[500,500:],'-r',label='G2')
     ax1[0, 3].plot(x,g2recN[m1,m2:m2+501],'-g',label='G2 rec.')
     ax1[0, 3].set_xlim(0, 2)
     ax1[0, 3].legend(loc="upper right", fontsize=10)
+    ax1[0, 3].errorbar(deliverR, deliverY, deliverE, fmt='ko')
     
     # Now we check how double G as psf performs
-    sigma = 0.2 #for the core
+    sigma = 0.1 #for the core
     # parameter#1,2
     for ip in range(2):
         if ip == 0:
@@ -123,14 +138,25 @@ def main():
             #G12d = A1-A1*(0.99)/20*np.sqrt(xm*xm+ym*ym)
             #G12d[G12d<0]=0
             
-            A1=2e-5
+            A1=1e-5
             A1=np.log10(A1)
-            G1=10**(A1-(A1-(-6))/30*x)
-            G12d = 10**(A1-(A1-(-8.2))/30*np.sqrt(xm*xm+ym*ym))
+            x1=0
+            y1=-5
+            x2 = 30
+            y2 = -6.9 #-6
+            x3 = 15
+            y3 = -6.1
+            abcM = np.array([[x1**2, x1, 1], [x2**2, x2, 1], [x3**2, x3, 1]])
+            abc = np.dot(np.linalg.inv(abcM), np.array([[y1] ,[y2], [y3]]))
+            G1=10**(abc[0][0]*x*x+abc[1][0]*x+abc[2][0])
+            rm = np.sqrt(xm*xm+ym*ym)
+            G12d = 10**(abc[0][0]*rm*rm+abc[1][0]*rm+abc[2][0])
             
-        g = np.exp(-x*x/2/sigma**2)*0+G1
+        g = np.exp(-x*x/2/sigma**2)+G1
         g2d = np.exp(-(xm*xm+ym*ym)/2/sigma**2)+G12d
-    
+        #m0 = int((len(grid1d)-1)/2)
+        #g2d[m0, m0]= 20
+        
         #convolution
         psffft = np.fft.fftshift(np.fft.fft2(np.fft.fftshift(g2d), s=g2d.shape))
         prodfft = psffft*vkfft
@@ -142,7 +168,7 @@ def main():
         ax1[ip+1, 0].semilogy(x, g,'-b',label='doubleG psf')
         ax1[ip+1, 0].semilogy(x, G1,'-g',label='the wider Gau.')
         ax1[ip+1, 0].set_xlim(0, 30)
-        ax1[ip+1, 0].set_ylim(1e-6, 10)
+        ax1[ip+1, 0].set_ylim(1e-7, 10)
         ax1[ip+1, 0].grid()
         ax1[ip+1, 0].legend(loc="upper right", fontsize=10)
         ax1[ip+1, 1].plot(x, psfN[500, 500:],'-ro',label='psf deconvolved')
@@ -157,13 +183,15 @@ def main():
         ax1[ip+1, 2].set_xlim(0, 30)
         ax1[ip+1, 2].set_ylim(1e-6, 10)
         ax1[ip+1, 2].legend(loc="upper right", fontsize=10)
+        ax1[ip+1, 2].errorbar(deliverR, deliverY, deliverE, fmt='ko')
     
         ax1[ip+1, 3].plot(x, vkN[500, 500:],'-b', label='vonK')
         ax1[ip+1, 3].plot(x,g2N[500,500:],'-r',label='G2')
         ax1[ip+1, 3].plot(x,newN[m1,m2:m2+501],'-g',label='G2 rec.')
         ax1[ip+1, 3].set_xlim(0, 3)
         ax1[ip+1, 3].legend(loc="upper right", fontsize=10)
-            
+        ax1[ip+1, 3].errorbar(deliverR, deliverY, deliverE, fmt='ko')
+        
     #plt.show()
     plt.savefig('output/deconvVK%d.png' % 94)
 

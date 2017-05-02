@@ -53,6 +53,8 @@ for line in objlist:
     if args.run == -1 or args.run == run:
         runcount += 1
         argList.append((sdss, run, runcount))
+    # test
+    # write1run(argList[0])
 
 pool = multiprocessing.Pool(args.numproc)
 

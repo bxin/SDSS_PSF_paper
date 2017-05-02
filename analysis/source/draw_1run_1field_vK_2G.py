@@ -47,15 +47,14 @@ def main():
     grid1d = np.linspace(-50, 50, 1001)
     vonK2D = np.loadtxt('data/vonK1.0.txt')
     tailPar = np.loadtxt('data/tailPar.txt')
-    tailPar = tailPar.reshape((5, 6, 3))
-    
+
     run = args.irun
     print('------ running on run# %d ---------' % run)
     f, ax1 = plt.subplots(nBand, nCamcol, sharex='col',
                           sharey='row', figsize=(12, 8))  # a plot is for a run
 
     outdir = "%s/%d/" % (rootName, run)
-    for camcol in range(1, 2): #nCamcol + 1):
+    for camcol in range(1, nCamcol + 1):
         print('running on camcol#%d' % camcol)
         datafile = outdir + "photoField-%06d-%d.fits" % (run, camcol)
 
@@ -67,25 +66,27 @@ def main():
             sys.exit()
         hdu1 = hdulist[1].data
 
-        for iBand in range(3, nBand):
+        for iBand in range(0, nBand):
 
             psf = sdsspsf(hdu1, args.ifield, iBand, run, camcol)
-            psf.tailSigma = tailPar[iBand, camcol - 1, 0]
-            psf.tailA = tailPar[iBand, camcol - 1, 1]
-            psf.tailB = tailPar[iBand, camcol - 1, 2]
+            psf.tailP = tailPar[iBand*nCamcol + camcol-1]
             
             psf.fit2vonK_curve_fit(vonK1arcsec, vonK2D, grid1d)
             if psf.scaleR < -1:
-                psf.fit2vonK_fmin(vonK1arcsec)
-            psf.fit2conv_curve_fit(vonK2D, grid1d)
+                psf.fit2vonK_fmin(vonK1arcsec, vonK2D, grid1d)
+            psf.fit2convEta_curve_fit(vonK2D, grid1d)
+            # psf.fit2conv_curve_fit(vonK2D, grid1d, sigma=0.2)
+            # psf.fit2conv_curve_fit(vonK2D, grid1d, tailB = psf.tailB)
             
             print('chi2=%4.1f/%4.1f, chi2lr = %4.1f/%4.1f, chi2hr=%4.1e/%4.1e' %(
                 psf.chi2, psf.G2chi2, psf.chi2lr, psf.G2chi2lr, psf.chi2hr, psf.G2chi2hr))
 
             if args.yscale == 'log' or args.yscale == 'logzoom':
                 ax1[iBand, camcol - 1].plot(psf.vR, np.log10(psf.vv), 'b')
-                ax1[iBand, camcol -
-                    1].plot(psf.r, psf.LpsfModel + np.log10(psf.scaleV), 'r')
+                # draw double Gaussian as Red
+                # ax1[iBand, camcol -
+                #    1].plot(psf.r, psf.LpsfModel + np.log10(psf.scaleV), 'r')
+                ax1[iBand, camcol - 1].plot(psf.vvR, np.log10(psf.vvv), 'r')
                 ax1[iBand, camcol - 1].errorbar(psf.OKprofRadii, psf.OKprofile,
                                                 psf.OKprofileErr, fmt='ok')
                 if args.yscale == 'log':
@@ -101,8 +102,10 @@ def main():
                     ax1[iBand, camcol - 1].set_ylim(-1.5, 0.1)
             elif args.yscale == 'linear':
                 ax1[iBand, camcol - 1].plot(psf.vR, psf.vv, 'b')
-                ax1[iBand, camcol - 1].plot(psf.r,
-                                            psf.psfModel * psf.scaleV, 'r')
+                # draw double Gaussian as Red
+                # ax1[iBand, camcol - 1].plot(psf.r,
+                #                             psf.psfModel * psf.scaleV, 'r')
+                ax1[iBand, camcol - 1].plot(psf.vvR, psf.vvv, 'r')
                 ax1[iBand, camcol - 1].errorbar(psf.OKprofRadii,
                                                 psf.OKprofileLinear,
                                                 psf.OKprofileErrLinear,
@@ -118,7 +121,7 @@ def main():
             if iBand == 0:
                 ax1[iBand, camcol - 1].set_title('camcol=%d' % camcol)
 
-    plt.suptitle('run %d, field %d, blue: vK, Red: 2G ' % (run, args.ifield))
+    plt.suptitle('run %d, field %d, Red: vK only, Blue: vK+instrument ' % (run, args.ifield))
     # plt.tight_layout()
     # plt.show()
     plt.savefig('output/run%d_fld%d_psf_vK_2G_%s.png' %

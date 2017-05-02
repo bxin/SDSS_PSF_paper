@@ -1,6 +1,6 @@
 import argparse
 import numpy as np
-from scipy import stats
+#from scipy import stats
 from matplotlib import pyplot as plt
 
 # The code generates two 2D Gaussians (psf1 and psf2), convolve them to get psf12,
@@ -35,7 +35,7 @@ def main():
     prodfft = psf2fft*psf1fft
     psf12 = np.fft.fftshift(np.fft.ifft2(np.fft.fftshift(prodfft),
                                                         s=prodfft.shape))
-    sigma12 = np.sqrt(sigma1**2+sigma2**2)
+    # sigma12 = np.sqrt(sigma1**2+sigma2**2)
     # psf12 = np.exp(-(xm*xm+ym*ym)/2/sigma12**2)
     
     #psf1_deconv = deconvolve(psf12, psf2)

@@ -9,6 +9,8 @@ from sdssinst import sdssinst
 ---for each run, each filter, make plot of cov vs separation
 """
 
+def func(x, a):
+    return a*x+1
 
 def main():
 
@@ -18,6 +20,8 @@ def main():
                         help='run number; -9 for all runs individually; \
                         makes no sense to plot all runs together')
     parser.add_argument('-doubleG', help='use psf_width from the double Gau fits',
+                        action='store_true')
+    parser.add_argument('-writefitp', help='write fit parameter',
                         action='store_true')
     parser.add_argument('-startfield', dest='startfield', default=0, type=int,
                         help='field# to start with')
@@ -31,7 +35,19 @@ def main():
     if runNo > 0:
         # remove all lines but one
         objlist = objlist[objlist[:, 0] == runNo, :]
-
+    if args.doubleG:
+        fwhmStr = 'fwhm2G'
+    else:
+        fwhmStr = 'fwhm'
+            
+    if (args.startfield == 0 and args.endfield == 99999):
+        fitpname = 'output/correlate_spatial/run%d_%s_fitp.txt'%(runNo, fwhmStr)
+    else:
+        fitpname = 'output/correlate_spatial/run%d_%s_fld_%d_%d_fitp.txt' %(
+            runNo, fwhmStr, args.startfield, args.endfield)
+        
+    if args.writefitp:
+        fid = open(fitpname, 'w')        
     sdss = sdssinst()
     runcount = 0
     for line in objlist:
@@ -46,10 +62,8 @@ def main():
             txtdata[:, 0] < args.endfield)
         txtdata = txtdata[idx, :]
         if args.doubleG:
-            fwhmStr = 'fwhm2G'
             fwhm = txtdata[:, 4]
         else:
-            fwhmStr = 'fwhm'
             fwhm = txtdata[:, 3]  # FWHMeff 
         airmass = txtdata[:, 5]
         fwhm = fwhm/airmass**0.6
@@ -71,16 +85,28 @@ def main():
                 idx = (txtdata[:, 1] == camcol) & (txtdata[:, 2] == iBand)
                 fwhmArray[:, camcol-1] = fwhm[idx]
             #myCovSquare=np.cov(fwhmArray, rowvar=0)
-            myCovSquare=np.corrcoef(fwhmArray, rowvar=0)
-            myCov = np.zeros(15)
+            myCorrCoef=np.corrcoef(fwhmArray, rowvar=0)
+            myCov = np.zeros(15) #15 = 1+2+3+4+5
             mySep = np.zeros(15)
+            myErr = np.zeros(15)
             i = 0
             for iCamcol in range(1, sdss.nCamcol + 1):
                 for jCamcol in range(iCamcol+1, sdss.nCamcol + 1):
-                    myCov[i] = myCovSquare[iCamcol-1, jCamcol-1]
+                    myCov[i] = myCorrCoef[iCamcol-1, jCamcol-1]
                     mySep[i] = jCamcol - iCamcol
+                    # https://www.mathworks.com/matlabcentral/newsreader/view_thread/107045
+                    myErr[i] = (1-myCov[i]**2)/np.sqrt(nfields-1)
                     i += 1
-            ax1[iRow, iCol].plot(mySep, myCov, 'xr',markersize=15)
+
+            popt, pcov = optimize.curve_fit(func, mySep, myCov, p0=[-0.005],
+                sigma=myErr, absolute_sigma=True)
+            myX = np.linspace(0, sdss.nCamcol, 100)
+            myY = func(myX, popt[0])
+            if args.writefitp:
+                fid.write('%d\t %d\t %6.4f \n'%(run, iBand, popt[0]))
+                
+            ax1[iRow, iCol].errorbar(mySep, myCov, myErr, fmt = 'ok') #,markersize=15)
+            ax1[iRow, iCol].plot(myX, myY, '-r')
             ax1[iRow, iCol].set_xlim(0, sdss.nCamcol)
             ax1[iRow, iCol].set_title('run%d, %s, %s' %
                         (runNo, fwhmStr, sdss.band[iBand]))
@@ -89,17 +115,19 @@ def main():
             ax1[iRow, iCol].set_ylabel('Correlation coefficients')
             ax1[iRow, iCol].grid()
             #plt.show()
-            
-    # plt.tight_layout()
-    if (args.startfield == 0 and args.endfield == 99999):
-        plt.savefig('output/correlate_spatial/run%d_%s.png' %
-                    (runNo, fwhmStr))
-    else:
-        plt.savefig(
-            'output/correlate_spatial/run%d_%s_fld_%d_%d.png' %
-            (runNo, fwhmStr, args.startfield, args.endfield))
 
-    plt.close()
+        if (args.startfield == 0 and args.endfield == 99999):
+            pngname = 'output/correlate_spatial/run%d_%s.png' %(run, fwhmStr)
+        else:
+            pngname = 'output/correlate_spatial/run%d_%s_fld_%d_%d.png' %(
+                run, fwhmStr, args.startfield, args.endfield)
 
+        # plt.tight_layout()
+        plt.savefig(pngname)
+        plt.close()
+        
+    if args.writefitp:
+        fid.close()
+        
 if __name__ == "__main__":
     main()
