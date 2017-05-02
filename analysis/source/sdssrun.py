@@ -119,7 +119,7 @@ class sdssrun(object):
         fid.write('\n')
 
         for camcol in range(1, sdss.nCamcol + 1):
-            print('running on camcol#%d' % camcol)
+            print('running on run#%d \t camcol#%d' % (self.runNo, camcol))
             datafile = self.fitsdir + \
                 "photoField-%06d-%d.fits" % (self.runNo, camcol)
 

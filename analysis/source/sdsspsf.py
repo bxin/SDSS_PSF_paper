@@ -287,9 +287,7 @@ class sdsspsf(object):
             print(self.OKprofileLinear)
             print('err=\n')
             print(errLinear)
-            self.tailSigma = -999
-            self.tailA = -999
-            self.tailB = -999
+            self.tailEta= -999
             # sys.exit()
 
     # used to use fminbound(), but it is for 1D optimization
@@ -427,8 +425,8 @@ def convVonKEta(vonK2D, grid1d, r, scaleR, scaleV, eta, tailP):
         f = interpolate.interp1d(vR, vv, bounds_error=False)
         p = f(r)
 
-        print('scaleR = %7.4f, eta=%7.4f, p(15arcsec)=%e' % (
-            scaleR, eta, f(15)))
+        # print('scaleR = %7.4f, eta=%7.4f, p(15arcsec)=%e' % (
+        #     scaleR, eta, f(15)))
     return p
 
 
