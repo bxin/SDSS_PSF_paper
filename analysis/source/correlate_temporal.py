@@ -169,7 +169,7 @@ def main():
                     ax1[iRow, iCol].set_ylabel('Correlation coefficients')
                 
                 ax1[iRow, iCol].set_title('run%d, %s, %s, camcol=%s' %
-                            (runNo, fwhmStr, sdss.band[band], camcol))
+                            (run, fwhmStr, sdss.band[band], camcol))
                 ax1[iRow, iCol].grid()
                 #plt.show()
                 

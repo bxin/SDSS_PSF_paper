@@ -109,7 +109,7 @@ def main():
             ax1[iRow, iCol].plot(myX, myY, '-r')
             ax1[iRow, iCol].set_xlim(0, sdss.nCamcol)
             ax1[iRow, iCol].set_title('run%d, %s, %s' %
-                        (runNo, fwhmStr, sdss.band[iBand]))
+                        (run, fwhmStr, sdss.band[iBand]))
             ax1[iRow, iCol].set_xlabel('Spatial separation')
             #ax1[iRow, iCol].set_ylabel('Covariance (arcsec^2)')
             ax1[iRow, iCol].set_ylabel('Correlation coefficients')

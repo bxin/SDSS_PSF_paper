@@ -218,6 +218,15 @@ Compare to SDSS, emphasize superiority of 1 parameter vs. 6 parameters fit
 
 Discuss profile shape stability when the seeing is rapidly  changing 
 
+\begin{figure}
+\centering
+\includegraphics[width=0.9\textwidth]{FIGURES/psffit.png}
+\caption{Fit to the PSF profiles from run 1033, field 200. Red curves
+  are results of 1-parameter von Karman fits. Blue curves are red
+  curve convolved with the instrument PSF, where the scaling factor on
+  the tail component is allowed to vary.
+\label{fig:psffit}}
+\end{figure}
 
 \section{The analysis of FWHM behavior} 
 
@@ -229,6 +238,20 @@ a single parameter, FWHM, we study three aspects of its variation, as follows.
 
 Asumming a power law, FWHM$\propto \lambda^{-\alpha}$, what can we say 
 about $\alpha$ distribution? 
+
+\begin{figure}
+\centering
+\includegraphics[width=0.9\textwidth]{FIGURES/fwhm_lambda.png}
+\caption{FWHM as functions of wavelength for run 3427.
+\label{fig:fwhm_lambda}}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[width=0.9\textwidth]{FIGURES/f3.eps}
+\caption{statistics for $\alpha$ from all 109 runs.
+\label{fig:alpha_stat}}
+\end{figure}
 
 
 Why is SDSS PSF different for the $i$ band? The $i$ band psf has ``stronger tails''
@@ -243,6 +266,20 @@ thick front-side chips are used (in all other bands, thin back-side chips are us
 Cross-correlation of FWHM for 6 camera columns and the measurement of the angular
 structure function (that is, the covariance vs. angular distance). 
 
+\begin{figure}
+\centering
+\includegraphics[width=0.9\textwidth]{FIGURES/spatial.png}
+\caption{spatial correlation for run 1009. (plot title wrong)
+\label{fig:fwhm_lambda}}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[width=0.9\textwidth]{FIGURES/f3.eps}
+\caption{statistics for correlation coefficients from all 109 runs.
+\label{fig:alpha_stat}}
+\end{figure}
+
 
 \subsection{Temporal auto-correlation function}
 
@@ -253,6 +290,21 @@ Study the temporal power spectrum:
 \item Potentially, we could also look at  Kelly and Becker code  (2014, ApJ 788, 33) 
 \item Here we can compare to Chuck's CP measurements (in opsim db) 
 \end{itemize} 
+
+\begin{figure}
+\centering
+\includegraphics[width=0.9\textwidth]{FIGURES/temporal.png}
+\caption{spatial correlation for run 1009. (plot title wrong). Average
+  $f_0 = 5.1\times 10^{-4} Hz$, Average $\tau = 314 sec.$ 
+\label{fig:psd}}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[width=0.9\textwidth]{FIGURES/f3.eps}
+\caption{statistics for correlation coefficients from all 109 runs.
+\label{fig:psd_stat}}
+\end{figure}
 
 
 
