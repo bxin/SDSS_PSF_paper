@@ -118,6 +118,8 @@ def main():
             idx = (idxm == camcol) 
             if args.ugri == 1:
                 idx = idx & (txtdata[:, 2] != 4)  # remove z band data
+                sdss.nBand = 4
+                sdss.Leff = sdss.Leff[:4]
             fwhmfit = fwhm[idx]
             Leffnparray = np.array(sdss.Leff)
             Lefffit = Leffnparray[np.uint8(txtdata[idx, 2])]
@@ -145,10 +147,10 @@ def main():
             fwhmt = np.zeros(sdss.nBand)
             fwhmerr = np.zeros(sdss.nBand)
             for iBand in range(sdss.nBand):
-                idx = (Lefffit == sdss.Leff[iBand])
-                aa = fwhm[(idxm == camcol)]
-                fwhmt[iBand] = np.mean(aa[idx])
-                fwhmerr[iBand] = np.std(aa[idx])
+                idxx = (Lefffit == sdss.Leff[iBand])
+                aa = fwhm[idx]
+                fwhmt[iBand] = np.mean(aa[idxx])
+                fwhmerr[iBand] = np.std(aa[idxx])
             ax1[iRow, iCol].errorbar(sdss.Leff, fwhmt, fwhmerr, fmt='ok')
             ax1[iRow, iCol].grid()
             ax1[iRow, iCol].set_title('camcol=%d' % camcol)

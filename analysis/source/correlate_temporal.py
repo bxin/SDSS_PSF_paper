@@ -141,20 +141,21 @@ def main():
                     f = f[cutoff]
                     PSD = PSD[cutoff]
                     popt, pcov = optimize.curve_fit(logpsdfunc, f, np.log10(PSD), p0=[1e5, 1e-3],
-                                                        bounds = ([1e4, 1e-4], [1e7, 1e-2]),)
+                                                        bounds = ([1, 1e-4], [1e7, 1e-2]),)
                     # sigma=myErr, absolute_sigma=True)
                     tau = 1/(2*np.pi*popt[1])
                     # print('A=%e, f0=%e, tau = %5.0f s' %(popt[0], popt[1], tau))
                     if args.writefitp:
                         fid.write('%d\t %d\t %d\t %e\t %e\t %6.1f \n'%(run, band, camcol, popt[0], popt[1], tau))
-                    
-                    myY = 10**logpsdfunc(f, popt[0], popt[1])
-                    ax1[iRow, iCol].loglog(f, PSD, '.-')#, c='#AAAAAA')
+
+                    myX = np.hstack((f[0]/2, f, f[-1]*2))
+                    myY = 10**logpsdfunc(myX, popt[0], popt[1])
+                    ax1[iRow, iCol].loglog(f, PSD, linestyle = 'None', marker='.', color='k', markersize=10)#, c='#AAAAAA')
                     # ax1[iRow, iCol].loglog(fW1, PSDW1,'-k')
                     # ax1[iRow, iCol].loglog(fW2, PSDW2,'-r')
-                    ax1[iRow, iCol].loglog(f, myY, 'r-')
+                    ax1[iRow, iCol].loglog(myX, myY, 'r-')
                     
-                    ax1[iRow, iCol].set_xlim(min(f), max(f))
+                    ax1[iRow, iCol].set_xlim(min(myX), max(myX))
                     ax1[iRow, iCol].set_xlabel('Frequency (Hz)')
                     ax1[iRow, iCol].set_ylabel('PSD (arcsec$^2$ second)')
                     

@@ -86,26 +86,35 @@ def main():
                 fwhmArray[:, camcol-1] = fwhm[idx]
             #myCovSquare=np.cov(fwhmArray, rowvar=0)
             myCorrCoef=np.corrcoef(fwhmArray, rowvar=0)
-            myCov = np.zeros(15) #15 = 1+2+3+4+5
+            myCor = np.zeros(15) #15 = 1+2+3+4+5
             mySep = np.zeros(15)
             myErr = np.zeros(15)
             i = 0
             for iCamcol in range(1, sdss.nCamcol + 1):
                 for jCamcol in range(iCamcol+1, sdss.nCamcol + 1):
-                    myCov[i] = myCorrCoef[iCamcol-1, jCamcol-1]
+                    myCor[i] = myCorrCoef[iCamcol-1, jCamcol-1]
                     mySep[i] = jCamcol - iCamcol
                     # https://www.mathworks.com/matlabcentral/newsreader/view_thread/107045
-                    myErr[i] = (1-myCov[i]**2)/np.sqrt(nfields-1)
+                    myErr[i] = (1-myCor[i]**2)/np.sqrt(nfields-1)
                     i += 1
 
-            popt, pcov = optimize.curve_fit(func, mySep, myCov, p0=[-0.005],
+            popt, pcov = optimize.curve_fit(func, mySep, myCor, p0=[-0.005],
                 sigma=myErr, absolute_sigma=True)
             myX = np.linspace(0, sdss.nCamcol, 100)
             myY = func(myX, popt[0])
             if args.writefitp:
                 fid.write('%d\t %d\t %6.4f \n'%(run, iBand, popt[0]))
                 
-            ax1[iRow, iCol].errorbar(mySep, myCov, myErr, fmt = 'ok') #,markersize=15)
+            wSep = np.zeros(sdss.nCamcol-1)
+            wCor = np.zeros(sdss.nCamcol-1)
+            wErr = np.zeros(sdss.nCamcol-1)
+            for iSep in range(1, sdss.nCamcol):
+                myidx = mySep == iSep
+                wSep[iSep-1] = iSep
+                wCor[iSep-1] = sum(myCor[myidx]/myErr[myidx]**2)/sum(1/myErr[myidx]**2)
+                wErr[iSep-1] = np.sqrt(1/sum(1/myErr[myidx]**2))
+            
+            ax1[iRow, iCol].errorbar(wSep, wCor, wErr, fmt = 'ok') #,markersize=15)
             ax1[iRow, iCol].plot(myX, myY, '-r')
             ax1[iRow, iCol].set_xlim(0, sdss.nCamcol)
             ax1[iRow, iCol].set_title('run%d, %s, %s' %
