@@ -133,7 +133,7 @@ class sdssrun(object):
                     psf.tailP = tailPar[iBand*sdss.nCamcol + camcol-1]
                     psf.fit2vonK_curve_fit(vonK1arcsec) #, vonK2D, grid1d)
                     if psf.scaleR < -1:
-                        psf.fit2vonK_fmin(vonK1arcsec, vonK2D, grid1d)
+                        psf.fit2vonK_fmin(vonK1arcsec) #, vonK2D, grid1d)
                     psf.fit2convEta_curve_fit(vonK2D, grid1d)
                     # psf.tailEta = -999
 

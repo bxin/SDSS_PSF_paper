@@ -54,7 +54,7 @@ def main():
                           sharey='row', figsize=(12, 8))  # a plot is for a run
 
     outdir = "%s/%d/" % (rootName, run)
-    for camcol in range(1, nCamcol + 1):
+    for camcol in range(1, nCamcol + 1): #(2,3): #
         print('running on camcol#%d' % camcol)
         datafile = outdir + "photoField-%06d-%d.fits" % (run, camcol)
 
@@ -66,7 +66,7 @@ def main():
             sys.exit()
         hdu1 = hdulist[1].data
 
-        for iBand in range(0, nBand):
+        for iBand in range(0, nBand): # (3,4): #
 
             psf = sdsspsf(hdu1, args.ifield, iBand, run, camcol)
             psf.tailP = tailPar[iBand*nCamcol + camcol-1]

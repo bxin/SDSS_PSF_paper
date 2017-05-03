@@ -246,6 +246,7 @@ class sdsspsf(object):
         try:
             errLinear = self.OKprofileLinear.copy()
             errLinear[self.nprofErr:] = 100
+            assert self.scaleR>-1, "Exiting fit2convEta_curve_fit, scaleR<-1" 
             idx = min(abs(self.OKprofRadii - 15)) == abs(self.OKprofRadii - 15)
             errLinear[idx] = 1e-10
             popt, pcov = optimize.curve_fit(
@@ -276,7 +277,7 @@ class sdsspsf(object):
             self.chi2hr = sum(
                 ((yy[idx] - self.OKprofileLinear[idx]) / errLinear[idx])**2) / sum(idx)
 
-        except (RuntimeError, ValueError) as e:
+        except (RuntimeError, ValueError, AssertionError) as e:
             print('in fit2conv_curve_fit\n')
             print(e)
             print('run#=%d, camcol=%d, field=%d, band=%d\n' % (
@@ -288,6 +289,15 @@ class sdsspsf(object):
             print('err=\n')
             print(errLinear)
             self.tailEta= -999
+            if self.scaleR < -1:
+                self.chi2 = -999
+                self.chi2lr = -999
+                self.chi2hr = -999
+                self.vvR = -999
+                self.vvv = -999
+                self.vR = -999
+                self.vv = -999
+            
             # sys.exit()
 
     # used to use fminbound(), but it is for 1D optimization
@@ -304,6 +314,7 @@ class sdsspsf(object):
         errLinear[self.nprofErr:] = 100
 
         try:
+            # raise RuntimeError
             xopt = optimize.fmin(
                 lambda scaleRV: scaleVonKRChi2(
                     vonK1arcsec, self.OKprofRadii, scaleRV,
@@ -312,6 +323,9 @@ class sdsspsf(object):
 
             self.scaleR = xopt[0]
             self.scaleV = xopt[1]
+            self.vvR = vonK1arcsec[0] * self.scaleR
+            self.vvv = vonK1arcsec[1] * self.scaleV
+            
             if not (vonK2D is None):
                 newN = convVonK2D(vonK2D, grid1d, self.scaleR,
                                   self.scaleV, 1, self.tailP)
@@ -321,18 +335,18 @@ class sdsspsf(object):
                 m2 = max(np.argmax(newN == np.max(newN), axis=1))
                 self.vv = newN[m1, m2:m2 + m + 1]
             else:
-                self.vR = vonK1arcsec[0] * self.scaleR
-                self.vv = vonK1arcsec[1] * self.scaleV
+                self.vR = self.vvR
+                self.vv = self.vvv
 
-            self.chi2 = sum(scaleVonKRChi2(
-                vonK1arcsec, self.OKprofRadii, xopt)) \
+            self.chi2 = (scaleVonKRChi2(
+                vonK1arcsec, self.OKprofRadii, xopt, self.OKprofileLinear, errLinear)) \
                 / (len(self.OKprofRadii) - 2)
             idx = self.OKprofRadii < 2
-            self.chi2lr = sum(scaleVonKRChi2(
-                vonK1arcsec, self.OKprofRadii[idx], xopt)) / (sum(idx))
+            self.chi2lr = (scaleVonKRChi2(
+                vonK1arcsec, self.OKprofRadii[idx], xopt, self.OKprofileLinear[idx], errLinear[idx])) / (sum(idx))
             idx = self.OKprofRadii >= 2
-            self.chi2hr = sum(scaleVonKRChi2(
-                vonK1arcsec, self.OKprofRadii[idx], xopt)) / sum(idx)
+            self.chi2hr = (scaleVonKRChi2(
+                vonK1arcsec, self.OKprofRadii[idx], xopt, self.OKprofileLinear[idx], errLinear[idx])) / sum(idx)
 
         except (RuntimeError, ValueError) as e:
             print('in fit2vonK_fmin\n')
