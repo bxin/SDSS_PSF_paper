@@ -1,5 +1,12 @@
 \begin{thebibliography}{}
 
+\bibitem[\protect\citeauthoryear{{Gunn} et~al.}{{Gunn} et~al.}{2006}]{Gunn2006}
+{Gunn}, J.~E., et~al. 2006, \aj, 131, 2332
+
+\bibitem[\protect\citeauthoryear{{Ivezi{\'c}} et~al.}{{Ivezi{\'c}}
+  et~al.}{2007}]{Ivezic2007}
+{Ivezi{\'c}}, {\v Z}., et~al. 2007, \aj, 134, 973
+
 \bibitem[\protect\citeauthoryear{{Ivezi\'c} et~al.}{{Ivezi\'c}
   et~al.}{2008}]{LSSToverview}
 {Ivezi\'c}, {\v{Z}}., et~al. 2008, arXiv:0805.2366v4
@@ -18,8 +25,19 @@
   Engineers (SPIE) Conference Series, Vol. 4836, Survey and Other Telescope
   Technologies and Discoveries, ed. J.~A. {Tyson} \& S.~{Wolff}, 350
 
+\bibitem[\protect\citeauthoryear{{Pier} et~al.}{{Pier} et~al.}{2003}]{Pier2003}
+{Pier}, J.~R., {Munn}, J.~A., {Hindsley}, R.~B., {Hennessy}, G.~S., {Kent},
+  S.~M., {Lupton}, R.~H.,  \& {Ivezi{\'c}}, {\v Z}. 2003, \aj, 125, 1559
+
+\bibitem[\protect\citeauthoryear{{Sesar} et~al.}{{Sesar}
+  et~al.}{2007}]{Sesar2007}
+{Sesar}, B., et~al. 2007, \aj, 134, 2236
+
 \bibitem[\protect\citeauthoryear{{Stoughton} et~al.}{{Stoughton}
   et~al.}{2002}]{SDSSEDR}
 {Stoughton}, C., et~al. 2002, \aj, 123, 485
+
+\bibitem[\protect\citeauthoryear{{York} et~al.}{{York} et~al.}{2000}]{York2000}
+{York}, D.~G., et~al. 2000, \aj, 120, 1579
 
 \end{thebibliography}

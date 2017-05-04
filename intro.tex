@@ -1,18 +1,54 @@
 
 % \section{Introduction}
 
-ZI write a brief overview of SDSS and motivation for analysis (e.g. performance optimization
-for LSST, \citealt{LSSToverview}): this shouldn't be hard and can be done in about a day. 
+The atmospheric seeing, the point-spread function (PSF) due to atmospheric turbulence, plays
+a major role in ground-based astronomy. An adequate description of the PSF is critical for 
+photometry, star-galaxy separation, and for unbiased measures of the shapes of nonstellar 
+objects \citep{Lupton2001}. 
 
-Hey Bo! Here is an example of using bibtex and cite call: SDSS PSF algorithm is described 
-in \cite{Lupton2001}, \cite{Lupton2002}, and \citet[][see \S4.3]{SDSSEDR}.
+The vertical distribution of the optical turbulence strength, described by the altitude 
+dependence of the refractive-index structure constant $C^2_n$, is hard to measure. 
 
-Bo or ZI: add a brief summary with a few references (e.g. Young, Tyson, Roddier,
-Tokovinin papers; can also recruit George for this part!) about what is known 
-regarding:  PSF profile shape (e.g. Kolmogorov vs. von Karman), 
-the dependence of FWHM on wavelength, and angular and temporal 
-structure functions. 
 
-Paper layout here.
+The Sloan Digital Sky Survey (SDSS, \citealt{York2000}) is a large-area multi-bandpass sky survey. 
+The SDSS provides homogeneous and deep ($r\la22.5$) photometry in five bandpasses ($u$, $g$, $r$, $i$, 
+and $z$, with effective wavelengths of 3551, 4686, 6166, 7480, and 8932 $\AA$), 
+accurate to about 0.02 mag for unresolved sources not limited by photon statistics \citep{Sesar2007}. 
+Astrometric positions are accurate to better than 0.1 arcsec per coordinate for sources with $r<20.5$ 
+\citep{Pier2003}, and the morphological information from the images allows reliable star-galaxy separation 
+to $r<21.5$ \citep{Lupton2002}.
+ 
+The SDSS camera (Gunn et al. 1998) used drift-scanning observing mode (scanning along great circles
+at the sidereal rate) and detected objects in the order 
+$r-i-u-z-g$, with detections in two successive bands separated in time by 72 s. Each of the six camera
+columns produces a 13.5 arcmin wide scan; the scans are split into fields 9.0 arcmin long, corresponding
+to 36 seconds of time (the exposure time is 54.1 seconds because the sensor size is 2k by 2k pixels,
+with 0.396 arcsec per pixel). 
+The point-spread function (PSF) is estimated for each field and in each bandpass - there are about 
+148 seeing estimates for each square degree of scanned sky. As a result, the SDSS measurements can
+be used to explore the seeing dependence on time (on time scales from 1 minute to 10 hours) and 
+wavelength (from the UV to the near-IR), as well as its angular correlation on the sky on scales from 
+arcminutes to about 2.5 degrees. Thanks to large dynamic range for stellar brightness, the PSF can 
+be traced to large radii ($\sim$30 arcsec) and compared to seeing profiles predicted by turbulence
+theories. 
+
+The SDSS seeing measurements represent an excellent database that has not been systematically 
+explored yet. Here we utilize about a million SDSS seeing estimates to study the seeing profile 
+and its behavior as a function of time and wavelength, and compare our results to theoretical 
+expectations. In addition to direct scientific drivers, we are also motivated by the possibility 
+to use seeing forecasts to optimize the efficiency of LSST observing strategy \citep{LSSToverview}.
+
+
+{\bf Bo or ZI:} add a brief summary with a few references (e.g. Young, Tyson, Roddier,
+Tokovinin papers) about what is known regarding:  PSF profile shape (e.g. Kolmogorov vs. von Karman), 
+the dependence of FWHM on wavelength, and angular and temporal structure functions. 
+An expanded version can go to Discussion and Conclusions section. 
+
+
+The outline of this paper is as follows. In \S2, we give a brief description of the 
+observations and the data used in analysis. We describe the PSF profile analysis, 
+including estimatation method for the full-width-at-half-maximum (FWHM) seeing
+parameter, in \S3. In \S4, we analyse the dependence of FWHM on wavelength, and its angular 
+and temporal structure functions. We discuss and present our conclusions in \S5. 
 
  
