@@ -2,21 +2,29 @@
 % \section{Introduction}
 
 The atmospheric seeing, the point-spread function (PSF) due to atmospheric turbulence, plays
-a major role in ground-based astronomy. An adequate description of the PSF is critical for 
-photometry, star-galaxy separation, and for unbiased measures of the shapes of nonstellar 
-objects \citep{Lupton2001}. 
+a major role in ground-based astronomy \cite{Roddier1981}. An adequate description 
+of the PSF is critical for photometry, star-galaxy separation, and for unbiased measures of 
+the shapes of nonstellar objects \citep{Lupton2001}. In addition, better understanding of the 
+PSF temporal variation can lead to improved seeing forecasts; for example, such forecasts are 
+considered in the optimization of LSST observing strategy \citep{LSSToverview}.
 
-The vertical distribution of the optical turbulence strength, described by the altitude 
-dependence of the refractive-index structure constant $C^2_n$, is hard to measure. 
+Seeing varies with the wavelength of observation, and it also varies with time, on time 
+scales ranging from minutes to years. These variations, as well as the radial seeing (PSF) 
+profile, can be understood as manifestations of atmospheric instabilities due to turbulent layers. 
+Although turbulence is a complex physical phenomenon, the basic properties of the atmospheric
+seeing can be predicted from first principles \cite{Racine2009}. The Von Karman turbulence theory, 
+an extension of the Komogorov theory that introduces a finite size for turbulent eddies (the so-called
+outer scale parameter), quantitatively predicts the seeing profile and the variation of seeing
+with wavelength. Therefore, seeing measurements can be used to test the theory and estimate
+the relevant physical parameters. 
 
-
-The Sloan Digital Sky Survey (SDSS, \citealt{York2000}) is a large-area multi-bandpass sky survey. 
-The SDSS provides homogeneous and deep ($r\la22.5$) photometry in five bandpasses ($u$, $g$, $r$, $i$, 
-and $z$, with effective wavelengths of 3551, 4686, 6166, 7480, and 8932 $\AA$), 
-accurate to about 0.02 mag for unresolved sources not limited by photon statistics \citep{Sesar2007}. 
-Astrometric positions are accurate to better than 0.1 arcsec per coordinate for sources with $r<20.5$ 
-\citep{Pier2003}, and the morphological information from the images allows reliable star-galaxy separation 
-to $r<21.5$ \citep{Lupton2002}.
+The Sloan Digital Sky Survey (SDSS, \citealt{York2000}), a large-area multi-bandpass sky survey
+provided a large databased of seeing measurements. The SDSS delivered homogeneous and deep 
+($r\la22.5$) photometry in five bandpasses ($u$, $g$, $r$, $i$, and $z$, with effective wavelengths 
+of 3551, 4686, 6166, 7480, and 8932 $\AA$), accurate to about 0.02 mag for unresolved sources 
+not limited by photon statistics \citep{Sesar2007}. Astrometric positions are accurate to better 
+than 0.1 arcsec per coordinate for sources with $r<20.5$ \citep{Pier2003}, and the morphological 
+information from the images allows reliable star-galaxy separation to $r<21.5$ \citep{Lupton2002}.
  
 The SDSS camera (Gunn et al. 1998) used drift-scanning observing mode (scanning along great circles
 at the sidereal rate) and detected objects in the order 
@@ -35,20 +43,8 @@ theories.
 The SDSS seeing measurements represent an excellent database that has not been systematically 
 explored yet. Here we utilize about a million SDSS seeing estimates to study the seeing profile 
 and its behavior as a function of time and wavelength, and compare our results to theoretical 
-expectations. In addition to direct scientific drivers, we are also motivated by the possibility 
-to use seeing forecasts to optimize the efficiency of LSST observing strategy \citep{LSSToverview}.
-
-
-{\bf Bo or ZI:} add a brief summary with a few references (e.g. Young, Tyson, Roddier,
-Tokovinin papers) about what is known regarding:  PSF profile shape (e.g. Kolmogorov vs. von Karman), 
-the dependence of FWHM on wavelength, and angular and temporal structure functions. 
-An expanded version can go to Discussion and Conclusions section. 
-
-
-The outline of this paper is as follows. In \S2, we give a brief description of the 
+expectations. The outline of this paper is as follows. In \S2, we give a brief description of the 
 observations and the data used in analysis. We describe the PSF profile analysis, 
 including estimatation method for the full-width-at-half-maximum (FWHM) seeing
 parameter, in \S3. In \S4, we analyse the dependence of FWHM on wavelength, and its angular 
 and temporal structure functions. We discuss and present our conclusions in \S5. 
-
- 
