@@ -80,34 +80,35 @@ def main():
                                   sharey='row', figsize=(12, 8))
 
         idxm = np.zeros(txtdata.shape[0])
+        fwhmN = np.zeros(txtdata.shape[0])
         for ii in range(txtdata.shape[0]):
             # scanning order is r-i-u-z-g
             # u, normalize using fwhm[r-band]
             if ((txtdata[ii, 2] == 0) & (txtdata[ii, 0] > startfield + 3) & (
-                    txtdata[ii, 0] < endfield - 4)):
+                    txtdata[ii, 0] < endfield+1 - 4)):#Nfield = endfield+1
                 rx = (txtdata[:, 2] == 2) & (txtdata[:, 0] == txtdata[ii, 0]+4)& (txtdata[:, 1] == txtdata[ii, 1])
-                fwhm[ii] = fwhm[ii]/fwhm[rx]
+                fwhmN[ii] = fwhm[ii]/fwhm[rx]
                 idxm[ii]= txtdata[ii, 1]
             # g
-            elif ((txtdata[ii, 2] == 1) & (txtdata[ii, 0] < endfield - 8)):
+            elif ((txtdata[ii, 2] == 1) & (txtdata[ii, 0] < endfield+1 - 8)):
                 rx = (txtdata[:, 2] == 2) & (txtdata[:, 0] == txtdata[ii, 0]+8) & (txtdata[:, 1] == txtdata[ii, 1])
-                fwhm[ii] = fwhm[ii]/fwhm[rx]
+                fwhmN[ii] = fwhm[ii]/fwhm[rx]
                 idxm[ii]= txtdata[ii, 1]
             # r
             elif ((txtdata[ii, 2] == 2) & (txtdata[ii, 0] > startfield + 7)):
-                fwhm[ii] = 1
+                fwhmN[ii] = 1
                 idxm[ii]= txtdata[ii, 1]
             # i
             elif ((txtdata[ii, 2] == 3) & (txtdata[ii, 0] > startfield + 5) & (
-                     txtdata[ii, 0] < endfield - 2)):
+                     txtdata[ii, 0] < endfield+1 - 2)):
                 rx = (txtdata[:, 2] == 2) & (txtdata[:, 0] == txtdata[ii, 0]+2) & (txtdata[:, 1] == txtdata[ii, 1])
-                fwhm[ii] = fwhm[ii]/fwhm[rx]
+                fwhmN[ii] = fwhm[ii]/fwhm[rx]
                 idxm[ii]= txtdata[ii, 1]
             # z
             elif ((txtdata[ii, 2] == 4) & (txtdata[ii, 0] > startfield + 1) & (
-                      txtdata[ii, 0] < endfield - 6)):
+                      txtdata[ii, 0] < endfield+1 - 6)):
                 rx = (txtdata[:, 2] == 2) & (txtdata[:, 0] == txtdata[ii, 0]+6) & (txtdata[:, 1] == txtdata[ii, 1])
-                fwhm[ii] = fwhm[ii]/fwhm[rx]
+                fwhmN[ii] = fwhm[ii]/fwhm[rx]
                 idxm[ii]= txtdata[ii, 1]
                 
         for camcol in range(1, sdss.nCamcol + 1):
@@ -120,7 +121,7 @@ def main():
                 idx = idx & (txtdata[:, 2] != 4)  # remove z band data
                 sdss.nBand = 4
                 sdss.Leff = sdss.Leff[:4]
-            fwhmfit = fwhm[idx]
+            fwhmfit = fwhmN[idx]
             Leffnparray = np.array(sdss.Leff)
             Lefffit = Leffnparray[np.uint8(txtdata[idx, 2])]
             y02 = fwhm_lambda_dep1(xlambda, -0.2)
@@ -148,7 +149,7 @@ def main():
             fwhmerr = np.zeros(sdss.nBand)
             for iBand in range(sdss.nBand):
                 idxx = (Lefffit == sdss.Leff[iBand])
-                aa = fwhm[idx]
+                aa = fwhmN[idx]
                 fwhmt[iBand] = np.mean(aa[idxx])
                 fwhmerr[iBand] = np.std(aa[idxx])
             ax1[iRow, iCol].errorbar(sdss.Leff, fwhmt, fwhmerr, fmt='ok')
@@ -167,7 +168,7 @@ def main():
                 ax1[iRow, iCol].set_xscale('log')
                 ax1[iRow, iCol].set_xlim([300, 1000])
                 ax1[iRow, iCol].set_ylim(
-                    [np.min(fwhm) - 0.1, np.max(fwhm) + 0.3])
+                    [np.min(fwhmN) - 0.1, np.max(fwhmN) + 0.3])
 
         if runNo < 0:
             # plt.tight_layout()
