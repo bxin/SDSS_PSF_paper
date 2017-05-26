@@ -111,6 +111,8 @@ class sdssrun(object):
         otherParams = [['psf_width', '%5.3f'],
                        ['airmass', '%5.3f'],
                        ['mjd\t\t', '%12.6f'],
+                       ['RA\t\t', '%.4f'],
+                       ['Dec\t\t', '%.4f'],
                        ['psf_nstar ', '%d'],
                        ['neff_psf\t', '%7.3f'],
                        ['sky_frames\t', '%5.3f']]
@@ -142,7 +144,12 @@ class sdssrun(object):
                         ifield, camcol, iBand, psf.scaleR * 1.222,
                         psf.tailEta))
                     for i in range(len(otherParams)):
-                        fid.write('%s \t' % otherParams[i][1] % (
-                            hdu1[ifield][otherParams[i][0].strip()][iBand]))
+                        if ((otherParams[i][0].strip()=='RA') or (
+                            otherParams[i][0].strip()=='Dec')):
+                            fid.write('%s \t' % otherParams[i][1] % (
+                                hdu1[ifield][otherParams[i][0].strip()]))
+                        else:
+                            fid.write('%s \t' % otherParams[i][1] % (
+                                hdu1[ifield][otherParams[i][0].strip()][iBand]))
                     fid.write('\n')
         fid.close()
