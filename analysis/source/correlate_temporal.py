@@ -6,6 +6,7 @@ from scipy import optimize
 from scipy import fftpack
 
 from sdssinst import sdssinst
+from astroML.fourier import PSD_continuous
 
 """
 ---for each run, each filter, make plot of cov vs separation
@@ -14,6 +15,14 @@ from sdssinst import sdssinst
 def logpsdfunc(f, A, f0):
     # print('A = %e, f0 = %f'% (A, f0))
     return np.log10(A/(1+(f/f0)**2))
+
+def logpsdfuncChi2(f, Af0, y):
+    A = Af0[0]
+    f0 = Af0[1]
+    yp = np.log10(A/(1+(f/f0)**2))
+    chi2 = np.sum((yp - y)**2)
+    # print('A = %e, f0 = %f, chi2 = %f'% (A, f0, chi2))
+    return chi2
 
 def main():
 
@@ -140,8 +149,11 @@ def main():
                     cutoff = f>0
                     f = f[cutoff]
                     PSD = PSD[cutoff]
+
                     popt, pcov = optimize.curve_fit(logpsdfunc, f, np.log10(PSD), p0=[1e5, 1e-3],
-                                                        bounds = ([1, 1e-4], [1e7, 1e-2]),)
+                                                        bounds = ([1, 1e-4], [1e7, 1e-2]))
+                    # popt = optimize.fmin(lambda Af0: logpsdfuncChi2(f, Af0, np.log10(PSD)), [1e5, 1e-3], disp=1)
+                                                   
                     # sigma=myErr, absolute_sigma=True)
                     tau = 1/(2*np.pi*popt[1])
                     # print('A=%e, f0=%e, tau = %5.0f s' %(popt[0], popt[1], tau))
@@ -150,14 +162,43 @@ def main():
 
                     myX = np.hstack((f[0]/2, f, f[-1]*2))
                     myY = 10**logpsdfunc(myX, popt[0], popt[1])
+                    chi2 = logpsdfuncChi2(f, popt, np.log10(PSD))
+                    # popt = [1e4, 6e-4]
+                    # myY1 = 10**logpsdfunc(myX, popt[0], popt[1])                    
                     ax1[iRow, iCol].loglog(f, PSD, linestyle = 'None', marker='.', color='k', markersize=10)#, c='#AAAAAA')
                     # ax1[iRow, iCol].loglog(fW1, PSDW1,'-k')
                     # ax1[iRow, iCol].loglog(fW2, PSDW2,'-r')
                     ax1[iRow, iCol].loglog(myX, myY, 'r-')
+                    # ax1[iRow, iCol].loglog(myX, myY1, 'b-')
                     
                     ax1[iRow, iCol].set_xlim(min(myX), max(myX))
                     ax1[iRow, iCol].set_xlabel('Frequency (Hz)')
                     ax1[iRow, iCol].set_ylabel('PSD (arcsec$^2$ second)')
+
+                    chi21 = logpsdfuncChi2(f, popt, np.log10(PSD))
+
+                    hj_N = fwhm[idx]
+                    if np.mod(N, 2)==1:
+                        N -= 1
+                        hj_N = hj_N[:-1]
+                    tj = np.arange(N) * dt
+                    fk, PSDc = PSD_continuous(tj, hj_N)
+                    fc = fk
+                    print('%d\t %d\t %d\t %e\t %e\t %6.1f \n'%(run, band, camcol, popt[0], popt[1], tau))
+                    popt, pcov = optimize.curve_fit(logpsdfunc, fc, np.log10(PSDc), p0=[1e5, 1e-3],
+                                                        bounds = ([1, 1e-5], [1e8, 1e-2]))
+                    # popt = optimize.fmin(lambda Af0: logpsdfuncChi2(f, Af0, np.log10(PSD)), [1e5, 1e-3], disp=1)
+                                                   
+                    # sigma=myErr, absolute_sigma=True)
+                    tau = 1/(2*np.pi*popt[1])
+                    # print('A=%e, f0=%e, tau = %5.0f s' %(popt[0], popt[1], tau))
+                    if args.writefitp:
+                        fid.write('c: %d\t %d\t %d\t %e\t %e\t %6.1f \n'%(run, band, camcol, popt[0], popt[1], tau))
+                    print('c: %d\t %d\t %d\t %e\t %e\t %6.1f \n'%(run, band, camcol, popt[0], popt[1], tau))
+                    myX = np.hstack((f[0]/2, f, f[-1]*2))
+                    myY = 10**logpsdfunc(myX, popt[0], popt[1])
+                    ax1[iRow, iCol].loglog(fc, PSDc, linestyle = 'None', marker='.', color='g', markersize=10)#, c='#AAAAAA')
+                    ax1[iRow, iCol].loglog(myX, myY, 'b-')
                     
                 elif args.type == 'autocor':
                     result = np.correlate(fwhm[idx], fwhm[idx], mode='full')
