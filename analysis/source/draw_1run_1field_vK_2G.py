@@ -77,9 +77,10 @@ def main():
             psf.fit2convEta_curve_fit(vonK2D, grid1d)
             # psf.fit2conv_curve_fit(vonK2D, grid1d, sigma=0.2)
             # psf.fit2conv_curve_fit(vonK2D, grid1d, tailB = psf.tailB)
-            
-            print('chi2=%4.1f/%4.1f, chi2lr = %4.1f/%4.1f, chi2hr=%4.1e/%4.1e' %(
-                psf.chi2, psf.G2chi2, psf.chi2lr, psf.G2chi2lr, psf.chi2hr, psf.G2chi2hr))
+
+            print('eta = %.2f\n'%psf.tailEta)
+            #print('chi2=%4.1f/%4.1f, chi2lr = %4.1f/%4.1f, chi2hr=%4.1e/%4.1e' %(
+            #    psf.chi2, psf.G2chi2, psf.chi2lr, psf.G2chi2lr, psf.chi2hr, psf.G2chi2hr))
 
             if args.yscale == 'log' or args.yscale == 'logzoom':
                 ax1[iBand, camcol - 1].plot(psf.vR, np.log10(psf.vv), 'b')
