@@ -18,7 +18,7 @@ def func(x, a):
 def sf1run(argList):
     run        =  argList[0] 
     startfield =  argList[1] 
-    endfield   =  argList[2] 
+    endfield99 =  argList[2] 
     doubleG    =  argList[3] 
     writesf    =  argList[4] 
     sdss       =  argList[5] 
@@ -31,7 +31,7 @@ def sf1run(argList):
     txtfile = 'SDSSdata/masterTXT/run%d.txt' % (run)
     txtdata = np.loadtxt(txtfile)
     idx = (txtdata[:, 0] >= startfield) & (
-        txtdata[:, 0] <= endfield)
+        txtdata[:, 0] <= endfield99)
     txtdata = txtdata[idx, :]
     if doubleG:
         fwhm = txtdata[:, 4]
@@ -51,7 +51,7 @@ def sf1run(argList):
     for iBand in range(0, sdss.nBand):
         print('-- running on run# %d , band = %s---------' % (
             run, sdss.band[iBand]))
-        if (startfield == 0 and endfield == 99999):
+        if (startfield == 0 and endfield99 == 99999):
             sfname = 'output/correlate_spatial/run%d_%s_%s_sf.txt'%(
                 run, sdss.band[iBand], fwhmStr)
         else:
@@ -111,7 +111,7 @@ def sf1run(argList):
         ax1[iRow, iCol].grid()
         #plt.show()
 
-    if (startfield == 0 and endfield == 99999):
+    if (startfield == 0 and endfield99 == 99999):
         pngname = 'output/correlate_spatial/run%d_%s.png' %(run, fwhmStr)
     else:
         pngname = 'output/correlate_spatial/run%d_%s_fld_%d_%d.png' %(
