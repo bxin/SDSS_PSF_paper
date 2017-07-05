@@ -137,6 +137,8 @@ def main():
     parser.add_argument('-endfield', dest='endfield', default=99999, type=int,
                         help='field# to end with (note indexing \
                         starts from 0)')
+    parser.add_argument('-p', dest='numproc', default=1, type=int,
+                    help='Number of Processors to use')                        
     args = parser.parse_args()
     
     start = time.time()
