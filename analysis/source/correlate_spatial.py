@@ -9,7 +9,7 @@ import multiprocessing
 from sdssinst import sdssinst
 
 """
----for each run, each filter, make plot of cov vs separation
+---for each run, each filter, each field, get dFWHM vs separation. Then take std over all fields
 """
 
 def func(x, a):
@@ -52,10 +52,10 @@ def sf1run(argList):
         print('-- running on run# %d , band = %s---------' % (
             run, sdss.band[iBand]))
         if (startfield == 0 and endfield99 == 99999):
-            sfname = 'output/correlate_spatial/run%d_%s_%s_sf.txt'%(
+            sfname = 'SDSSdata/correlate_spatial/run%d_%s_%s_sf.txt'%(
                 run, sdss.band[iBand], fwhmStr)
         else:
-            sfname = 'output/correlate_spatial/run%d_%s_%s_fld_%d_%d_sf.txt' %(
+            sfname = 'SDSSdata/correlate_spatial/run%d_%s_%s_fld_%d_%d_sf.txt' %(
                 run, sdss.band[iBand], fwhmStr, startfield, endfield)
     
         iRow = np.uint8(np.ceil((iBand+1) / nCol)) - 1
@@ -83,10 +83,15 @@ def sf1run(argList):
                     sfArray[ii, 1] = abs(fwhmbf[i] - fwhmbf[j])
                     ii += 1
 
-        nbin = 10
+        nbin = 5
         myN = np.zeros(nbin) 
-        mySF = np.zeros(nbin) 
-        edge = np.linspace(0, max(sfArray[:, 0]), nbin+1)
+        mySF = np.zeros(nbin)
+        xmax = max(sfArray[:, 0])
+        xmin = min(sfArray[:, 0])
+        binsize = (xmax - xmin)/(nbin - 1)
+        xmin = xmin - binsize/2
+        xmax = xmax+binsize/2
+        edge = np.linspace(xmin, xmax, nbin+1)
         mySep = (edge[:-1] + edge[1:])/2
         for i in range(0, nbin):
             idx = (sfArray[:, 0] > edge[i] ) & (sfArray[:, 0]<edge[i+1])
@@ -102,7 +107,7 @@ def sf1run(argList):
         mySF = mySF[idx]
         mySep = mySep[idx]
         ax1[iRow, iCol].plot(mySep, mySF, '-ro')
-        #ax1[iRow, iCol].set_xlim(0, sdss.nCamcol)
+        ax1[iRow, iCol].set_xlim(xmin, xmax)
         ax1[iRow, iCol].set_title('run%d, %s, %s' %
                     (run, fwhmStr, sdss.band[iBand]))
         ax1[iRow, iCol].set_xlabel('Spatial separation')
@@ -112,9 +117,9 @@ def sf1run(argList):
         #plt.show()
 
     if (startfield == 0 and endfield99 == 99999):
-        pngname = 'output/correlate_spatial/run%d_%s.png' %(run, fwhmStr)
+        pngname = 'SDSSdata/correlate_spatial/run%d_%s.png' %(run, fwhmStr)
     else:
-        pngname = 'output/correlate_spatial/run%d_%s_fld_%d_%d.png' %(
+        pngname = 'SDSSdata/correlate_spatial/run%d_%s_fld_%d_%d.png' %(
             run, fwhmStr, startfield, endfield)
 
     # plt.tight_layout()
