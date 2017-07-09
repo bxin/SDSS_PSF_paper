@@ -86,6 +86,7 @@ def sf1run(argList):
         nbin = 5
         myN = np.zeros(nbin) 
         mySF = np.zeros(nbin)
+        mySFstd = np.zeros(nbin)
         xmax = max(sfArray[:, 0])
         xmin = min(sfArray[:, 0])
         binsize = (xmax - xmin)/(nbin - 1)
@@ -98,10 +99,12 @@ def sf1run(argList):
             myN[i] = sum(idx)
             if myN[i] == 0:
                 mySF[i] = np.nan
+                mySFstd[i] = np.nan
             else:
-                mySF[i] = np.std(sfArray[idx, 1])
+                mySF[i] = np.sqrt(np.mean(sfArray[idx, 1]**2))
+                mySFstd[i] = np.std(sfArray[idx, 1])
         if writesf:
-            np.savetxt(sfname, np.vstack((mySep, mySF, myN)))
+            np.savetxt(sfname, np.vstack((mySep, mySF, myN, mySFstd)))
 
         idx = ~np.isnan(mySF)
         mySF = mySF[idx]
