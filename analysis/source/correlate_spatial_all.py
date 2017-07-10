@@ -78,10 +78,14 @@ def main():
                     (fwhmStr, sdss.band[iBand]))
         ax1[iRow, iCol].set_xlabel('Spatial separation')
         #ax1[iRow, iCol].set_ylabel('Covariance (arcsec^2)')
-        ax1[iRow, iCol].set_ylabel('PSF size structure function')
+        if iCol == 0:
+            ax1[iRow, iCol].set_ylabel('PSF size structure function')
         ax1[iRow, iCol].grid()
         #plt.show()
 
+    for iiCol in range(iCol+1, nCol):
+        f.delaxes(ax1[iRow, iiCol])
+        
     pngname = 'SDSSdata/correlate_spatial/runALL_%s.png' %(fwhmStr)    
     # plt.tight_layout()
     plt.savefig(pngname)

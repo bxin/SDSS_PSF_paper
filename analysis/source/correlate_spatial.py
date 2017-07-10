@@ -119,6 +119,9 @@ def sf1run(argList):
         ax1[iRow, iCol].grid()
         #plt.show()
 
+    for iiCol in range(iCol+1, nCol):
+        f.delaxes(ax1[iRow, iiCol])
+                
     if (startfield == 0 and endfield99 == 99999):
         pngname = 'SDSSdata/correlate_spatial/run%d_%s.png' %(run, fwhmStr)
     else:
