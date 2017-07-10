@@ -44,16 +44,15 @@ def main():
                 myN = np.zeros(nbin)
                 mySF = np.zeros(nbin)
             idx = ~np.isnan( txtdata[1, :])
-            if args.errorbar:
-                mySF[idx] += txtdata[1, idx]
-                myN += 1
-            else:
-                mySF[idx] += txtdata[1, idx]**2 * txtdata[2, idx]
-                myN[idx] += txtdata[2, idx]
+            mySF[idx] += txtdata[1, idx]**2 * txtdata[2, idx]
+            myN[idx] += txtdata[2, idx]
 
+        idx = myN>0
+        mySF[idx] = np.sqrt(mySF[idx]/myN[idx])
+        mySF[~idx] = -1
+            
         if args.errorbar:
-            mySF = mySF/myN[0]
-            nrun = myN[0]
+            nrun = objlist.shape[0]
             myN[:] = 0 #use this to calculate std around the mean
             for line in objlist:
                 run = int(line[0])
@@ -63,10 +62,6 @@ def main():
                 idx = ~np.isnan( txtdata[1, :])
                 myN[idx] += (txtdata[1, idx] - mySF[idx])**2
             myN[idx] = np.sqrt(myN[idx]/nrun)
-        else:
-            idx = myN>0
-            mySF[idx] = np.sqrt(mySF[idx]/myN[idx])
-            mySF[~idx] = -1
         
         idx = (mySF>0)
         mySF = mySF[idx]
