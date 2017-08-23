@@ -67,6 +67,10 @@ def main():
         fitpname = 'output/correlate_temporal/run%d_%s_fld_%d_%d_fitp.txt' %(
             runNo, fwhmStr, args.startfield, args.endfield)
 
+    txtdata= np.loadtxt('data/opsim_seeing_psd.txt')
+    opsimf = txtdata[:, 0]
+    opsimpsd = txtdata[:, 1]
+    
     if args.writefitp:
         fid = open(fitpname, 'w')              
     sdss = sdssinst()
@@ -133,7 +137,9 @@ def main():
                     # http://www.astroml.org/book_figures/chapter10/fig_LIGO_power_spectrum.html
                     # compute PSD using simple FFT
                     df = 1./ (N * dt)
-                    PSD = abs(dt * fftpack.fft(fwhm[idx])[:int(N / 2)]) ** 2
+                    aa = abs(fftpack.fft(fwhm[idx]))**2 * dt/N
+                    PSD = aa[:int(N / 2)]
+                    PSD += aa[-1:-int(N / 2)-1:-1]
                     f = df * np.arange(int(N / 2))
     
                     # npsd = 64 # 2048 # 16
@@ -164,26 +170,28 @@ def main():
                     myY = 10**logpsdfunc(myX, popt[0], popt[1])
                     chi2 = logpsdfuncChi2(f, popt, np.log10(PSD))
                     # popt = [1e4, 6e-4]
-                    # myY1 = 10**logpsdfunc(myX, popt[0], popt[1])                    
-                    ax1[iRow, iCol].loglog(f, PSD, linestyle = 'None', marker='.', color='k', markersize=10)#, c='#AAAAAA')
+                    # myY1 = 10**logpsdfunc(myX, popt[0], popt[1])
+                    ax1[iRow, iCol].loglog(opsimf*3600, opsimpsd, linestyle = 'None', marker='.', color='y', markersize=10)#, c='#AAAAAA')
+                    ax1[iRow, iCol].loglog(f*3600, PSD, linestyle = 'None', marker='.', color='k', markersize=10)#, c='#AAAAAA')
                     # ax1[iRow, iCol].loglog(fW1, PSDW1,'-k')
                     # ax1[iRow, iCol].loglog(fW2, PSDW2,'-r')
-                    ax1[iRow, iCol].loglog(myX, myY, 'r-')
+                    ax1[iRow, iCol].loglog(myX*3600, myY, 'r-')
                     # ax1[iRow, iCol].loglog(myX, myY1, 'b-')
                     
-                    ax1[iRow, iCol].set_xlim(min(myX), max(myX))
-                    ax1[iRow, iCol].set_xlabel('Frequency (Hz)')
+                    ax1[iRow, iCol].set_xlim(min(myX*3600), max(myX*3600))
+                    # ax1[iRow, iCol].set_xlabel('Frequency (Hz)')
+                    ax1[iRow, iCol].set_xlabel('Frequency (1/hour)')
                     ax1[iRow, iCol].set_ylabel('PSD (arcsec$^2$ second)')
-
-                    chi21 = logpsdfuncChi2(f, popt, np.log10(PSD))
 
                     hj_N = fwhm[idx]
                     if np.mod(N, 2)==1:
                         N -= 1
                         hj_N = hj_N[:-1]
-                    tj = np.arange(N) * dt
-                    fk, PSDc = PSD_continuous(tj, hj_N)
-                    fc = fk
+                    tj = np.linspace(-N/2*dt, N/2*dt, N)
+                    fc, PSDc = PSD_continuous(tj, hj_N)
+                    cutoff = fc>0
+                    fc = fc[cutoff]
+                    PSDc = PSDc[cutoff]/dt/N
                     print('%d\t %d\t %d\t %e\t %e\t %6.1f \n'%(run, band, camcol, popt[0], popt[1], tau))
                     popt, pcov = optimize.curve_fit(logpsdfunc, fc, np.log10(PSDc), p0=[1e5, 1e-3],
                                                         bounds = ([1, 1e-5], [1e8, 1e-2]))
@@ -198,8 +206,10 @@ def main():
                     myX = np.hstack((f[0]/2, f, f[-1]*2))
                     myY = 10**logpsdfunc(myX, popt[0], popt[1])
                     ax1[iRow, iCol].loglog(fc, PSDc, linestyle = 'None', marker='.', color='g', markersize=10)#, c='#AAAAAA')
-                    ax1[iRow, iCol].loglog(myX, myY, 'b-')
-                    
+                    ax1[iRow, iCol].loglog(myX*3600, myY, 'b-')
+
+                    chi21 = logpsdfuncChi2(f, popt, np.log10(PSD))
+
                 elif args.type == 'autocor':
                     result = np.correlate(fwhm[idx], fwhm[idx], mode='full')
                     autoCorr = result[result.size/2:]

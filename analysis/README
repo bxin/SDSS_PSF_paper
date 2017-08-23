@@ -6,7 +6,12 @@ fit2vonK_curve_fit()	fit the radial profile to von Karman, using curve_fit() in 
 fit2vonK_fminbound()	fit the radial profile to von Karman, using fminbound() in scipy.optimize
 			    	       based on tests using draw_1run_1field_vK_2G.py,
 				       this takes 15 times longer than fit2vonK_curve_fit()
-
+fit2conv_curve_fit() 	fit 2D profile by convolving vonK with instrument PSF. vonK is fixed.
+			use gaussian(sigma) +10^(ax+b) as instrumental PSF
+			Depending on what input parameters are specified, either sigma or b, or both.
+fit2convEta_curve_fit()  fit 2D profile by convolving vonK with instrument PSF. vonK is fixed. 
+			 use gaussian+10^[eta*(ax^2+bx+c)] as instrumental PSF 
+			 only tail normalization eta is float.
 ------------------sdssinst.py
 class for sdss instrument
 

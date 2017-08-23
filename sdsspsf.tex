@@ -24,13 +24,16 @@ We use SDSS imaging data in $ugriz$ passbands to study the shape of
 point spread function (PSF) profile and the variation of its width with 
 wavelength and time. We find that the PSF profile is well described by 
 theoretical predictions based on von Karman's turbulence theory and
-can be parametrized by a single parameter, the profile's FWHM (full width
-at half maximum). The profile shape is very similar to the ``double gaussian
+can be parametrized by two parameter, the profile's FWHM (full width
+at half maximum) and a normalization on a empirical instrumental PSF. 
+The profile shape is very similar to the ``double gaussian
 plus power-law wing'' decomposition used by SDSS, but here it is modeled 
-with a single free model parameter, rather than six as in SDSS pipeline. 
+with two free model parameter, rather than six as in SDSS pipeline. 
 The FWHM variation with wavelength folows the
-$\lambda^{-0.3}$ power law. We also measure the temporal and angular
-structure functions for FWHM and find lots of interesting results \dots
+$\lambda^{\alpha}$ power law, where $\alpha \approx-0.3$, and is correlated
+with the FWHM itself. We also measure the temporal and angular
+structure functions for FWHM and compare them to simulations and
+existing measurements.
 \end{abstract}
 
 \keywords{imaging point spread function --- SDSS}
