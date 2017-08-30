@@ -65,11 +65,11 @@ def main():
         txtdata = txtdata[idx, :]
         if args.doubleG:
             fwhmStr = 'fwhm2G'
-            fwhm = txtdata[:, 4]
+            fwhm = txtdata[:, 5]
         else:
             fwhmStr = 'fwhm'
             fwhm = txtdata[:, 3] / 1.222  # convert FWHMeff into FWHM
-        airmass = txtdata[:, 5]
+        airmass = txtdata[:, 6]
         fwhm = fwhm/airmass**0.6
         startfield = args.startfield
         endfield = np.uint16(np.max(txtdata[:, 0]))

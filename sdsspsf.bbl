@@ -1,5 +1,11 @@
 \begin{thebibliography}{}
 
+\bibitem[\protect\citeauthoryear{{Boccas}}{{Boccas}}{2004}]{Boccas2004}
+{Boccas}, M. 2004, Gemini Technical Note
+
+\bibitem[\protect\citeauthoryear{{Borgnino}}{{Borgnino}}{1990}]{vk1}
+{Borgnino}, J. 1990, \ao, 29, 1863
+
 \bibitem[\protect\citeauthoryear{{Gunn} et~al.}{{Gunn} et~al.}{2006}]{Gunn2006}
 {Gunn}, J.~E., et~al. 2006, \aj, 131, 2332
 
@@ -63,5 +69,9 @@
 
 \bibitem[\protect\citeauthoryear{{York} et~al.}{{York} et~al.}{2000}]{York2000}
 {York}, D.~G., et~al. 2000, \aj, 120, 1579
+
+\bibitem[\protect\citeauthoryear{{Ziad} et~al.}{{Ziad} et~al.}{2000}]{vk2}
+{Ziad}, A., {Conan}, R., {Tokovinin}, A., {Martin}, F.,  \& {Borgnino}, J.
+  2000, \ao, 39, 5415
 
 \end{thebibliography}
