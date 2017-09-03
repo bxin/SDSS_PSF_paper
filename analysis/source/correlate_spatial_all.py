@@ -70,15 +70,18 @@ def main():
                     mySFallband = np.zeros(nbin)
                     myErrallband = np.zeros(nbin)
             idx = ~np.isnan( txtdata[useRow, :])
-            if (not args.errorbar or args.oneplot):
-                mySF[idx] += txtdata[useRow, idx]**2 * txtdata[2, idx]
-                myN[idx] += txtdata[2, idx]
-            else: #if errorbar is desired for each band:
-                mySF[idx] += txtdata[useRow, idx]**2 
-                myN[idx] += 1
+#            if (not args.errorbar and not args.oneplot):
+            mySF[idx] += txtdata[useRow, idx]**2 * txtdata[2, idx]
+            myN[idx] += txtdata[2, idx]
+#            else: #if errorbar is desired for each band:
+#                mySF[idx] += txtdata[useRow, idx]
+#                myN[idx] += 1
 
         idx = myN>0
+#        if (not args.errorbar and not args.oneplot):
         mySF[idx] = np.sqrt(mySF[idx]/myN[idx])
+#        else:
+#            mySF[idx] = mySF[idx]/myN[idx]
         mySF[~idx] = -1
             
         if (args.errorbar or args.oneplot):
