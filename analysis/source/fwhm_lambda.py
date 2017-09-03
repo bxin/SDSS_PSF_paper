@@ -125,19 +125,20 @@ def main():
             Leffnparray = np.array(sdss.Leff)
             Lefffit = Leffnparray[np.uint8(txtdata[idx, 2])]
             y02 = fwhm_lambda_dep1(xlambda, -0.2)
-            ax1[iRow, iCol].plot(xlambda, y02, '-b', label='power = -0.2')
+            ax1[iRow, iCol].plot(xlambda, y02, ':b', label=r'$\alpha=-$0.2')
 
             y03 = fwhm_lambda_dep1(xlambda, -0.3)
-            ax1[iRow, iCol].plot(xlambda, y03, '-g', label='power = -0.3')
+            ax1[iRow, iCol].plot(xlambda, y03, '--g', label=r'$\alpha=-$0.3')
 
             popt, pcov = optimize.curve_fit(
                 fwhm_lambda_dep1,
                 Lefffit, fwhmfit, p0=[-0.25])
             powerfit = popt[0]
+            powerfiterr = np.sqrt(pcov[0])
             yfit = fwhm_lambda_dep1(xlambda, powerfit)
             ax1[iRow, iCol].plot(xlambda, yfit, '-k',
-                                 label='power (fit) = %5.2f' % powerfit)
-            print('camcol=%d, power (fit) = %5.2f' % (camcol, powerfit))
+                                 label=r'$\alpha$(fit) = $%6.3f\pm%6.3f$' % (powerfit, powerfiterr))
+            print('camcol=%d, power (fit) = %5.2f\\pm %4.2f' % (camcol, powerfit, powerfiterr))
             if runNo < 0:
                 if camcol == 1:
                     fidw.write('%d\t' % run)
@@ -155,12 +156,15 @@ def main():
             ax1[iRow, iCol].errorbar(sdss.Leff, fwhmt, fwhmerr, fmt='ok')
             ax1[iRow, iCol].grid()
             ax1[iRow, iCol].set_title('camcol=%d' % camcol)
-            ax1[iRow, iCol].plot(xlambda, y02, '-b')
-            ax1[iRow, iCol].plot(xlambda, y03, '-g')
-            ax1[iRow, iCol].plot(xlambda, yfit, '-k')
+            #ax1[iRow, iCol].plot(xlambda, y02, '-b')
+            #ax1[iRow, iCol].plot(xlambda, y03, '-g')
+            #ax1[iRow, iCol].plot(xlambda, yfit, '-k')
+            ax1[iRow, iCol].set_ylim([0.8, 1.4])
 
-            ax1[iRow, iCol].set_xlabel('Effective wavelength (nm)')
-            ax1[iRow, iCol].set_ylabel(fwhmStr)
+            if iRow==1:
+                ax1[iRow, iCol].set_xlabel('Effective wavelength (nm)')
+            if iCol == 0:
+                ax1[iRow, iCol].set_ylabel('%s/%s(r-band)'%(fwhmStr.upper(), fwhmStr.upper()))
             ax1[iRow, iCol].legend(loc="upper right", fontsize=10)
 
             if args.yscale == 'log':

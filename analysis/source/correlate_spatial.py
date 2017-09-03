@@ -138,7 +138,7 @@ def main():
         description='----- correlate_spatial.py ---------')
     parser.add_argument('run', type=int, default=94,
                         help='run number; -9 for all runs individually; \
-                        makes no sense to plot all runs together')
+                        plot all runs together? use correlate_spatial_all.py')
     parser.add_argument('-doubleG', help='use psf_width from the double Gau fits',
                         action='store_true')
     parser.add_argument('-writesf', help='write fit parameter',

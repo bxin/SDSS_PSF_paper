@@ -1,35 +1,120 @@
 
 %  \section{The analysis of FWHM behavior} 
 
-Now that we understand (heopfully) that the seeing is by and large described by 
+Now that we understand that the seeing is by and large described by 
 a single parameter, FWHM, we study three aspects of its variation, as follows.
 
 
 \subsection{The FWHM dependence on wavelength} 
 
-Asumming a power law, FWHM$\propto \lambda^{-\alpha}$, what can we say 
-about $\alpha$ distribution? 
+The Kolmogorov turbulence theory gives a standard formula for the FWHM of a long-exposure
+seeing-limited PSF in a large telescope,
+\begin{equation}
+FWHM^{Kolm}(\lambda, X) = \frac{0.976\lambda}{r_0(\lambda,X)}.
+\label{eq:fwhmkolm}
+\end{equation}
+Here $\lambda$ is the wavelength, and $X$ is the airmass.
+We use $\lambda = 500$nm as the reference wavelength,
+\begin{equation}
+r_0(\lambda,X) = r_0(500) \left(\frac{\lambda}{500}\right)^{1.2}
+\frac{1}{X^{0.6}},
+\label{eq:r0}
+\end{equation}
+where $r_0(500)$ is the $r_0$ for $\lambda=500$nm and $X$=1, and $\lambda$ is in
+the unit of nm.
+Substituting Eq.~(\ref{eq:r0}) into (\ref{eq:fwhmkolm}), it is easy to see
+\begin{equation}
+FWHM^{Kolm} \propto \lambda^{-0.2}.
+\end{equation}
+
+
+With the von Karman atmosphere model, the FWHM as in
+Eq.~(\ref{eq:fwhmkolm}) needs an additional correction factor
+which is a function of the outer scale $L_0$~\citep{Tokovinin2002},
+\begin{equation}
+FWHM^{vonK}(\lambda, X) = \frac{0.976\lambda}{r_0(\lambda,X)}
+\sqrt{1-2.183\left( \frac{r_0(\lambda,X) }{L_0} \right)^{0.356}}.
+\end{equation}
+If we still want to write $FWHM^{vonK} \propto \lambda^{\alpha} $, 
+$\alpha$ will be a function of $L_0$ and $r_0$ at a specified
+wavelength and airmass, or equivalently, $L_0$ and $FWHM^{vonK}$ at a
+specified wavelength and airmass. Below, we will use SDSS 
+PSF FWHM measurements from the 
+$r$-band,
+whose effective wavelength is 616.6 nm, and airmass of 1.
+In this work, we always use FWHM to refer to FWHM$^{vonK}$.
+
+For each run from SDSS Stripe 82 data, and each camera column, we make
+a least-square fit to
+all the simultaneous FWHM measurements across the optical bands, to
+estimate the power parameter $\alpha$.
+All FWHM are multiplied with $1/X^{0.6}$ to correct for airmass.
+We take into account that the same field number doesn't correspond to the same
+time in all filters. The scanning order in the SDSS camera is $r$-$i$-$u$-$z$-$g$, with the delay between the two 
+successive filters corresponding to 2 fields. That is, If we take the field number $F$ for the $r$-band, then
+we need to take FWHM for the $i$-band from field $F-2$, for the u band
+from $F-4$, and so on. Fig.~\ref{fig:fwhm_lambda} shows such fits for
+run 4874. All FWHM are normalized using corresponding FWHM in the
+$r$-band taken at the same moment in time.
+Significant deviation from $\alpha = -0.2$, as predicted by the
+Kolmogorov model, can be seen in most bands.
 
 \begin{figure}
 \centering
 \includegraphics[width=0.9\textwidth]{FIGURES/fwhm_lambda.png}
 \caption{FWHM as functions of wavelength for run 4874.
+For comparison purposes, the $\alpha=-0.2$ (dotted) and $\alpha=-0.3$ (dashed) lines are
+also shown.
 \label{fig:fwhm_lambda}}
+\end{figure}
+
+As discussed above, based on the von Karman atmosphere model, the
+power $\alpha$ should be a function of outer scale $L_0$ and the
+FWHM in a specified optical band.
+Fig.~\ref{fig:alpha_fwhm} is a scattered plot of $\alpha$ versus FWHM
+in the $r$-band, for all the Stripe 82 runs.
+A correlation between $\alpha$ and the FWHM seems to be present.
+Similar correlations have been seen in Subaru images and reported by~\cite{subaruSeeing2016}.
+The data points are overlaid with curves as predicted by the von
+Karman model, with varying $L_0$, ranging from 2 meters to infinity.
+The data clear deviate from the Kolmogorov model prediction, which is
+the horizontal line at $\alpha = -0.20$, with infinite $L_0$.
+For LSST, using the commonly assumed $L_0 = 30$m, and a FWHM of 0.6
+arcsec, we get a $\alpha$ value close to $-0.30$.
+
+\begin{figure}
+\centering
+\includegraphics[width=0.5\textwidth]{FIGURES/alpha_fwhm.png}
+\caption{Wavelength-dependence power parameter $\alpha$ vs the
+  FWHM in the $r$-band for all the Stripe 82 runs. 
+The curves are predictions of the von Karman
+  model, with $L_0$ ranging from 2 meters to infinity.
+\label{fig:alpha_fwhm}}
 \end{figure}
 
 
 
 \subsection{Angular structure function} 
 
-Cross-correlation of FWHM for 6 camera columns and the measurement of the angular
-structure function (that is, the covariance vs. angular distance). 
+To examine the spatial correlation of the FWHM we compute the angular
+structure function using PSF measurements from all 6 camera columns.
+Our structure function is defined as
+the root-mean-square of the PSF size differences of pairs of stars
+in the same angular bin. 
+Results are shown in Fig.~\ref{fig:spatial}.
+The SDSS curves are combined for all the Stripe 82 runs, then for all
+the optical bands.
 
 \begin{figure}
 \centering
-\includegraphics[width=0.9\textwidth]{FIGURES/spatial.png}
-\caption{spatial correlation for run 1009. 
-\label{fig:fwhm_lambda}}
+\includegraphics[width=0.5\textwidth]{FIGURES/spatial.png}
+\caption{Angular structure function. 
+\label{fig:spatial}}
 \end{figure}
+
+% phosim, ref.
+% add Peterson to author list?
+% instrument dominate?
 
 \subsection{Temporal auto-correlation function}
 
@@ -65,25 +150,3 @@ Study the temporal power spectrum:
 \end{figure}
 
 
-
-\begin{table}[t!]
-\caption{A little stolen table to test if it works here... It does! }
-\vskip 0.05in
-\begin{tabular}{|l|c|c|c|c|c|}
-\hline  
-    $r$   &  $\sigma^a_{xy} $  & $\sigma^b_\pi$  &   $\sigma^c_\mu$   &  $\sigma^d_1$  &  $\sigma^e_C$  \\
-    mag &       mas            &      mas  & mas/yr &   mag   &    mag  \\
-\hline  
-       21 &  11  &  0.6  &  0.2   &   0.01  &   0.005 \\
-       22 &  15  &  0.8  &  0.3   &   0.02  &   0.005 \\
-       23 &  31  &  1.3  &  0.5   &   0.04  &   0.006 \\
-       24 &  74  &  2.9  &  1.0   &   0.10  &   0.009 \\
-\hline                         
-\end{tabular}
-\\ \vskip 0.05in
-  $^a$ Typical astrometric accuracy (rms per coordinate per visit); \\
-  $^b$ Parallax accuracy for 10-year long survey; \\
-  $^c$ Proper motion accuracy for 10-year long survey; \\
-  $^d$ Photometric error for a single visit (two 15-second exposures); \\
-  $^e$ Photometric error for coadded observations (see Table 1). \\
-\end{table}

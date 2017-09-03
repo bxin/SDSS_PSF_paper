@@ -83,11 +83,11 @@ def main():
             #    psf.chi2, psf.G2chi2, psf.chi2lr, psf.G2chi2lr, psf.chi2hr, psf.G2chi2hr))
 
             if args.yscale == 'log' or args.yscale == 'logzoom':
-                ax1[iBand, camcol - 1].plot(psf.vR, np.log10(psf.vv), 'b')
+                ax1[iBand, camcol - 1].plot(psf.vR, np.log10(psf.vv), '-b')
                 # draw double Gaussian as Red
                 # ax1[iBand, camcol -
                 #    1].plot(psf.r, psf.LpsfModel + np.log10(psf.scaleV), 'r')
-                ax1[iBand, camcol - 1].plot(psf.vvR, np.log10(psf.vvv), 'r')
+                ax1[iBand, camcol - 1].plot(psf.vvR, np.log10(psf.vvv), '--r')
                 ax1[iBand, camcol - 1].errorbar(psf.OKprofRadii, psf.OKprofile,
                                                 psf.OKprofileErr, fmt='ok')
                 if args.yscale == 'log':
@@ -102,11 +102,11 @@ def main():
                     ax1[iBand, camcol - 1].set_xlim(0, 2)
                     ax1[iBand, camcol - 1].set_ylim(-1.5, 0.1)
             elif args.yscale == 'linear':
-                ax1[iBand, camcol - 1].plot(psf.vR, psf.vv, 'b')
+                ax1[iBand, camcol - 1].plot(psf.vR, psf.vv, '-b')
                 # draw double Gaussian as Red
                 # ax1[iBand, camcol - 1].plot(psf.r,
                 #                             psf.psfModel * psf.scaleV, 'r')
-                ax1[iBand, camcol - 1].plot(psf.vvR, psf.vvv, 'r')
+                ax1[iBand, camcol - 1].plot(psf.vvR, psf.vvv, '--r')
                 ax1[iBand, camcol - 1].errorbar(psf.OKprofRadii,
                                                 psf.OKprofileLinear,
                                                 psf.OKprofileErrLinear,
@@ -122,7 +122,7 @@ def main():
             if iBand == 0:
                 ax1[iBand, camcol - 1].set_title('camcol=%d' % camcol)
 
-    plt.suptitle('run %d, field %d, Red: vK only, Blue: vK+instrument ' % (run, args.ifield))
+    plt.suptitle('run %d, field %d, dashed: vK only, solid: vK+instrument ' % (run, args.ifield))
     # plt.tight_layout()
     # plt.show()
     plt.savefig('output/run%d_fld%d_psf_vK_2G_%s.png' %
