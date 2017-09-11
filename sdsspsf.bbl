@@ -9,6 +9,16 @@
 \bibitem[\protect\citeauthoryear{{Gunn} et~al.}{{Gunn} et~al.}{2006}]{Gunn2006}
 {Gunn}, J.~E., et~al. 2006, \aj, 131, 2332
 
+\bibitem[\protect\citeauthoryear{{Heymans} et~al.}{{Heymans}
+  et~al.}{2012}]{heymans2012}
+{Heymans}, C., {Rowe}, B., {Hoekstra}, H., {Miller}, L., {Erben}, T.,
+  {Kitching}, T.,  \& {van Waerbeke}, L. 2012, \mnras, 421, 381
+
+\bibitem[\protect\citeauthoryear{{Ivezi{\'c}} et~al.}{{Ivezi{\'c}}
+  et~al.}{2014}]{zeljkoBook}
+{Ivezi{\'c}}, {\v Z}., {Connolly}, A.~J., {VanderPlas}, J.~T.,  \& {Gray}, A.
+  2014, {Statistics, Data Mining, and Machine Learning in Astronomy}
+
 \bibitem[\protect\citeauthoryear{{Ivezi{\'c}} et~al.}{{Ivezi{\'c}}
   et~al.}{2007}]{Ivezic2007}
 {Ivezi{\'c}}, {\v Z}., et~al. 2007, \aj, 134, 973
@@ -40,6 +50,10 @@
   et~al.}{2016}]{subaruSeeing2016}
 {Oya}, S., {Terada}, H., {Hayano}, Y., {Watanabe}, M., {Hattori}, M.,  \&
   {Minowa}, Y. 2016, Experimental Astronomy, 42, 85
+
+\bibitem[\protect\citeauthoryear{Peterson~et al.}{Peterson~et
+  al.}{2015}]{phosim}
+Peterson~et al., J.~R. 2015, ApJS, 218, 14
 
 \bibitem[\protect\citeauthoryear{{Pier} et~al.}{{Pier} et~al.}{2003}]{Pier2003}
 {Pier}, J.~R., {Munn}, J.~A., {Hindsley}, R.~B., {Hennessy}, G.~S., {Kent},

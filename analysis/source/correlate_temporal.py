@@ -141,7 +141,7 @@ def main():
                     PSD = aa[:int(N / 2)]
                     PSD += aa[-1:-int(N / 2)-1:-1]
                     f = df * np.arange(int(N / 2))
-    
+
                     # npsd = 64 # 2048 # 16
                     # # compute PSD using Welch's method -- no window function
                     # PSDW1, fW1 = mlab.psd(fwhm[idx], NFFT=npsd, Fs=1. / dt,
@@ -164,7 +164,7 @@ def main():
                     tau = 1/(2*np.pi*popt[1])
                     # print('A=%e, f0=%e, tau = %5.0f s' %(popt[0], popt[1], tau))
                     if args.writefitp:
-                        fid.write('%d\t %d\t %d\t %e\t %e\t %6.1f \n'%(run, band, camcol, popt[0], popt[1], tau))
+                        fid.write('%d\t %d\t %d\t %e\t %e\t %6.1f \n'%(run, band, camcol, popt[0], popt[1], tau/60))
 
                     myX = np.hstack((f[0]/2, f, f[-1]*2))
                     myY = 10**logpsdfunc(myX, popt[0], popt[1])
@@ -183,32 +183,34 @@ def main():
                     ax1[iRow, iCol].set_xlabel('Frequency (1/hour)')
                     ax1[iRow, iCol].set_ylabel('PSD (arcsec$^2$ second)')
 
-                    hj_N = fwhm[idx]
-                    if np.mod(N, 2)==1:
-                        N -= 1
-                        hj_N = hj_N[:-1]
-                    tj = np.linspace(-N/2*dt, N/2*dt, N)
-                    fc, PSDc = PSD_continuous(tj, hj_N)
-                    cutoff = fc>0
-                    fc = fc[cutoff]
-                    PSDc = PSDc[cutoff]/dt/N
-                    print('%d\t %d\t %d\t %e\t %e\t %6.1f \n'%(run, band, camcol, popt[0], popt[1], tau))
-                    popt, pcov = optimize.curve_fit(logpsdfunc, fc, np.log10(PSDc), p0=[1e5, 1e-3],
-                                                        bounds = ([1, 1e-5], [1e8, 1e-2]))
-                    # popt = optimize.fmin(lambda Af0: logpsdfuncChi2(f, Af0, np.log10(PSD)), [1e5, 1e-3], disp=1)
-                                                   
-                    # sigma=myErr, absolute_sigma=True)
-                    tau = 1/(2*np.pi*popt[1])
-                    # print('A=%e, f0=%e, tau = %5.0f s' %(popt[0], popt[1], tau))
-                    if args.writefitp:
-                        fid.write('c: %d\t %d\t %d\t %e\t %e\t %6.1f \n'%(run, band, camcol, popt[0], popt[1], tau))
-                    print('c: %d\t %d\t %d\t %e\t %e\t %6.1f \n'%(run, band, camcol, popt[0], popt[1], tau))
-                    myX = np.hstack((f[0]/2, f, f[-1]*2))
-                    myY = 10**logpsdfunc(myX, popt[0], popt[1])
-                    ax1[iRow, iCol].loglog(fc, PSDc, linestyle = 'None', marker='.', color='g', markersize=10)#, c='#AAAAAA')
-                    ax1[iRow, iCol].loglog(myX*3600, myY, 'b-')
-
-                    chi21 = logpsdfuncChi2(f, popt, np.log10(PSD))
+                    print('%d\t %d\t %d\t %e\t %e\t %6.1f \n'%(run, band, camcol, popt[0], popt[1], tau/60))
+                    
+                    # below, use PSD_continuous and see how different things are
+                    # hj_N = fwhm[idx]
+                    # if np.mod(N, 2)==1:
+                    #     N -= 1
+                    #     hj_N = hj_N[:-1]
+                    # tj = np.linspace(-N/2*dt, N/2*dt, N)
+                    # fc, PSDc = PSD_continuous(tj, hj_N)
+                    # cutoff = fc>0
+                    # fc = fc[cutoff]
+                    # PSDc = PSDc[cutoff]/dt/N
+                    # popt, pcov = optimize.curve_fit(logpsdfunc, fc, np.log10(PSDc), p0=[1e5, 1e-3],
+                    #                                     bounds = ([1, 1e-5], [1e8, 1e-2]))
+                    # # popt = optimize.fmin(lambda Af0: logpsdfuncChi2(f, Af0, np.log10(PSD)), [1e5, 1e-3], disp=1)
+                    #                                
+                    # # sigma=myErr, absolute_sigma=True)
+                    # tau = 1/(2*np.pi*popt[1])
+                    # # print('A=%e, f0=%e, tau = %5.0f s' %(popt[0], popt[1], tau))
+                    # if args.writefitp:
+                    #     fid.write('c: %d\t %d\t %d\t %e\t %e\t %6.1f \n'%(run, band, camcol, popt[0], popt[1], tau/60))
+                    # print('c: %d\t %d\t %d\t %e\t %e\t %6.1f \n'%(run, band, camcol, popt[0], popt[1], tau/60))
+                    # myX = np.hstack((f[0]/2, f, f[-1]*2))
+                    # myY = 10**logpsdfunc(myX, popt[0], popt[1])
+                    # ax1[iRow, iCol].loglog(fc, PSDc, linestyle = 'None', marker='.', color='g', markersize=10)#, c='#AAAAAA')
+                    # ax1[iRow, iCol].loglog(myX*3600, myY, 'b-')
+                    # 
+                    # chi21 = logpsdfuncChi2(f, popt, np.log10(PSD))
 
                 elif args.type == 'autocor':
                     result = np.correlate(fwhm[idx], fwhm[idx], mode='full')

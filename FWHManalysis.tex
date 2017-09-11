@@ -102,51 +102,83 @@ Our structure function is defined as
 the root-mean-square of the PSF size differences of pairs of stars
 in the same angular bin. 
 Results are shown in Fig.~\ref{fig:spatial}.
-The SDSS curves are combined for all the Stripe 82 runs, then for all
-the optical bands.
+The SDSS curves are combined for 86 out of the 108 Stripe 82 runs with number of
+fields more than 100, then for all
+the optical bands. We also checked the structure function for each band
+separately, and found no statistically significant difference.
+
+For comparison, Fig. ~\ref{fig:spatial} also shows the PSF angular
+structure functions obtained using PhoSim~\citep{phosim} by simulating LSST,
+and that from CFHT PSF measurements~\citep{heymans2012}.
+The PhoSim PSF profiles are obtained by simulating a grid of stars
+spaced by 6 arcminutes with non-perturbed telescope and ideal sensors.
+The results are averaged over 9 different atmosphere realizations with
+different wind and screen parameters and airmass, and with 3 different
+wavelength, 350 nm, 660 nm, and 970 nm.
+The CFHT PSF size measurements are provided by Heymans.
+The 3 curves in Fig.~\ref{fig:spatial} appear to be quantitatively
+consistent with each other, even though they are for different telescopes.
+
 
 \begin{figure}
 \centering
 \includegraphics[width=0.5\textwidth]{FIGURES/spatial.png}
-\caption{Angular structure function. 
+\caption{PSF size angular structure function using SDSS measurements
+  combined over 86 out of the 108 runs with number of fields larger
+  than 100, and comparisons with PhoSim simulations and CFHT
+  measurements of the same quantity.
 \label{fig:spatial}}
 \end{figure}
 
-% phosim, ref.
-% add Peterson to author list?
-% instrument dominate?
-
 \subsection{Temporal auto-correlation function}
 
-Study the temporal power spectrum:
-\begin{itemize}
-\item Let's start with plain Fourier transform and look at power spectra (we can 
-    play games with co-addition, 6 columns for a given run, or all runs)
-\item Potentially, we could also look at  Kelly and Becker code  (2014, ApJ 788, 33) 
-\item Here we can compare to Chuck's CP measurements (in opsim db) 
-\end{itemize} 
+To study the temporal behavior of the seeing, we look at the 
+ power spectrum.
+Fig.~\ref{fig:psd} shows the temporal power spectral density (PSD) of the
+PSF FWHM for 6 camera columns, in run 4874, $r$-band.
+We fit the PSD to the damped random walk model~\citep{zeljkoBook},
+\begin{equation}
+PSD(f) = \frac{\tau^2 SF^2_{\infty}}{1+(2\pi f \tau)^2},
+\end{equation}
+where $f$ is the temporal frequency, $SF_{\infty}$ is the asymptotic
+value of the structure function, and $\tau$ is the
+characteristic timescale.
+Combining fit results for all camera columns and optical bands for run 4874
+gives $\tau = 15.1 \pm 1.4$ minutes.
+This is consistent with ~\cite{Racine1996}, where a timescale of 
+$\tau = 17 \pm 1$ minutes was found.
+Making the same fits for all the Stripe 82 runs with number of fields
+larger than 600, the values of $\tau$ are plotted in Fig.~\ref{fig:hist}.
 
 \begin{figure}
 \centering
-\includegraphics[width=0.9\textwidth]{FIGURES/temporal.png}
-\caption{spatial correlation for run 1752. Average
-  $f_0 = 5.1\times 10^{-4} Hz$, Average $\tau = 314 sec.$ 
+\includegraphics[width=0.9\textwidth]{FIGURES/temporalPSD.png}
+\caption{PSF size temporal power spectral density for run 4874, r-band. 
+Combining fit results for all camera columns and optical bands for
+this run
+gives $\tau = 15.1 \pm 1.4$ minutes.
 \label{fig:psd}}
 \end{figure}
 
 \begin{figure}
 \centering
-\includegraphics[width=0.9\textwidth]{FIGURES/hist.png}
+\includegraphics[width=0.5\textwidth]{FIGURES/hist.png}
 \caption{histograms
 \label{fig:hist}}
 \end{figure}
 
 
-\begin{figure}
-\centering
-\includegraphics[width=0.9\textwidth]{FIGURES/correlate.png}
-\caption{correlations  from all 108 runs.
-\label{fig:correlate}}
-\end{figure}
+Following~\cite{Racine1996}, we also define the structure-function-like quantity
+\begin{equation}
+       f(\Delta t) = {| \theta(t+\Delta t) - \theta(t)| \over  \theta(t+\Delta t) + \theta(t) },
+\end{equation} 
+where $\theta$ is seeing.
+We then fit the mean value of $f(\Delta t)$ to 
+\begin{equation}
+    < f(\Delta t) > =  f(\Delta t) ^\infty \, \left[ 1 - \exp(-\Delta t/\tau)^\gamma \right],
+\end{equation} 
+The timescale $\tau$ is found to be mostly within the range of 15 $-$
+25 minutes.
+
 
 

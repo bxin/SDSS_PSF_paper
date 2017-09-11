@@ -40,7 +40,7 @@ def main():
     sdss = sdssinst()
     
     useRow = 1 # row number in the data files (starts from 0)
-
+    objlist = objlist[objlist[:, 2] - objlist[:, 1] + 1>=100, :] #get rid of short runs
     if not args.oneplot:
         nRow = 2
         nCol = 3
