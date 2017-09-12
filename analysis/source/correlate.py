@@ -20,7 +20,7 @@ plt.figure(figsize=(6,4.5))
 #plt.subplot(1,2,2)
 plt.scatter(seeing, alpha, s=10, c='r', edgecolors='r')
 plt.grid()
-plt.xlabel(r'FWHM (arcsec)') # (spatial correlation slope)')
+plt.xlabel(r'FWHM$_r$ (arcsec)') # (spatial correlation slope)')
 plt.ylabel(r'$\alpha$')
 
 #The files below have the von Karman prediction curves we show on the alpha vs seeing plots.

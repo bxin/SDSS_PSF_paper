@@ -10,7 +10,7 @@ a single parameter, FWHM, we study three aspects of its variation, as follows.
 The Kolmogorov turbulence theory gives a standard formula for the FWHM of a long-exposure
 seeing-limited PSF in a large telescope,
 \begin{equation}
-FWHM^{Kolm}(\lambda, X) = \frac{0.976\lambda}{r_0(\lambda,X)}.
+\textrm{FWHM}^{\rm Kolm}(\lambda, X) = \frac{0.976\lambda}{r_0(\lambda,X)}.
 \label{eq:fwhmkolm}
 \end{equation}
 Here $\lambda$ is the wavelength, and $X$ is the airmass.
@@ -24,25 +24,24 @@ where $r_0(500)$ is the $r_0$ for $\lambda=500$nm and $X$=1, and $\lambda$ is in
 the unit of nm.
 Substituting Eq.~(\ref{eq:r0}) into (\ref{eq:fwhmkolm}), it is easy to see
 \begin{equation}
-FWHM^{Kolm} \propto \lambda^{-0.2}.
+\textrm{FWHM}^{\rm Kolm} \propto \lambda^{-0.2}.
 \end{equation}
 
 
-With the von Karman atmosphere model, the FWHM as in
+With the \vk~atmosphere model, the FWHM as in
 Eq.~(\ref{eq:fwhmkolm}) needs an additional correction factor
 which is a function of the outer scale $L_0$~\citep{Tokovinin2002},
 \begin{equation}
-FWHM^{vonK}(\lambda, X) = \frac{0.976\lambda}{r_0(\lambda,X)}
+\textrm{FWHM}^{\rm vonK}(\lambda, X) = \frac{0.976\lambda}{r_0(\lambda,X)}
 \sqrt{1-2.183\left( \frac{r_0(\lambda,X) }{L_0} \right)^{0.356}}.
 \end{equation}
-If we still want to write $FWHM^{vonK} \propto \lambda^{\alpha} $, 
+If we still want to write FWHM$^{\rm vonK} \propto \lambda^{\alpha} $, 
 $\alpha$ will be a function of $L_0$ and $r_0$ at a specified
-wavelength and airmass, or equivalently, $L_0$ and $FWHM^{vonK}$ at a
-specified wavelength and airmass. Below, we will use SDSS 
+wavelength and airmass, or equivalently, $L_0$ and FWHM$^{\rm vonK}$ at a
+specified wavelength and airmass. Below, for FWHM, we will use FWHM$_r$,
 PSF FWHM measurements from the 
 $r$-band,
 whose effective wavelength is 616.6 nm, and airmass of 1.
-In this work, we always use FWHM to refer to FWHM$^{vonK}$.
 
 For each run from SDSS Stripe 82 data, and each camera column, we make
 a least-square fit to
@@ -52,7 +51,7 @@ All FWHM are multiplied with $1/X^{0.6}$ to correct for airmass.
 We take into account that the same field number doesn't correspond to the same
 time in all filters. The scanning order in the SDSS camera is $r$-$i$-$u$-$z$-$g$, with the delay between the two 
 successive filters corresponding to 2 fields. That is, If we take the field number $F$ for the $r$-band, then
-we need to take FWHM for the $i$-band from field $F-2$, for the u band
+we need to take FWHM for the $i$-band from field $F-2$, for the $u$-band
 from $F-4$, and so on. Fig.~\ref{fig:fwhm_lambda} shows such fits for
 run 4874. All FWHM are normalized using corresponding FWHM in the
 $r$-band taken at the same moment in time.
@@ -68,27 +67,27 @@ also shown.
 \label{fig:fwhm_lambda}}
 \end{figure}
 
-As discussed above, based on the von Karman atmosphere model, the
-power $\alpha$ should be a function of outer scale $L_0$ and the
-FWHM in a specified optical band.
+As discussed above, based on the \vk~atmosphere model, the
+power $\alpha$ should be a function of outer scale $L_0$ and %the
+FWHM$_r$. % in a specified optical band.
 Fig.~\ref{fig:alpha_fwhm} is a scattered plot of $\alpha$ versus FWHM
 in the $r$-band, for all the Stripe 82 runs.
 A correlation between $\alpha$ and the FWHM seems to be present.
 Similar correlations have been seen in Subaru images and reported by~\cite{subaruSeeing2016}.
-The data points are overlaid with curves as predicted by the von
-Karman model, with varying $L_0$, ranging from 2 meters to infinity.
-The data clear deviate from the Kolmogorov model prediction, which is
+The data points are overlaid with curves as predicted by the 
+\vk~model, with varying $L_0$, ranging from 2 meters to infinity.
+The data clearly deviate from the Kolmogorov model prediction, which is
 the horizontal line at $\alpha = -0.20$, with infinite $L_0$.
 For LSST, using the commonly assumed $L_0 = 30$m, and a FWHM of 0.6
-arcsec, we get a $\alpha$ value close to $-0.30$.
+arcsec, the \vk~model predicts a $\alpha$ value close to $-0.30$.
 
 \begin{figure}
 \centering
 \includegraphics[width=0.5\textwidth]{FIGURES/alpha_fwhm.png}
 \caption{Wavelength-dependence power parameter $\alpha$ vs the
   FWHM in the $r$-band for all the Stripe 82 runs. 
-The curves are predictions of the von Karman
-  model, with $L_0$ ranging from 2 meters to infinity.
+The curves are predictions of the \vk~model, 
+with $L_0$ ranging from 2 meters to infinity.
 \label{fig:alpha_fwhm}}
 \end{figure}
 
@@ -115,9 +114,11 @@ spaced by 6 arcminutes with non-perturbed telescope and ideal sensors.
 The results are averaged over 9 different atmosphere realizations with
 different wind and screen parameters and airmass, and with 3 different
 wavelength, 350 nm, 660 nm, and 970 nm.
-The CFHT PSF size measurements are provided by Heymans.
+The CFHT PSF size measurements were made in the $i$-band, and provided
+by the authors of~\cite{heymans2012}.
 The 3 curves in Fig.~\ref{fig:spatial} appear to be quantitatively
-consistent with each other, even though they are for different telescopes.
+consistent with each other, even though they are for telescopes at
+different sites and with different optics.
 
 
 \begin{figure}
@@ -132,13 +133,13 @@ consistent with each other, even though they are for different telescopes.
 
 \subsection{Temporal auto-correlation function}
 
-To study the temporal behavior of the seeing, we look at the 
+To study the temporal behavior of the seeing, we look at its
  power spectrum.
 Fig.~\ref{fig:psd} shows the temporal power spectral density (PSD) of the
 PSF FWHM for 6 camera columns, in run 4874, $r$-band.
 We fit the PSD to the damped random walk model~\citep{zeljkoBook},
 \begin{equation}
-PSD(f) = \frac{\tau^2 SF^2_{\infty}}{1+(2\pi f \tau)^2},
+\textrm{PSD}(f) = \frac{\tau^2 SF^2_{\infty}}{1+(2\pi f \tau)^2},
 \end{equation}
 where $f$ is the temporal frequency, $SF_{\infty}$ is the asymptotic
 value of the structure function, and $\tau$ is the
