@@ -7,12 +7,13 @@ all SDSS imaging data.
 
 \subsection{Stripe 82 dataset} 
 
-The equatorial stripe 82 region (22$^h$24$^m$ $<$ R.A. $<$ 04$^h$08$^m$, $-$1.27$^\circ$  $<$ $+$1.27$^\circ$, about 
+The equatorial Stripe 82 region (22$^h$24$^m$ $<$ R.A. $<$ 04$^h$08$^m$, 
+$-$1.27$^\circ$  $<$ Dec $<$ $+$1.27$^\circ$, about 
 290 deg$^2$) from the southern Galactic cap ($-64^\circ < b <  -20^\circ$) has been repeatedly imaged (of the order
 hundered times) by SDSS to study variability phenomena (such as supernovae, asteroids, variable stars, quasar 
 variability). A given observing stretch of SDSS imaging data is called a ``run''. Often there is only a single
-run for a given observing run, though sometimes there are multiple runs per night. We use here seeing data for 
-108 runs, with a total of 31580 fields, obtained between September, 1998 and September 2008). All
+run for a given observing night, though sometimes there are multiple runs per night. We use here seeing data for 
+108 runs, with a total of 31,580 fields, obtained between September, 1998 and September 2008). All
 runs are obtained during the Fall observing season (September to December). Astrometric and photometric aspects 
 of this dataset have been discussed in detail by \cite{Ivezic2007} and \cite{Sesar2007}. 
 
@@ -28,11 +29,13 @@ the imaging camera, see Figure 7 in \citealt{SDSSEDR}).
  
 The SDSS imaging PSF is modeled 
 heuristically in each band using a Karhunen-Lo\'{e}ve (K-L) transform \citep{Lupton2002}. 
-Using stars brighter than roughly 20$^{th}$ magnitude, the PSF from a series of five frames is expanded 
-into eigenimages and the first three terms are kept. The variation of the coefficients is fit 
-with polynomials, using data from the frame in question, plus the immediately preceding and following 
-half-frames. The success of this K-L expansion is gauged by comparing PSF photometry based on the 
-modeled K-L PSFs with large-aperture photometry for the same (bright) stars \citep{SDSSEDR}. 
+Using stars brighter than roughly 20$^{th}$ magnitude, the PSF images from a series of five 
+frames are expanded into eigenimages and the first three terms are kept (K-L transform is 
+also known as the Principal Component Analysis). The angular variation of the eigencoefficients
+is fit with polynomials, using data from the frame in question, plus the immediately preceding 
+and following half-frames. The success of this K-L expansion is gauged by comparing PSF 
+photometry based on the modeled K-L PSFs with large-aperture photometry for the same 
+(bright) stars \citep{SDSSEDR}. 
 Parameters that characterize seeing for one field of imaging data are stored in the so-called psField 
 files\footnote{https://data.sdss.org/datamodel/files/PHOTO\_REDUX/RERUN/RUN/objcs/CAMCOL/psField.html}. 
 The status parameter flag for each frame indicates the success of the K-L decomposition.
@@ -43,6 +46,7 @@ extended to $\sim$30 arcsec using observations of bright stars and at such large
 double Gaussian fits underpredict the measured profiles. For this reason, the fits are extended 
 to include the so-called ``power-law wings''
 \begin{equation}
+\label{eq:SDSSPSF}
         PSF(r) = {\exp(-{r^2\over 2\,\sigma_1^2}) + b\,\exp(-{r^2\over 2\,\sigma_2^2})
            + p_0\left(1 + { r^2 \over \beta \sigma_P^2}\right)^{-\beta/2} \over 1 + b + p_0}.
 \end{equation} 
