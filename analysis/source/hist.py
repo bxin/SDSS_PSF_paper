@@ -10,10 +10,11 @@ tauerr = a[:, 3]
 plt.figure(figsize=(6,4.5))
 
 idx = nfield>600
+#idx = nfield>500
 plt.hist(tau[idx])
 plt.grid()
-plt.xlabel(r'$\tau$ (minutes)')
-
+plt.xlabel(r'$\tau$ (minutes)', {'fontsize': 16})
+plt.ylabel('Number of runs', {'fontsize': 16})
 
 
 #usebands = 'ugriz'

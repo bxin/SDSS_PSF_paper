@@ -17,12 +17,16 @@ from astroML.fourier import PSD_continuous
 def fdt(dt, A, tau, gamma):
     # print('A = %e, f0 = %f'% (A, f0))
     return A*(1-(np.exp(-dt/tau))**gamma )
+    #return A*(1-(np.exp(-dt/tau))*gamma )
+    # return A*(1-np.exp((-dt/tau)**gamma) )  # (-dt/tau)**gamma -> nan
 
 def fdtChi2(dt, Atg, y, yerr):
     A = Atg[0]
     tau = Atg[1]
     gamma = Atg[2]
     yp = A*(1-(np.exp(-dt/tau))**gamma)
+    #yp = A*(1-(np.exp(-dt/tau))*gamma)
+    #yp = A*(1-np.exp((-dt/tau)**gamma))
     chi2 = np.sum(((yp - y)/yerr)**2)
     # print('A = %e, f0 = %f, chi2 = %f'% (A, f0, chi2))
     return chi2
@@ -155,37 +159,45 @@ def main():
                     mySF = txtdata[1, :]
                     myN = txtdata[2, :]
                     mySFstd = txtdata[3, :]
-                    
+
+                # mySFstd = mySFstd/100 #playing around, checking why pcov is large
+                # curve_fit gives the error
                 popt, pcov = optimize.curve_fit(fdt, mySep, mySF, p0=[0.1, 30, 0.8],
                                                         bounds = ([0, 5, 0], [0.3, 300, 5]),
                                                     sigma = mySFstd)
-                print('%6.1f\t %6.1f\n'%(popt[1], np.sqrt(pcov[1,1])))
-                popt = optimize.fmin(
-                    lambda Atg: fdtChi2(mySep, Atg,mySF, mySFstd), [0.1, 30, 0.8], disp=0)
-                print('fmin: %6.1f\n'%(popt[1]))
                 A = popt[0]
                 tau = popt[1]
                 gamma = popt[2]
                 Aerr = np.sqrt(pcov[0, 0])
                 tauerr = np.sqrt(pcov[1, 1])
                 gammaerr = np.sqrt(pcov[2, 2])
-
+                print('curve_fit: tau = %6.1f\t %6.1f'%(tau, tauerr))
+                print('curve_fit: gamma = %6.3f\t %6.3f'%(gamma, gammaerr))
+                # fmin does not give the error
+                popt = optimize.fmin(
+                    lambda Atg: fdtChi2(mySep, Atg,mySF, mySFstd), [0.1, 30, 0.8], disp=0)
+                A = popt[0]
+                tau = popt[1]
+                gamma = popt[2]
+                print('fmin: tau = %6.1f'%tau)
+                print('fmin: gamma = %6.3f'%gamma)
+                
                 if args.writefitp:
                     fid = open(fitpname, 'w')     
                     fid.write('%5.3f\t %5.3f\n' % (A, Aerr))
                     fid.write('%5.0f\t %5.0f\n' % (tau, tauerr))
                     fid.write('%5.2f\t %5.2f\n' % (gamma, gammaerr))
                     
-                #plt.figure(figsize=(6,4.5))
-                #plt.errorbar(mySep, mySF, mySFstd, fmt = 'ok')
-                #myX = np.linspace(0, mySep[0]+mySep[-1], 100)
-                #myY = fdt(myX, A, tau, gamma)
-                #chi2 = fdtChi2(mySep, popt, mySF, mySFstd)
-                #plt.plot(myX, myY, 'r-')
-                #
-                #plt.title('run%d, %s, %s, camcol=%s' %
-                #            (run, fwhmStr, sdss.band[band], camcol))
-                #plt.grid()
+                plt.figure(figsize=(6,4.5))
+                plt.errorbar(mySep, mySF, mySFstd, fmt = 'ok')
+                myX = np.linspace(0, mySep[0]+mySep[-1], 100)
+                myY = fdt(myX, A, tau, gamma)
+                chi2 = fdtChi2(mySep, popt, mySF, mySFstd)
+                plt.plot(myX, myY, 'r-')
+                
+                plt.title('run%d, %s, %s, camcol=%s' %
+                            (run, fwhmStr, sdss.band[band], camcol))
+                plt.grid()
                 # plt.show()
                 
             if (args.startfield == 0 and args.endfield == 99999):

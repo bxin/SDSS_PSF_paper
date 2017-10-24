@@ -1,52 +1,53 @@
 
 %  \section{Discussion and Conclusions} 
  
-For now, a collection place for stuff from other seeing papers (commented out),
-and some text to move later to Sections 3 and 4. 
+Using SDSS Stripe 82 data, we have seen a direct evidence that the
+wavelength dependence of the atmospheric seeing agrees better with the
+\vk~model than the Kolmogorov turbulence theory.
+Most of the long-term seeing statistics are taken at the visible
+wavelength. The knowledge on the wavelength-dependence of the seeing
+is useful for extrapolating the seeing statistics to other
+wavelength, for example, the near-infrared, where a lot of the
+adaptive optics programs operate.
 
 
-1) \cite{VMT1998} 
+We have also measured 
+the characteristic angular and temporal scales on which the seeing
+decorrelates.
+The numerical results may only apply to the SDSS site, but can be used
+as references when considering spatial and temporal variations of
+seeing at other observatories.
+Comparisons with simulations of the LSST and PSF measurements at CFHT
+show good general agreement, taken into account that the results are
+for different sites and different telescope optics.
+The results can be useful for observatories in scheduling
+observations to make best use of good seeing conditions.
 
-For seeing prediction, it is tempting to find statistical laws which describe its temporal behaviour.
-To our knowledge only three authors (Racine, 1996; Munoz-Tunon et al., 1997; Sarazin, 1997) 
-have worked on this problem. 
+We thank John Peterson for running the PhoSim simulations and
+providing us with both the PhoSim and CFHT curves in
+Fig.~\ref{fig:spatial}.
 
-- fig. 2: average autocorrelation function of seeing over 9 months:  A*exp(-t/tau) 
+%check lognormal?
+% - seeing distribution is  log–normal, due to the fact that seeing arises from the addition of uncorrelated random processes 
 
-- seeing distribution is  log–normal, due to the fact that seeing arises from the addition of uncorrelated random processes
+%check autocorrelation?
+% - fig. 2: average autocorrelation function of seeing over 9 months:  A*exp(-t/tau) 
+% see Eq. (3) in VMT 1998 for definition.
+% This could be calculated using correlate_temporal_bin.py (autocor
+% option), or make a copy of correlate_temporal_sf.py, and calculate
+% in a similar way. But, in fig 2 of VMT 1998, why autocor(dt=0) not
+% at 1?
 
-
-with $\tau$=17 min and $\gamma \sim 0.7$. for observations at Mauna Kea \cite{Racine1996}
-
-Seeing varies greatly with time and seems to decorrelate after 1 to 2 hr. 
-
-The seeing auto-correlation function
-\begin{equation}
-      C(\Delta t) = < \theta(t) \theta(t+\Delta t)>,
-\end{equation} 
-can be modeled as
-\begin{equation}
-      C(\Delta t) = A \, \exp(-\Delta t/\tau),
-\end{equation} 
-with $\tau \sim 1$ hour. 
+%The seeing auto-correlation function
+%\begin{equation}
+%      C(\Delta t) = < \theta(t) \theta(t+\Delta t)>,
+%\end{equation} 
+%can be modeled as
+%\begin{equation}
+%      C(\Delta t) = A \, \exp(-\Delta t/\tau),
+%\end{equation} 
+%with $\tau \sim 1$ hour. 
  
-Triple correlation:
-\begin{equation}
-      C(\Delta t_1, \Delta t_2) = < \theta(t) \theta(t+\Delta t_1)\theta(t+\Delta t_2) >
-\end{equation} 
-
-2) 
-
-The vertical distribution of the optical turbulence strength (energy profile), described by the altitude 
-dependence of the refractive-index structure constant $C^2_n$, is hard to measure. When $C^2_n$ 
-is available, the seeing $\theta$ is obtained by integrating $C^2_n$ over altitude $h$ as 
-\begin{equation}
-   \theta =  0.98 {\lambda \over r_0} = 5.25 \, \lambda^{-1/5} \, \left[ \int_0^\infty C_n^2(h) dh \right]^{3/5},
-\end{equation}
-where $r_0$ is the Fried's parameter \cite{Roddier1981}. 
-
-
-
 
 
 
@@ -61,12 +62,7 @@ where $r_0$ is the Fried's parameter \cite{Roddier1981}.
 
 % Coulman (1985, ARAA 23, 19) for theory of turbulence and seeing in astronomy
 
-\begin{equation} 
-FWHM = 0.98 {\lambda \over r_0} 
-\end{equation} 
-where $\lambda$ is the wavelength and $r_0$ is the Fried's
-parameter. It can be shown that the variation of $r_0$ with wavelength
-predicted by the Kolmogorov's turbulence implies $FWHM \propto \lambda^{-0.2}$. 	
+
 % cite: Vernin, J.; Munoz-Tunon, C. 1992, Astronomy and Astrophysics, vol. 257, no. 2, p. 811-816. 
 
 % Check for seeing forecastas and "flexible scheduling" !! 

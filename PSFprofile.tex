@@ -1,7 +1,7 @@
 
 %  \section{The PSF profile analysis}
 
-Since the complex 6-parameter PSF fit given by eq.~\ref{eq:SDSSPSF} was adopted by 
+Since the complex 6-parameter PSF fit given by Eq.~(\ref{eq:SDSSPSF}) was adopted by 
 the SDSS processing pipeline, significant progress has been made in validating the 
 \vk~model of the atmosphere and measuring the associated outer
 scale (see, for example, \citealt{Tokovinin2002}, \citealt{Boccas2004}, and \citealt{MartinezMessenger}).
@@ -36,7 +36,7 @@ so light goes all the way through the chip and is reflected off the solder, and 
 back up through the Si. This effect is not visible in the $z$-band because in this case
 thick front-side chips are used (in all other bands, thin back-side chips are used). 
 
-To improve the fit quality are large radii, in the second fitting step we introduce an
+To improve the fit quality at large radii, in the second fitting step we introduce an
 empirical instrumental PSF, so that the observed PSF can be expressed as
 a convolution of the atmosphere, represented by the \vk, and
 the instrumental PSF,
@@ -48,7 +48,13 @@ where vonK is the \vk~shape, whose only parameter is its FWHM, and
         \textrm{PSF}_{\textrm{inst}} = \exp(-\frac{r^2}{2\sigma^2}) + 10^{\eta(ar^2+br+c)}.
 \label{eq:psfinst}
 \end{equation} 
-Because the shape of the instrument PSF tail should not vary with
+The standard deviation of the central Gaussian, $\sigma$, cannot be
+too wide because the \vk~term already well describes the core of the PSF.
+On the other hand, if $\sigma$ is close to zero, once the
+total intensity of the instrumental PSF is normalized to 1, too much
+widening power would be given to the instrumental PSF tail.
+We found $\sigma = 0.1$ arcsec a reasonable choice for all the fits.
+Because the shape of the instrumental PSF tail should not vary with
 time, the parameters $a$, $b$, and $c$ in Eq.~(\ref{eq:psfinst}) are
 fixed for each band-camera-column combination.
 Their values come from a one-time fit using the same PSF functions,
@@ -59,7 +65,6 @@ These fits are very slow but need to be done only once.
 Although this second fitting step involves a 2-dimensional convolution,
 there is only one free parameter in the fit: $\eta$, the normalization of the
 instrument PSF tail. Each two-step PSF fit can be done in a few seconds.
-XXX Bo, what about delta from eq.3, where does it come from? 
 
 
 \begin{figure}
