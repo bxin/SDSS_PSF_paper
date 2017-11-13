@@ -188,16 +188,18 @@ def main():
                     fid.write('%5.0f\t %5.0f\n' % (tau, tauerr))
                     fid.write('%5.2f\t %5.2f\n' % (gamma, gammaerr))
                     
-                plt.figure(figsize=(6,4.5))
+                plt.figure(figsize=(6,4.6))
                 plt.errorbar(mySep, mySF, mySFstd, fmt = 'ok')
                 myX = np.linspace(0, mySep[0]+mySep[-1], 100)
                 myY = fdt(myX, A, tau, gamma)
                 chi2 = fdtChi2(mySep, popt, mySF, mySFstd)
                 plt.plot(myX, myY, 'r-')
                 
-                plt.title('run%d, %s, %s, camcol=%s' %
-                            (run, fwhmStr, sdss.band[band], camcol))
+                plt.title('run%d, %s, %s-band, camcol=%s' %
+                            (run, fwhmStr.upper(), sdss.band[band], camcol))
                 plt.grid()
+                plt.xlabel(r'$\Delta t$ (minutes)')
+                plt.ylabel(r'$<f(\Delta t)>$')
                 # plt.show()
                 
             if (args.startfield == 0 and args.endfield == 99999):
@@ -207,7 +209,7 @@ def main():
                 pngname = 'output/correlate_temporal/run%d_%s_sf_%s_fld_%d_%d.png' %(
                     run, fwhmStr, sdss.band[band], args.startfield, args.endfield)
                 
-            # plt.tight_layout()
+            plt.tight_layout()
             plt.savefig(pngname)
             plt.close()
         

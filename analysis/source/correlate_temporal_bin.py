@@ -208,7 +208,11 @@ def main():
                     # popt = [1e4, 6e-4]
                     # myY1 = 10**logpsdfunc(myX, popt[0], popt[1])
                     # ax1[iRow, iCol].loglog(opsimf*3600, opsimpsd, linestyle = 'None', marker='.', color='y', markersize=10)#, c='#AAAAAA')
-                    ax1[iRow, iCol].loglog(f*3600, PSD, linestyle = 'None', marker='.', color='k', markersize=10)#, c='#AAAAAA')
+                    # ax1[iRow, iCol].loglog(f*3600, PSD, linestyle = 'None', marker='.', color='k', markersize=10)#, c='#AAAAAA')
+                    lower_error = 10**(mySF)-10**(mySF-mySFstd)
+                    upper_error = 10**(mySF+mySFstd)-10**(mySF)
+                    asymmetric_error = [lower_error, upper_error]
+                    ax1[iRow, iCol].errorbar((10**mySep)*3600, 10**mySF, asymmetric_error, fmt='ok')
                     # ax1[iRow, iCol].loglog(fW1, PSDW1,'-k')
                     # ax1[iRow, iCol].loglog(fW2, PSDW2,'-r')
                     ax1[iRow, iCol].loglog(myX*3600, myY, 'r-')

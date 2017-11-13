@@ -70,7 +70,18 @@ def main():
 
             psf = sdsspsf(hdu1, args.ifield, iBand, run, camcol)
             psf.tailP = tailPar[iBand*nCamcol + camcol-1]
-            
+
+            # convert tailP into abc, so that we can put them in Latex table.----
+            x1= psf.tailP[3]
+            y1= psf.tailP[4]
+            x2 =psf.tailP[5]
+            y2 =psf.tailP[6]
+            x3 =psf.tailP[7]
+            y3 =psf.tailP[8]
+            abcM = np.array([[x1**2, x1, 1], [x2**2, x2, 1], [x3**2, x3, 1]])
+            abc = np.dot(np.linalg.inv(abcM), np.array([[y1] ,[y2], [y3]]))
+            # end of ----
+    
             psf.fit2vonK_curve_fit(vonK1arcsec, vonK2D, grid1d)
             if psf.scaleR < -1:
                 psf.fit2vonK_fmin(vonK1arcsec, vonK2D, grid1d)

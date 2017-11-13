@@ -171,13 +171,25 @@ Following~\cite{Racine1996}, we also define the structure-function-like quantity
 where $\theta$ is seeing.
 We then fit the mean value of $f(\Delta t)$ to 
 \begin{equation}
-    < f(\Delta t) > =  f(\Delta t) ^\infty \, \left[ 1 - \exp(-\Delta t/\tau)^\gamma \right],
+    < f(\Delta t) > =  f(\Delta t) ^\infty \, \left[ 1 - \exp(-\Delta
+      t/\tau)^\gamma \right],
+\label{eq:fdt}
 \end{equation} 
-with $\tau$ and $\gamma$ as free parameters.
+with $f(\Delta t) ^\infty$, $\tau$ and $\gamma$ as free parameters.
 The timescale $\tau$ is found to be mostly within the range of 15 to
 25 minutes, and $\gamma$ between 1.0 and 1.5.
+Fig.~\ref{fig:fdt} shows one example of such fits.
 %note: fits do not look as good as Fig 4 in Racine 1997.
-% see output/correlate_temporal/run4874_fwhm_sf_r.png
+
+\begin{figure}
+\centering
+\includegraphics[width=0.5\textwidth]{FIGURES/fdt.png}
+\caption{The average normalized seeing difference, $<f(\Delta t)>$, as
+  a function of the time separation, $\Delta t$, for run 4874, camera
+  column 1, in the $r$-band.
+The fit to Eq.~(\ref{eq:fdt}) gives $\tau = 20.2$ minutes and $\gamma$ = 1.16.
+\label{fig:psd}}
+\end{figure}
 
 \begin{figure}
 \centering
@@ -186,7 +198,7 @@ The timescale $\tau$ is found to be mostly within the range of 15 to
 Combining fit results for all camera columns and optical bands for
 this run
 gives $\tau = 15.1 \pm 1.4$ minutes.
-\label{fig:psd}}
+\label{fig:fdt}}
 \end{figure}
 
 \begin{figure}
