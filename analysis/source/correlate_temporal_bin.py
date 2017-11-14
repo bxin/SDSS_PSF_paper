@@ -26,6 +26,18 @@ def logpsdfuncChi2(logf, Af0, y):
     # print('A = %e, f0 = %f, chi2 = %f'% (A, f0, chi2))
     return chi2
 
+def logpsdLinear(logf, B, alpha):
+    #print('B = %e, alpha = %f'% (B, alpha))
+    return B+logf*alpha
+
+def logpsdLinearChi2(logf, Balpha, y):
+    B = Balpha[0]
+    alpha = Balpha[1]
+    yp = B+logf*alpha
+    chi2 = np.sum((yp - y)**2)
+    # print('B = %e, alpha = %f, chi2 = %f'% (B, alpha, chi2))
+    return chi2
+
 def main():
 
     parser = argparse.ArgumentParser(
@@ -108,6 +120,9 @@ def main():
         tauAll = 0
         tauErrAll = 0
         tauN = 0
+        alphaAll = 0
+        alphaErrAll = 0
+        alphaN = 0
         for band in bandlist:
             print('band = %d'%band)
             f, ax1 = plt.subplots(nRow, nCol, sharex='col',
@@ -191,6 +206,7 @@ def main():
                     mySFstd = mySFstd[idx]
                     myN = myN[idx]
                     mySFstd[myN==1] = np.mean(mySFstd[myN>1])
+                    #----fit to damped random walk (DRW) model
                     popt, pcov = optimize.curve_fit(logpsdfunc, mySep, mySF, p0=[1e5, 1e-3],
                                                         bounds = ([0.1, 1e-4], [1e5, 1e-2]), sigma=mySFstd)
                     # popt = optimize.fmin(lambda Af0: logpsdfuncChi2(f, Af0, np.log10(PSD)), [1e5, 1e-3], disp=1)
@@ -217,6 +233,17 @@ def main():
                     # ax1[iRow, iCol].loglog(fW2, PSDW2,'-r')
                     ax1[iRow, iCol].loglog(myX*3600, myY, 'r-')
                     # ax1[iRow, iCol].loglog(myX, myY1, 'b-')
+
+                    #----fit to random walk model (linear in log space)
+                    popt, pcov = optimize.curve_fit(logpsdLinear, mySep, mySF, p0=[0, -0.5],
+                                                        bounds = ([-8, -4], [5, 0]), sigma=mySFstd)
+                    alpha = popt[1]
+                    alphaErr = np.sqrt(pcov[1, 1])
+                    if args.run > 0 and args.writefitp:
+                        fid.write('%d\t %d\t %d\t %e\t %e \n'%(run, band, camcol, popt[0], popt[1]))
+                    myYLinear = 10**logpsdLinear(np.log10(myX), popt[0], popt[1])
+                    ax1[iRow, iCol].loglog(myX*3600, myYLinear, 'b--')
+                    #---- end of random walk model
                     
                     ax1[iRow, iCol].set_xlim(min(myX*3600), max(myX*3600))
                     # ax1[iRow, iCol].set_xlabel('Frequency (Hz)')
@@ -225,11 +252,16 @@ def main():
                     if iCol == 0:
                         ax1[iRow, iCol].set_ylabel('PSD (arcsec$^2$ second)')
 
-                    print('%d\t %d\t %d\t %e\t %e\t %6.1f +/- %6.1f \n'%(run, band, camcol, popt[0], popt[1], tau/60, tauErr/60))
+                    print('%d\t %d\t %d\t %e\t %e\t %6.1f +/- %6.1f \t %6.2f +/- %6.2f \n'%(
+                        run, band, camcol, popt[0], popt[1], tau/60, tauErr/60,
+                        alpha, alphaErr))
 
                     w = 1/tauErr**2
                     tauAll += tau*w
                     tauErrAll += w
+                    w= 1/alphaErr**2
+                    alphaAll += alpha*w
+                    alphaErrAll += w
 
                 elif args.type == 'autocor':
                     result = np.correlate(fwhm[idx], fwhm[idx], mode='full')
@@ -262,8 +294,12 @@ def main():
         tauAll = tauAll/tauErrAll
         tauErrAll = np.sqrt(1/tauErrAll)
         print('%6.1f +/- %6.1f \n'% (tauAll/60, tauErrAll/60))
+        alphaAll = alphaAll/alphaErrAll
+        alphaErrAll = np.sqrt(1/alphaErrAll)
+        print('%6.2f +/- %6.2f \n'% (alphaAll, alphaErrAll))
         if args.run<0 and args.writefitp:
-            fid.write('%d \t %d \t %6.1f \t %6.1f \n'% (run, nfields, tauAll/60, tauErrAll/60))
+            fid.write('%d \t %d \t %6.1f \t %6.1f \t %6.2f \t %6.2f\n'% (
+                run, nfields, tauAll/60, tauErrAll/60, alpha, alphaErr))
         
     if args.writefitp:
         fid.close()

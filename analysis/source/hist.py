@@ -6,15 +6,23 @@ run = a[:,0]
 nfield = a[:, 1]
 tau = a[:, 2]
 tauerr = a[:, 3]
+alpha = a[:, 4]
+alphaerr = a[:, 5]
 
-plt.figure(figsize=(6,4.5))
+fig, (ax0, ax1) = plt.subplots(ncols=2, figsize=(8,4))
+#plt.figure()
 
 idx = nfield>600
-#idx = nfield>500
-plt.hist(tau[idx])
-plt.grid()
-plt.xlabel(r'$\tau$ (minutes)', {'fontsize': 16})
-plt.ylabel('Number of runs', {'fontsize': 16})
+#idx = nfield>100
+ax0.hist(tau[idx])
+ax0.grid()
+ax0.set_xlabel(r'$\tau$ (minutes)', {'fontsize': 16})
+ax0.set_ylabel('Number of runs', {'fontsize': 16})
+
+ax1.hist(alpha[idx])
+ax1.grid()
+ax1.set_xlabel(r'Power-law index $\beta$', {'fontsize': 16})
+ax1.set_ylabel('Number of runs', {'fontsize': 16})
 
 
 #usebands = 'ugriz'
