@@ -141,28 +141,69 @@ To study the temporal behavior of the seeing, we look at its
  power spectrum.
 Fig.~\ref{fig:psd} shows the temporal power spectral density (PSD) of the
 PSF FWHM for 6 camera columns, in run 4874, $r$-band.
-We fit the PSD with a damped random walk model~\citep{zeljkoBook},
+We fit the PSD using two competing models.
+The first is a damped random walk model~\citep{zeljkoBook},
 \begin{equation}
 \textrm{PSD}(f) = \frac{\tau^2 SF^2_{\infty}}{1+(2\pi f \tau)^2},
 \end{equation}
 where $f$ is the temporal frequency, $SF_{\infty}$ is the asymptotic
 value of the structure function, and $\tau$ is the
 characteristic timescale.
+The solid curves in Fig. ~\ref{fig:psd} show fits using this model.
 Combining fit results for all camera columns and optical bands for run 4874
 gives $\tau = 15.1 \pm 1.4$ minutes.
 This is consistent with ~\cite{Racine1996}, where a timescale of 
 $\tau = 17 \pm 1$ minutes was found.
-Making the same fits for the 12 longest runs in Stripe 82, where the
-number of fields are
-larger than 600, we obtained the $\tau$ distribution plotted in Fig.~\ref{fig:hist}.
-%XXX How many runs? it looks like only 12 from fig. 6. Is 600 too conservative? 
-%what if you relax to, say, 300? 
-%Bo: when we change 600 to 300, we get FIGURES/hist_300.png 
-% the shorter runs tend to give smaller timescale. 
-% Looking at Fig.5, this is because the shorter runs have very few
-% point toward the lower frequency end, therefore are unable to
+Making the same fits for all the 108 runs in Stripe 82, 
+we obtain the $\tau$ distribution vs. the number of fields in each
+run, as shown in Fig.~\ref{fig:hist} (left).
+The shorter runs tend to give smaller timescale, due to the lack of
+data toward the low-frequency end of the spectra.
+% therefore are unable to
 % constrain the location of the "knee" during the fit. They tend to
 % push the "knee" to the right.
+There are a total of 12 runs with the number of fields larger than
+600.
+Their characteristic timescale is general within the range of
+$\sim5-25$ minutes.
+
+The temporal PSD of the FWHM can also be well-fitted using a power
+law,
+\begin{equation}
+\textrm{PSD}(f) = B f^\beta,
+\end{equation}
+where $B$ is the normalization factor, and $\beta$ is the power-law
+index.
+Fits to data in run 4874, $r$-band are shown in
+Fig.~\ref{fig:psd} as dashed lines.
+Combining fit results for all camera columns and optical bands for run 4874
+gives $\beta = -1.14\pm 0.05$.
+Making the same fits for all the 108 runs in Stripe 82, 
+we obtained the $\beta$ distribution vs. the number of fields in each
+run, as shown in Fig.~\ref{fig:hist} (right).
+The shorter runs give $\beta$ values with a larger variance.
+Most of the longer runs have power-law index roughly between $-1.4$ and $-0.9$.
+
+
+\begin{figure}
+\centering
+\includegraphics[width=0.9\textwidth]{FIGURES/temporalPSD.png}
+\caption{PSF size temporal power spectral density for run 4874, r-band. 
+The solid lines are fits using the damped random walk model. 
+The dashed lines show fits to the power-law model.
+\label{fig:psd}}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[width=0.8\textwidth]{FIGURES/taubeta.png}
+\caption{Left: The damped random walk characteristic
+  timescale $\tau$ for all 108 runs in Stripe 82 vs. the number of
+  fields in each run. Right: The power-law index $\beta$ for all 108 runs vs. the number of
+  fields in each run.
+\label{fig:hist}}
+\end{figure}
+
 
 Following~\cite{Racine1996}, we also define the structure-function-like quantity
 \begin{equation}
@@ -181,6 +222,7 @@ The timescale $\tau$ is found to be mostly within the range of 15 to
 Fig.~\ref{fig:fdt} shows one example of such fits.
 %note: fits do not look as good as Fig 4 in Racine 1997.
 
+
 \begin{figure}
 \centering
 \includegraphics[width=0.5\textwidth]{FIGURES/fdt.png}
@@ -188,25 +230,5 @@ Fig.~\ref{fig:fdt} shows one example of such fits.
   a function of the time separation, $\Delta t$, for run 4874, camera
   column 1, in the $r$-band.
 The fit to Eq.~(\ref{eq:fdt}) gives $\tau = 20.2$ minutes and $\gamma$ = 1.16.
-\label{fig:psd}}
-\end{figure}
-
-\begin{figure}
-\centering
-\includegraphics[width=0.9\textwidth]{FIGURES/temporalPSD.png}
-\caption{PSF size temporal power spectral density for run 4874, r-band. 
-Combining fit results for all camera columns and optical bands for
-this run
-gives $\tau = 15.1 \pm 1.4$ minutes, and $\beta = -1.14\pm 0.05$.
 \label{fig:fdt}}
 \end{figure}
-
-\begin{figure}
-\centering
-\includegraphics[width=0.9\textwidth]{FIGURES/hist.png}
-\caption{Distribution of the damped random walk characteristic
-  timescale for a total of 12 runs in Stripe 82 with the number of
-  fields larger than 600.
-\label{fig:hist}}
-\end{figure}
-

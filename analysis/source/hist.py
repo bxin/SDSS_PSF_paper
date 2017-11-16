@@ -12,17 +12,20 @@ alphaerr = a[:, 5]
 fig, (ax0, ax1) = plt.subplots(ncols=2, figsize=(8,4))
 #plt.figure()
 
-idx = nfield>600
+idx = nfield>0
+#idx = nfield>600
 #idx = nfield>100
-ax0.hist(tau[idx])
+ax0.scatter(nfield[idx], tau[idx], s=10, c='r', edgecolors='r')
 ax0.grid()
-ax0.set_xlabel(r'$\tau$ (minutes)', {'fontsize': 16})
-ax0.set_ylabel('Number of runs', {'fontsize': 16})
+ax0.set_ylabel(r'$\tau$ (minutes)', {'fontsize': 16})
+ax0.set_xlabel('Number of fields', {'fontsize': 16})
+ax0.set_xlim(0, 1000)
 
-ax1.hist(alpha[idx])
+ax1.scatter(nfield[idx], alpha[idx], s=10, c='r', edgecolors='r')
 ax1.grid()
-ax1.set_xlabel(r'Power-law index $\beta$', {'fontsize': 16})
-ax1.set_ylabel('Number of runs', {'fontsize': 16})
+ax1.set_ylabel(r'Power-law index $\beta$', {'fontsize': 16})
+ax1.set_xlabel('Number of fields', {'fontsize': 16})
+ax1.set_xlim(0, 1000)
 
 
 #usebands = 'ugriz'
@@ -54,4 +57,4 @@ ax1.set_ylabel('Number of runs', {'fontsize': 16})
 #
 plt.tight_layout()
 # plt.show()
-plt.savefig('output/hist.png', dpi=500)
+plt.savefig('output/taubeta.png', dpi=500)
