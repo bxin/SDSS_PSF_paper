@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 a = np.loadtxt('output/correlate_temporal/run-9_fwhm_fitp.txt')
 run = a[:,0]
-nfield = a[:, 1]
+totalT = a[:, 1]*36/60
 tau = a[:, 2]
 tauerr = a[:, 3]
 alpha = a[:, 4]
@@ -12,20 +12,20 @@ alphaerr = a[:, 5]
 fig, (ax0, ax1) = plt.subplots(ncols=2, figsize=(8,4))
 #plt.figure()
 
-idx = nfield>0
-#idx = nfield>600
-#idx = nfield>100
-ax0.scatter(nfield[idx], tau[idx], s=10, c='r', edgecolors='r')
+idx = totalT>0
+#idx = totalT>600*36/60
+#idx = totalT>100*36/60
+ax0.scatter(totalT[idx], tau[idx], s=10, c='r', edgecolors='r')
 ax0.grid()
 ax0.set_ylabel(r'$\tau$ (minutes)', {'fontsize': 16})
-ax0.set_xlabel('Number of fields', {'fontsize': 16})
-ax0.set_xlim(0, 1000)
+ax0.set_xlabel('Duration of run (minutes)', {'fontsize': 16})
+ax0.set_xlim(0, 600)
 
-ax1.scatter(nfield[idx], alpha[idx], s=10, c='r', edgecolors='r')
+ax1.scatter(totalT[idx], alpha[idx], s=10, c='r', edgecolors='r')
 ax1.grid()
 ax1.set_ylabel(r'Power-law index $\beta$', {'fontsize': 16})
-ax1.set_xlabel('Number of fields', {'fontsize': 16})
-ax1.set_xlim(0, 1000)
+ax1.set_xlabel('Duration of run (minutes)', {'fontsize': 16})
+ax1.set_xlim(0, 600)
 
 
 #usebands = 'ugriz'

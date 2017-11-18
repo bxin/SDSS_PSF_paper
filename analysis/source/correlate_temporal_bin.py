@@ -181,17 +181,22 @@ def main():
                     logPSD = np.log10(PSD)
 
                     nbin = 5
-                    myN = np.zeros(nbin) 
-                    mySF = np.zeros(nbin)
-                    mySFstd = np.zeros(nbin)
+                    abin  = 4 #additional bins
+                    bbin = 2*abin-1
+                    myN = np.zeros(nbin+abin+bbin) 
+                    mySF = np.zeros(nbin+abin+bbin)
+                    mySFstd = np.zeros(nbin+abin+bbin)
                     xmax = max(logf)
                     xmin = min(logf)
                     binsize = (xmax - xmin)/(nbin - 1)
                     xmin = xmin - binsize/2
                     xmax = xmax+binsize/2
                     edge = np.linspace(xmin, xmax, nbin+1)
+                    if abin>0:
+                        edge = np.sort(np.hstack((edge,(edge[-abin:]+edge[-abin-1:-1])/2)))
+                        edge = np.sort(np.hstack((edge,(edge[-bbin:]+edge[-bbin-1:-1])/2)))                        
                     mySep = (edge[:-1] + edge[1:])/2
-                    for i in range(0, nbin):
+                    for i in range(0, nbin+abin+bbin):
                         idx = (logf > edge[i] ) & (logf<edge[i+1])
                         myN[i] = sum(idx)
                         if myN[i] == 0:
@@ -200,18 +205,20 @@ def main():
                         else:
                             mySF[i] = np.mean(logPSD[idx])
                             mySFstd[i] = np.std(logPSD[idx])
-                    idx = myN>0
+                    idx = myN>1
                     mySep = mySep[idx]
                     mySF = mySF[idx]
                     mySFstd = mySFstd[idx]
                     myN = myN[idx]
-                    mySFstd[myN==1] = np.mean(mySFstd[myN>1])
+                    if band==3:
+                        aaa=1
                     #----fit to damped random walk (DRW) model
-                    popt, pcov = optimize.curve_fit(logpsdfunc, mySep, mySF, p0=[1e5, 1e-3],
-                                                        bounds = ([0.1, 1e-4], [1e5, 1e-2]), sigma=mySFstd)
-                    # popt = optimize.fmin(lambda Af0: logpsdfuncChi2(f, Af0, np.log10(PSD)), [1e5, 1e-3], disp=1)
-                                                   
-                    # sigma=myErr, absolute_sigma=True)
+                    try:
+                        popt, pcov = optimize.curve_fit(logpsdfunc, mySep, mySF, p0=[1e5, 1e-3],
+                                                        bounds = ([0.01, 1e-4], [1e5, 1e-2]), sigma=mySFstd)
+                    except RuntimeError as e:
+                        popt = optimize.fmin(lambda Af0: logpsdfuncChi2(f, Af0, np.log10(PSD)), [1e5, 1e-3], disp=1)
+                        # sigma=myErr, absolute_sigma=True)
                     tau = 1/(2*np.pi*popt[1])
                     tauErr = 1/(2*np.pi*popt[1]**2)*np.sqrt(pcov[1, 1])
                     # print('A=%e, f0=%e, tau = %5.0f s' %(popt[0], popt[1], tau))
@@ -234,7 +241,7 @@ def main():
                     ax1[iRow, iCol].loglog(myX*3600, myY, 'r-')
                     # ax1[iRow, iCol].loglog(myX, myY1, 'b-')
 
-                    #----fit to random walk model (linear in log space)
+                    #----fit to power law model (linear in log space)
                     popt, pcov = optimize.curve_fit(logpsdLinear, mySep, mySF, p0=[0, -0.5],
                                                         bounds = ([-8, -4], [5, 0]), sigma=mySFstd)
                     alpha = popt[1]

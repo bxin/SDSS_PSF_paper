@@ -39,7 +39,6 @@ def sf1run(argList):
         fwhm = txtdata[:, 3]  # FWHMeff 
     airmass = txtdata[:, 5]
     fwhm = fwhm/airmass**0.6
-    startfield = startfield
     endfield = np.uint16(np.max(txtdata[:, 0]))
     nfields = endfield - startfield + 1
 
