@@ -1,0 +1,111 @@
+
+%% to finish before submission
+
+- LSST affiliation may need more detail (street?)
+- keywords might be inconsistent what the journal would suggest 
+
+
+
+
+
+
+
+%% old comments
+
+----------Completed: ----------------
+
+ZI:  find exact definition of neff_psf (is it based on fit or input data?) 
+Bo: add analysis directory and py code 
+
+
+1)  make files, one per run, as a function of field number, with
+- field, camera column, bandpass, 
+- one-parameter fit FWHM from fitting \vk profile
+- other SDSS params: psf_width, airmass, mjd, psf_nstar, neff_psf, sky_frames 
+
+
+E.g. for some run
+#  field  camCol  filter   FWHMvK    (other SDSS params)
+
+2) plot FWHMvK vs. psf_width for 30 panels 
+
+-----use a Gaussian as convolution kernel, remake fits -------
+
+Bo:
+check neff_psf from the vK fit and compare to 2G fit.
+(checked fwhmeff, i.e., fwhmvk, and compared to psf_width from the 2G
+fit. Generally the agreement is good. When they don't agree very well,
+visually checking the vK fit vs the 2G fit shows that the vK fit often
+gives the more reasonable agreement between data and fit.)
+------make RMS (x - data) plots to quantify -----------
+            /n(-1?) for 1-4, 5+ separately
+            exclude bad 2G fits
+
+3) plot alpha (index for lambda dep.) histograms for all data and for 
+    two realizations of ``longest stretch'' selection
+(not very conclusive, due to z-band tipping upward. The i-band could
+be problematic too)
+
+----------to do ----------------
+
+---alpha vs seeing, col#6, col#3
+??? masterTXT, a column to flag failed 2D fits?
+???(in the master txt file for alpha, add seeing as a column)
+
+4) plot profiles for a range of fields when the seeing is rapidly changing (is profile shape changing?) 
+
+
+-------------Analysis structure: -----------------
+
+1) profile discussion
+- compare to SDSS, emphasize 1 parameter vs. 6 parameters
+- discuss profile shape stability when seeing is changing rapidly
+
+2) dependence on wavelength
+
+- what is alpha distribution? 
+
+3) cross-correlation of camera columns and measurement of structure function
+    (that is, the covariance vs. angular distance) 
+
+---for each run, each filter, make plot of cov vs separation
+----fit through (0,1), plot slope as a function of seeing
+
+4) auto-correlation function (and power spectrum) for temporal variation
+
+- let's start with plain Fourier transform and look at power spectra (we can 
+    play games with co-addition, 6 columns for a given run, or all runs)
+- potentially, we could also look at  Kelly and Becker code  (2014, ApJ 788, 33) 
+- here we can compare to Chuck's CP measurements (in opsim db) 
+
+---for each run, each filter, camcol (#2,3), make D vs frequency.
+
+
+Adaptive Beaming and Imaging in the Turbulent Atmosphere 
+by Vladimir P. Lukin; Boris V. Fortes, Chapter 3, SPIE Press Book.
+Fig 3: the depdendence of FWHM on D, Lo and lambda 
+
+
+
+
+FWHM vs. field analysis
+
+1040: 122 fields, oscillations on 5 min timescale, look at PSD 
+2583: 227 fields, excellent seeing (1.1 in r) 
+2662: 469 fields, long with typical seeing, with worst at the end
+2709: 263 fields, oscillations on 5 min timescale, look at PSD 
+2728: 488 fields, long with good seeing (1.2 in r) 
+3325: 493 fields, long with typical seeing, with worst at the start
+3360: 513 fields, typical but very variable seeing
+3384: 784 fields, a long and *very* oscillatory run
+3388: 713 fields, very different PSD than for 3384 
+4145: 505 fields, steady deterioration from 1 arcsec to ~2 arcsec
+4198: 747 fields, another long run with typical and oscillatory seeing
+4203: 777 fields, another long run
+4207: 753 fields, another long run
+4849: 918 fields, a long run, typical seeing 
+4868: 609 fields, another long run
+4874: 981 fields, the longest run, typical seeing   *poster child* 
+
+
+I would exclude runs with fewer than 100 fields from our analysis 

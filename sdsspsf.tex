@@ -3,10 +3,10 @@
 \newcommand{\vdag}{(v)^\dagger}
 \newcommand{\vk}{von K\'{a}rm\'{a}n}
 \newcommand{\myemail}{skywalker@galaxy.far.far.away}
-\slugcomment{Draft version}
+\slugcomment{Draft version v1.1}
  
-\shorttitle{A Study of the Point Spread Function at SDSS}
-\shortauthors{Xin, Ivezi\'{c} and Friends}
+\shorttitle{A Study of the SDSS PSF}
+\shortauthors{Xin et al.}
  
 \begin{document}
 
@@ -28,26 +28,25 @@ We use SDSS imaging data in $ugriz$ passbands to study the shape of
 point spread function (PSF) profile and the variation of its width with 
 wavelength and time. We find that the PSF profile is well described by 
 theoretical predictions based on \vk's turbulence theory. The observed 
-profile can be parametrized by two parameters, the profile's FWHM (full width
-at half maximum) and a normalization of the contribution of an empirical
+profile can be parametrized by only two parameters, the profile's FWHM (full width
+at half maximum) and a normalization of the contribution of an empirically determined 
 instrumental PSF. The profile shape is very similar to the ``double gaussian
-plus power-law wing'' decomposition used by SDSS, but here it is modeled 
-with two free model parameters, rather than six as in SDSS pipeline. 
+plus power-law wing'' decomposition used by SDSS imaging processing pipeline, 
+but here it is modeled with two free model parameters, rather than six as in SDSS pipeline. 
 The FWHM variation with wavelength folows the
 $\lambda^{\alpha}$ power law, where $\alpha \approx-0.3$, and is correlated
 with the FWHM itself. This behavior is much better described by \vk's turbulence 
 theory with the outer scale parameter in the range 10--30 m, than by the 
 Kolmogorov's turbulence theory. We also measure the temporal and angular
 structure functions for FWHM and compare them to simulations and
-existing measurements.
-The angular structure function saturates around 0.5$-$1.0 degree. 
-The temporal behavior is found to be consistent with both the damped random
-walk model with a characteristic timescale of $\sim15-25$ minutes and
-a power law with index roughly between $-1.5$ and $-1.0$.
+existing measurements. The angular structure function saturates at scales beyond 0.5$-$1.0 degree. 
+The power spectrum of the temporal behavior is found to be broadly consistent with 
+both a damped random walk model with characteristic timescale in the range $\sim15-25$ minutes, 
+and with a power law with index roughly between $-1.5$ and $-1.0$. A hybrid model 
+is likely needed to fully capture both the low-frequency and high-frequency behavior. 
 \end{abstract}
 
-\keywords{imaging point spread function --- SDSS}
- 
+\keywords{SDSS --- imaging point spread function --- turbulence}
 
 
 \section{Introduction}
@@ -74,170 +73,20 @@ a power law with index roughly between $-1.5$ and $-1.0$.
 
 \acknowledgments
 
+This material is based upon work supported in part by the National Science Foundation through
+Cooperative Agreement 1258333 managed by the Association of Universities for Research in Astronomy
+(AURA), and the Department of Energy under Contract No. DE-AC02-76SF00515 with the SLAC National
+Accelerator Laboratory. Additional LSST funding comes from private donations, grants to universities,
+and in-kind support from LSSTC Institutional Members.
 
-
-
-%% To help institutions obtain information on the effectiveness of their
-%% telescopes, the AAS Journals has created a group of keywords for telescope
-%% facilities. A common set of keywords will make these types of searches
-%% significantly easier and more accurate. In addition, they will also be
-%% useful in linking papers together which utilize the same telescopes
-%% within the framework of the National Virtual Observatory.
-%% See the AASTeX Web site at http://aastex.aas.org/
-%% for information on obtaining the facility keywords.
-
-%% After the acknowledgments section, use the following syntax and the
-%% \facility{} macro to list the keywords of facilities used in the research
-%% for the paper.  Each keyword will be checked against the master list during
-%% copy editing.  Individual instruments or configurations can be provided 
-%% in parentheses, after the keyword, but they will not be verified.
-
-{\it Facilities:} \facility{SDSS}, \facility{LSST}.
-
-%% Appendix material should be preceded with a single \appendix command.
-%% There should be a \section command for each appendix. Mark appendix
-%% subsections with the same markup you use in the main body of the paper.
-
-%% Each Appendix (indicated with \section) will be lettered A, B, C, etc.
-%% The equation counter will reset when it encounters the \appendix
-%% command and will number appendix equations (A1), (A2), etc.
-
-%\appendix
-%
-%\section{Appendix material}
-
-%% The reference list follows the main body and any appendices.
-%% Use LaTeX's thebibliography environment to mark up your reference list.
-%% Note \begin{thebibliography} is followed by an empty set of
-%% curly braces.  If you forget this, LaTeX will generate the error
-%% "Perhaps a missing \item?".
-%%
-%% thebibliography produces citations in the text using \bibitem-\cite
-%% cross-referencing. Each reference is preceded by a
-%% \bibitem command that defines in curly braces the KEY that corresponds
-%% to the KEY in the \cite commands (see the first section above).
-%% Make sure that you provide a unique KEY for every \bibitem or else the
-%% paper will not LaTeX. The square brackets should contain
-%% the citation text that LaTeX will insert in
-%% place of the \cite commands.
-
-%% We have used macros to produce journal name abbreviations.
-%% AASTeX provides a number of these for the more frequently-cited journals.
-%% See the Author Guide for a list of them.
-
-%% Note that the style of the \bibitem labels (in []) is slightly
-%% different from previous examples.  The natbib system solves a host
-%% of citation expression problems, but it is necessary to clearly
-%% delimit the year from the author name used in the citation.
-%% See the natbib documentation for more details and options.
-
+Funding for the SDSS and SDSS-II has been provided by the Alfred
+P. Sloan Foundation, the Participating Institutions, the National
+Science Foundation, the U.S. Department of Energy, the National
+Aeronautics and Space Administration, the Japanese Monbukagakusho, the
+Max Planck Society, and the Higher Education Funding Council for
+England. The SDSS Web Site is http://www.sdss.org/.
 
 \bibliographystyle{aj}
 \bibliography{sdsspsf}
 
-
-%% The following command ends your manuscript. LaTeX will ignore any text
-%% that appears after it.
-
 \end{document}
-
-%%
-%% End of file `sample.tex'.
-
-----------Completed: ----------------
-
-ZI:  find exact definition of neff_psf (is it based on fit or input data?) 
-Bo: add analysis directory and py code 
-
-
-1)  make files, one per run, as a function of field number, with
-- field, camera column, bandpass, 
-- one-parameter fit FWHM from fitting \vk profile
-- other SDSS params: psf_width, airmass, mjd, psf_nstar, neff_psf, sky_frames 
-
-
-E.g. for some run
-#  field  camCol  filter   FWHMvK    (other SDSS params)
-
-2) plot FWHMvK vs. psf_width for 30 panels 
-
------use a Gaussian as convolution kernel, remake fits -------
-
-Bo:
-check neff_psf from the vK fit and compare to 2G fit.
-(checked fwhmeff, i.e., fwhmvk, and compared to psf_width from the 2G
-fit. Generally the agreement is good. When they don't agree very well,
-visually checking the vK fit vs the 2G fit shows that the vK fit often
-gives the more reasonable agreement between data and fit.)
-------make RMS (x - data) plots to quantify -----------
-            /n(-1?) for 1-4, 5+ separately
-            exclude bad 2G fits
-
-3) plot alpha (index for lambda dep.) histograms for all data and for 
-    two realizations of ``longest stretch'' selection
-(not very conclusive, due to z-band tipping upward. The i-band could
-be problematic too)
-
-----------to do ----------------
-
----alpha vs seeing, col#6, col#3
-??? masterTXT, a column to flag failed 2D fits?
-???(in the master txt file for alpha, add seeing as a column)
-
-4) plot profiles for a range of fields when the seeing is rapidly changing (is profile shape changing?) 
-
-
--------------Analysis structure: -----------------
-
-1) profile discussion
-- compare to SDSS, emphasize 1 parameter vs. 6 parameters
-- discuss profile shape stability when seeing is changing rapidly
-
-2) dependence on wavelength
-
-- what is alpha distribution? 
-
-3) cross-correlation of camera columns and measurement of structure function
-    (that is, the covariance vs. angular distance) 
-
----for each run, each filter, make plot of cov vs separation
-----fit through (0,1), plot slope as a function of seeing
-
-4) auto-correlation function (and power spectrum) for temporal variation
-
-- let's start with plain Fourier transform and look at power spectra (we can 
-    play games with co-addition, 6 columns for a given run, or all runs)
-- potentially, we could also look at  Kelly and Becker code  (2014, ApJ 788, 33) 
-- here we can compare to Chuck's CP measurements (in opsim db) 
-
----for each run, each filter, camcol (#2,3), make D vs frequency.
-
-
-Adaptive Beaming and Imaging in the Turbulent Atmosphere 
-by Vladimir P. Lukin; Boris V. Fortes, Chapter 3, SPIE Press Book.
-Fig 3: the depdendence of FWHM on D, Lo and lambda 
-
-
-
-
-FWHM vs. field analysis
-
-1040: 122 fields, oscillations on 5 min timescale, look at PSD 
-2583: 227 fields, excellent seeing (1.1 in r) 
-2662: 469 fields, long with typical seeing, with worst at the end
-2709: 263 fields, oscillations on 5 min timescale, look at PSD 
-2728: 488 fields, long with good seeing (1.2 in r) 
-3325: 493 fields, long with typical seeing, with worst at the start
-3360: 513 fields, typical but very variable seeing
-3384: 784 fields, a long and *very* oscillatory run
-3388: 713 fields, very different PSD than for 3384 
-4145: 505 fields, steady deterioration from 1 arcsec to ~2 arcsec
-4198: 747 fields, another long run with typical and oscillatory seeing
-4203: 777 fields, another long run
-4207: 753 fields, another long run
-4849: 918 fields, a long run, typical seeing 
-4868: 609 fields, another long run
-4874: 981 fields, the longest run, typical seeing   *poster child* 
-
-
-I would exclude runs with fewer than 100 fields from our analysis 
