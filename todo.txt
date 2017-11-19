@@ -3,6 +3,15 @@
 
 - LSST affiliation may need more detail (street?)
 - keywords might be inconsistent what the journal would suggest 
+- run 4874, field 0: is it really field 0 (usually SDSS runs start at ~10 or so);
+     could it be that 0 is (field-fieldStart)?  Actually, it seems that fieldStart=11, see
+        http://classic.sdss.org/dr7/coverage/sndr7.html
+- same problem for run 94 (startField=12); I fixed both in text, but couldn't fix 
+   titles in figures (which I understand you are removing any way)
+- eq. 11: is gamma really inside, or perhaps outside brackets? (as in DRW model)
+- please add DRW curve to the left panel in fig. 8 (see revised caption and added 
+   discussion of DRW SF after eq. 11 
+
 
 
 
@@ -109,3 +118,71 @@ FWHM vs. field analysis
 
 
 I would exclude runs with fewer than 100 fields from our analysis 
+
+
+
+
+
+
+%check autocorrelation?
+% - fig. 2: average autocorrelation function of seeing over 9 months:  A*exp(-t/tau) 
+% see Eq. (3) in VMT 1998 for definition.
+% This could be calculated using correlate_temporal_bin.py (autocor
+% option), or make a copy of correlate_temporal_sf.py, and calculate
+% in a similar way. But, in fig 2 of VMT 1998, why autocor(dt=0) not
+% at 1?
+
+%The seeing auto-correlation function
+%\begin{equation}
+%      C(\Delta t) = < \theta(t) \theta(t+\Delta t)>,
+%\end{equation} 
+%can be modeled as
+%\begin{equation}
+%      C(\Delta t) = A \, \exp(-\Delta t/\tau),
+%\end{equation} 
+%with $\tau \sim 1$ hour. 
+ 
+
+
+
+% Statistics of turbulence profile at Cerro Tololo: 
+%A. Tokovinin, S. Baumont and J. Vasquez
+%Mon. Not. R. Astron. Soc. 340, 52–58 (2003)
+
+%the Gemini site testing campaign at Cerro Pachon (Vernin et al. 2000; Avila et al. 2000)
+%http://www.gemini.edu/documentation/webdocs/rpt/rpt-ao-g0094-1.ps
+% SPIE: 
+%http://proceedings.spiedigitallibrary.org/proceeding.aspx?articleid=898738
+
+% Coulman (1985, ARAA 23, 19) for theory of turbulence and seeing in astronomy
+
+
+% cite: Vernin, J.; Munoz-Tunon, C. 1992, Astronomy and Astrophysics, vol. 257, no. 2, p. 811-816. 
+
+% Check for seeing forecastas and "flexible scheduling" !! 
+% http://www.sciencedirect.com/science/article/pii/S1387647398000438
+% also
+% The temporal behaviour of seeing:
+% Using a large amount of data gathered during previous seeing campaign
+% at ORM, we analyse the temporal evolution of seeing in order to find
+% out whether predictions could be made over a short time interval of a
+% few hours. The first results are presented.
+% http://www.sciencedirect.com/science/article/pii/S1387647398000517
+
+% time dependence of seeing: http://adsabs.harvard.edu/abs/2001BASI...29...39S
+% they give references for time scales (from 15 mins to 2 hours), also
+% see a claim for 2 hour time scale:
+% http://adsabs.harvard.edu/abs/2003A%26A...409.1169T
+% TMT testing - seeing:
+% http://adsabs.harvard.edu/abs/2009PASP..121.1151S 
+% HSC seeing in V and K: bad seeing has flatter seeing vs. lambda due
+% to outer scale effects
+% http://adsabs.harvard.edu/abs/2016ExA....42...85O
+
+% a good summary of work to date for introduction
+% https://arxiv.org/pdf/1206.3319.pdf
+
+% forecasting "These characteristics make forecasting seeing a tall challenge."
+% http://adsabs.harvard.edu/abs/2015JPhCS.595a2029R
+% but this one claims some success using ARIMA:
+% http://adsabs.harvard.edu/abs/2016ExA....41..223K

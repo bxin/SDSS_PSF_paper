@@ -10,12 +10,14 @@ all SDSS imaging data.
 The equatorial Stripe 82 region (22$^h$24$^m$ $<$ R.A. $<$ 04$^h$08$^m$, 
 $-$1.27$^\circ$  $<$ Dec $<$ $+$1.27$^\circ$, about 
 290 deg$^2$) from the southern Galactic cap ($-64^\circ < b <  -20^\circ$) has been repeatedly imaged (of the order
-hundered times) by SDSS to study variability phenomena (such as supernovae, asteroids, variable stars, quasar 
-variability). A given observing stretch of SDSS imaging data is called a ``run''. Often there is only a single
+hundred times) by SDSS to study time-domain phenomena (such as supernovae, asteroids, variable stars, quasar 
+variability).  An observing stretch of SDSS imaging data is called a ``run''. Often there is only a single
 run for a given observing night, though sometimes there are multiple runs per night. We use here seeing data for 
-108 runs, with a total of 31,580 fields, obtained between September, 1998 and September 2008). All
-runs are obtained during the Fall observing season (September to December). Astrometric and photometric aspects 
-of this dataset have been discussed in detail by \cite{Ivezic2007} and \cite{Sesar2007}. 
+108 runs, with a total of 31,580 fields, obtained between September, 1998 and September 2008). 
+For each field, there 30 seeing estimates (there are 6 camera columns, each with 5 filters; for more
+details please \citealt{Gunn2006}). All runs are obtained during the Fall observing season (September to 
+December). Astrometric and photometric aspects of this dataset have been discussed in detail by 
+\cite{Ivezic2007} and \cite{Sesar2007}. 
 
 
 \subsection{The treatment of seeing in SDSS}
@@ -50,7 +52,7 @@ to include the so-called ``power-law wings''
         PSF(r) = {\exp(-{r^2\over 2\,\sigma_1^2}) + b\,\exp(-{r^2\over 2\,\sigma_2^2})
            + p_0\left(1 + { r^2 \over \beta \sigma_P^2}\right)^{-\beta/2} \over 1 + b + p_0}.
 \end{equation} 
-The measured PSFs are thus modeled using 6 free parameters, and given that the measured
-profiles include up to 10 data points, the fits are usually excellent. The best-fit parameters
-are reported in psField files. 
+The measured PSFs are thus modeled using 6 free parameters ($\sigma_1$, $\sigma_2$, $\sigma_P$,
+$b$, $p_0$ and $\beta$), and given that the measured profiles include only up to 10 data points, 
+the fits are usually excellent. The best-fit parameters are reported in psField files. 
 

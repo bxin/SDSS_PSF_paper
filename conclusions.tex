@@ -1,94 +1,53 @@
 
 %  \section{Discussion and Conclusions} 
  
-Using SDSS Stripe 82 data, we have seen a direct evidence that the
-wavelength dependence of the atmospheric seeing agrees better with the
-\vk~model than the Kolmogorov turbulence theory.
-Most of the long-term seeing statistics are taken at the visible
-wavelength. The knowledge on the wavelength-dependence of the seeing
-is useful for extrapolating the seeing statistics to other
-wavelength, for example, the near-infrared, where a lot of the
-adaptive optics programs operate.
+The atmospheric seeing due to atmospheric turbulence plays a major role in 
+ground-based astronomy; seeing varies with the wavelength of observation
+and with time, on time scales ranging from minutes to years. Better empirical
+and theoretical understanding of the seeing behavior can inform optimization 
+of large survey programs, such as LSST. We have utilized here for the first 
+time an unprecedentedly large database of about a million SDSS seeing estimates
+and studied the seeing profile and its behavior as a function of time and wavelength.
 
+We find that the observed PSF profile can be parametrized by only two parameters, 
+the FWHM of a theretically motivated profile and a normalization of the contribution 
+of an empirically determined instrumental PSF. The profile shape is very similar to 
+the ``double gaussian plus power-law wing'' decomposition used by SDSS image
+processing pipeline, but here it is modeled with two free model parameters, rather 
+than six as in SDSS pipeline (of course, the SDSS image processing pipeline had
+to be designed with adequate flexibility to be able to efficiently and robustly 
+handle various unanticipated behavior). We find that the PSF profile is well 
+described by theoretical predictions based theoretical predictions based on both 
+Kolmogorov and \vk's turbulence theory (see Fig.~\ref{fig:psffit}). Given the extra 
+degree of freedom due to the instrumental PSF, the shape of the measured profile alone 
+is insufficient to reliably rule out either of the two theoretical profiles.  
 
-We have also measured 
-the characteristic angular and temporal scales on which the seeing
-decorrelates.
-The numerical results may only apply to the SDSS site, but can be used
-as references when considering spatial and temporal variations of
-seeing at other observatories.
-Comparisons with simulations of the LSST and PSF measurements at CFHT
-show good general agreement, taken into account that the results are
-for different sites and different telescope optics.
-The results can be useful for observatories in scheduling
-observations to make best use of good seeing conditions.
+We report empirical evidence that the wavelength dependence of the atmospheric 
+seeing and its correlation with the seeing itself agrees better with the \vk~model 
+than the Kolmogorov turbulence theory (see Fig.~\ref{fig:alpha_fwhm}). For example, 
+the best-fit power-law index to describe the seeing wavelength dependence in conditions 
+representative for LSST survey is much closer to $-0.3$ than to the usually assumed value
+of $-0.2$ predicted by the Kolmogorov theory. 
+We note that most of the long-term seeing statistics are measured at visible 
+wavelengths. The knowledge of the wavelength-dependence of the seeing is useful 
+for extrapolating the seeing statistics to other wavelengths, for example, to
+the near-infrared where a lot of the adaptive optics programs operate. 
 
-We thank John Peterson for running the PhoSim simulations and
-providing us with both the PhoSim and CFHT curves in
-Fig.~\ref{fig:spatial}.
+We have also measured the characteristic angular and temporal scales on which 
+the seeing decorrelates. The angular structure function saturates at scales beyond 
+0.5$-$1.0 degree. The seeing rms variation at large angular scales is about 5\%,
+but we emphasize that our data do not probe scales beyond 2.5 degree. Comparisons 
+with simulations of the LSST and PSF measurements at the CFHT site show good general 
+agreement.
 
-%check lognormal?
-% - seeing distribution is  log–normal, due to the fact that seeing arises from the addition of uncorrelated random processes 
+The power spectrum of the temporal behavior is found to be broadly consistent with 
+a damped random walk model with characteristic timescale in the range $\sim15-25$ 
+minutes, though data show a shallower high-frequency behavior. The high-frequency 
+behavior can be quantitatively described by a single power law with index in the 
+range $-1.5$ to $-1.0$. A hybrid model is likely needed to fully capture both the 
+low-frequency and high-frequency behavior of the temporal variations of atmospheric
+seeing. 
 
-%check autocorrelation?
-% - fig. 2: average autocorrelation function of seeing over 9 months:  A*exp(-t/tau) 
-% see Eq. (3) in VMT 1998 for definition.
-% This could be calculated using correlate_temporal_bin.py (autocor
-% option), or make a copy of correlate_temporal_sf.py, and calculate
-% in a similar way. But, in fig 2 of VMT 1998, why autocor(dt=0) not
-% at 1?
-
-%The seeing auto-correlation function
-%\begin{equation}
-%      C(\Delta t) = < \theta(t) \theta(t+\Delta t)>,
-%\end{equation} 
-%can be modeled as
-%\begin{equation}
-%      C(\Delta t) = A \, \exp(-\Delta t/\tau),
-%\end{equation} 
-%with $\tau \sim 1$ hour. 
- 
-
-
-
-% Statistics of turbulence profile at Cerro Tololo: 
-%A. Tokovinin, S. Baumont and J. Vasquez
-%Mon. Not. R. Astron. Soc. 340, 52–58 (2003)
-
-%the Gemini site testing campaign at Cerro Pachon (Vernin et al. 2000; Avila et al. 2000)
-%http://www.gemini.edu/documentation/webdocs/rpt/rpt-ao-g0094-1.ps
-% SPIE: 
-%http://proceedings.spiedigitallibrary.org/proceeding.aspx?articleid=898738
-
-% Coulman (1985, ARAA 23, 19) for theory of turbulence and seeing in astronomy
-
-
-% cite: Vernin, J.; Munoz-Tunon, C. 1992, Astronomy and Astrophysics, vol. 257, no. 2, p. 811-816. 
-
-% Check for seeing forecastas and "flexible scheduling" !! 
-% http://www.sciencedirect.com/science/article/pii/S1387647398000438
-% also
-% The temporal behaviour of seeing:
-% Using a large amount of data gathered during previous seeing campaign
-% at ORM, we analyse the temporal evolution of seeing in order to find
-% out whether predictions could be made over a short time interval of a
-% few hours. The first results are presented.
-% http://www.sciencedirect.com/science/article/pii/S1387647398000517
-
-% time dependence of seeing: http://adsabs.harvard.edu/abs/2001BASI...29...39S
-% they give references for time scales (from 15 mins to 2 hours), also
-% see a claim for 2 hour time scale:
-% http://adsabs.harvard.edu/abs/2003A%26A...409.1169T
-% TMT testing - seeing:
-% http://adsabs.harvard.edu/abs/2009PASP..121.1151S 
-% HSC seeing in V and K: bad seeing has flatter seeing vs. lambda due
-% to outer scale effects
-% http://adsabs.harvard.edu/abs/2016ExA....42...85O
-
-% a good summary of work to date for introduction
-% https://arxiv.org/pdf/1206.3319.pdf
-
-% forecasting "These characteristics make forecasting seeing a tall challenge."
-% http://adsabs.harvard.edu/abs/2015JPhCS.595a2029R
-% but this one claims some success using ARIMA:
-% http://adsabs.harvard.edu/abs/2016ExA....41..223K
+We conclude by noting that, while our numerical results may only apply to the SDSS 
+site, they can be used as useful reference points when considering spatial and 
+temporal variations of seeing at other observatories.

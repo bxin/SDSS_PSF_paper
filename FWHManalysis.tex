@@ -2,7 +2,7 @@
 %  \section{The analysis of FWHM behavior} 
 
 Given that the observed seeing is by and large described by a single parameter, FWHM, 
-we study three aspects of its variation, as follows.
+we study three aspects of its variation in detail, as follows.
 
 
 \subsection{The FWHM dependence on wavelength} 
@@ -22,7 +22,7 @@ r_0(\lambda,X) = r_0(500) \left(\frac{\lambda}{500}\right)^{1.2}
 \end{equation}
 where $r_0(500)$ is the $r_0$ for $\lambda=500$ nm and $X$=1, and $\lambda$ is 
 expressed in nm.
-Substituting Eq.~(\ref{eq:r0}) into (\ref{eq:fwhmkolm}), it is easy to see
+Substituting Eq.~(\ref{eq:r0}) into (\ref{eq:fwhmkolm}), it is easy to show that 
 \begin{equation}
 \textrm{FWHM}^{\rm Kolm} \propto \lambda^{-0.2}.
 \end{equation}
@@ -35,31 +35,33 @@ which is a function of the outer scale $L_0$~\citep{Tokovinin2002},
 \textrm{FWHM}^{\rm vonK}(\lambda, X) = \frac{0.976\lambda}{r_0(\lambda,X)}
 \sqrt{1-2.183\left( \frac{r_0(\lambda,X) }{L_0} \right)^{0.356}}.
 \end{equation}
-If we still want to write FWHM$^{\rm vonK} \propto \lambda^{\alpha} $, 
-$\alpha$ will be a function of $L_0$ and $r_0$ at a specified
-wavelength and airmass, or equivalently, $L_0$ and FWHM$^{\rm vonK}$ at a
-specified wavelength and airmass. Below, for FWHM, we will use FWHM$_r$,
-PSF FWHM measurements from the 
-$r$-band,
-whose effective wavelength is 616.6 nm, and airmass of 1.
+If power-law approximation is attempted,  FWHM$^{\rm vonK} \propto \lambda^{\alpha} $, 
+$\alpha$ becomes a function of $L_0$ and $r_0$ at a specified
+wavelength and airmass, or equivalently, a function of $L_0$ and FWHM$^{\rm vonK}$.
+For the subsequent analysis, we adopt the $r$ band as the fiducial band (with
+the effective wavelength of 616.6 nm).
 
-\begin{figure}
+
+\begin{figure}[th]
 \centering
 \includegraphics[width=0.9\textwidth]{FIGURES/fwhm_lambda.png}
-\caption{FWHM as functions of wavelength for run 4874.
-For comparison purposes, the $\alpha=-0.2$ (dotted) and $\alpha=-0.3$ (dashed) lines are
-also shown.
+\caption{The behavior of FWHM as a function of wavelength for the fiducial run 4874.
+Symbols are SDSS data and solid line is the best power-law fit, with the best-fit slope
+($\alpha$) shown in inset. For comparison purposes, the $\alpha=-0.2$ (dotted) and $\alpha=-0.3$ 
+(dashed) lines are also shown. For the ensemble behavior of best-fit $\alpha$, see Fig.~\ref{fig:alpha_fwhm}. 
 \label{fig:fwhm_lambda}}
 \end{figure}
 
 
-\begin{figure}
+\begin{figure}[th]
 \centering
-\includegraphics[width=0.5\textwidth]{FIGURES/alpha_fwhm.png}
-\caption{The power-law index for the wavelength dependence of FWHM, $\alpha$, 
-vs. the FWHM in the $r$-band for all the 108 Stripe 82 runs. 
-The curves are predictions of the \vk~model, with $L_0$ ranging from 2 meters to infinity.
-\label{fig:alpha_fwhm}}
+\includegraphics[width=0.8\textwidth]{FIGURES/alpha_fwhm.png}
+\caption{The variation of the best-fit power-law index for the wavelength dependence of FWHM, $\alpha$, 
+vs. the FWHM in the $r$-band for all the 108 Stripe 82 runs. The symbols are SDSS
+measurements averaged over all 6 camera columns. The curves are predictions of the 
+\vk~model, with $L_0$ ranging from 2 meters to infinity, as labeled. The data are clearly
+inconsistent with Kolmogorov predictions ($L_0=\infty$) and reasonably well described by
+\vk~model and $L_0$ in the range from 10m to 30m.  \label{fig:alpha_fwhm}}
 \end{figure}
 
  
@@ -79,11 +81,11 @@ corresponding FWHM in the $r$-band taken at the same moment in time. Significant
 from $\alpha = -0.2$, predicted by the Kolmogorov model, can be seen in most bands.
 
 
-As discussed above, based on the \vk~atmosphere model, the
-power $\alpha$ should be a function of outer scale $L_0$ and 
+As discussed above, according to the \vk~atmosphere model, the
+power index $\alpha$ should be a function of the outer scale $L_0$ and 
 FWHM. 
-Fig.~\ref{fig:alpha_fwhm} shows a scatter plot of $\alpha$ versus FWHM
-in the $r$-band, for all the Stripe 82 runs.
+Fig.~\ref{fig:alpha_fwhm} shows a scatter plot of best-fit $\alpha$ (averaged
+over six columns) versus the FWHM in the $r$-band, for all analyzed runs.
 A correlation between $\alpha$ and the FWHM seems to be present.
 Similar correlations have been seen in Subaru images and reported by~\cite{subaruSeeing2016}.
 The data points are overlaid with curves predicted by the 
@@ -97,53 +99,69 @@ $L_0 = 30$ m, the \vk~model predicts an $\alpha$ value close to $-0.31$.
 
 \subsection{Angular structure function} 
 
-\begin{figure}
+\begin{figure}[th]
 \centering
-\includegraphics[width=0.5\textwidth]{FIGURES/spatial.png}
-\caption{PSF size angular structure function using SDSS measurements
-  combined over 86 out of the 108 runs with number of fields larger
-  than 100, and comparisons with PhoSim simulations and CFHT
-  measurements of the same quantity \citep{heymans2012}.
+\includegraphics[width=0.8\textwidth]{FIGURES/spatial.png}
+\caption{The angular structure function for the PSF size determined using 
+  CFHT data from \cite{heymans2012}, SDSS data analyzed here, and LSST image simulations. 
+  SDSS measurements are averaged over 86 runs with number of fields larger than 100. 
 \label{fig:spatial}}
 \end{figure}
 
-To examine the spatial correlation of the FWHM, we compute the angular
+To examine the angular (spatial) correlation of the FWHM, we compute the angular
 structure function using PSF measurements from all 6 camera columns.
-Our structure function is defined as
-the root-mean-square of the PSF size differences of pairs of stars
-in the same angular bin. 
-The SDSS curves are combined for 86 out of the 108 Stripe 82 runs with the number of
-fields larger than 100, and then combined for all
+Our structure function is defined as the root-mean-square scatter of the PSF size 
+differences of pairs of stars in the same angular bin\footnote{The adopted form 
+of the structure function, $SF$, is closely related to the autocorrelation function, $ACF$, as 
+$SF \propto (1-ACF)^{1/2}$.} 
+The SDSS curves are combined for 86 out of the 108 Stripe 82 runs with the number 
+of fields larger than 100, and then combined for all
 the bands. We also compared the structure functions for each band
 separately, and found no statistically significant differences.
 Results are shown in Fig.~\ref{fig:spatial}.
 
-For comparison, Fig. ~\ref{fig:spatial} also shows the PSF angular
-structure functions obtained using PhoSim~\citep{phosim} by simulating LSST,
-and that from the CFHT PSF measurements~\citep{heymans2012}.
+The structure function starts saturating at separations of
+$\sim 0.5 - 1.0$ degree, with an asymptotic value of about $\sim 0.05$ arcsec.
+In other words, the seeing rms variation at large angular scales is about 5\%,
+but we emphasize that our data do not probe scales beyond 2.5 degree. 
+
+For comparison, Fig. ~\ref{fig:spatial} also shows simulated PSF angular
+structure functions obtained using PhoSim~\citep{phosim},
+and results from the CFHT PSF measurements~\citep{heymans2012}.
 The PhoSim PSF profiles are obtained by simulating a grid of stars
-spaced by 6 arcminutes with non-perturbed telescope and ideal sensors.
+spaced by 6 arcminutes with non-perturbed LSST telescope and ideal sensors.
 The results are averaged over 9 different atmosphere realizations with
-different wind and screen parameters and airmass, and with 3 different
-wavelength, 350 nm, 660 nm, and 970 nm.
+different wind and screen parameters and airmass, and over 3 different
+wavelengths (350 nm, 660 nm, and 970 nm).
 The CFHT PSF size measurements were made in the $i$-band, and provided
 by the authors of~\cite{heymans2012}.
-The 3 curves in Fig.~\ref{fig:spatial} appear to be quantitatively
-consistent with each other, even though they are for telescopes at
+The three curves in Fig.~\ref{fig:spatial} appear to be quantitatively
+consistent with each other, even though they correspond to telescopes at
 different sites and with different optics.
-The structure function is seen to start saturating at a separation of
-$\sim 0.5 - 1.0$ degree, where the PSF size typically differ on the
-scale of $\sim 0.05$ arcsec.
 
-\subsection{Temporal auto-correlation function}
 
-To study the temporal behavior of the seeing, we look at its
- power spectrum.
+\subsection{Temporal behavior}
+
+\subsubsection{Power spectrum analysis} 
+
+\begin{figure}[th]
+\centering
+\includegraphics[width=0.99\textwidth]{FIGURES/temporalPSD.png}
+\vskip -0.2in
+\caption{PSF size temporal power spectral density for run 4874, r-band. 
+The solid lines are fits using the damped random walk model. 
+The dashed lines show best fits based on a single power law. The former
+predicts a steeper high-frequency behavior, while the latter cannnot 
+explain the turnover at low frequencies. 
+\label{fig:psd}}
+\end{figure}
+
+To study the temporal behavior of the seeing, we first analyze it power spectrum.
 Fig.~\ref{fig:psd} shows the temporal power spectral density (PSD) of the
 PSF FWHM for 6 camera columns, in run 4874, $r$-band.
 The time difference between subsequent fields is 36 seconds.
 We fit the PSD using two competing models.
-The first is a damped random walk (DRW) model~\citep{zeljkoBook},
+The first is a damped random walk (DRW) model~\citep[for introduction see Chapter 10 in][]{zeljkoBook},
 \begin{equation}
 \textrm{PSD}(f) = \frac{\tau^2 SF^2_{\infty}}{1+(2\pi f \tau)^2},
 \end{equation}
@@ -159,89 +177,94 @@ gives $\tau = 23.6 \pm 1.3$ minutes.
 Making the same fits for all the 108 runs in Stripe 82, 
 we obtain the $\tau$ distribution vs. the duration of each
 run, as shown in Fig.~\ref{fig:hist} (left).
-The shorter runs tend to give smaller timescale, due to the lack of
-data toward the low-frequency end of the spectra.
-% therefore are unable to
-% constrain the location of the "knee" during the fit. They tend to
-% push the "knee" to the right.
-There are a total of 12 runs longer than 6 hours.
-Their characteristic timescale is general within the range of
-$\sim15-25$ minutes.
-This is generally consistent with ~\cite{Racine1996}, where a timescale of 
+The shorter runs tend to give smaller timescale. It is plausible that short runs 
+cannot reliably constrain $\tau$ due to the lack of data toward the low-frequency 
+end of the spectra. There are 12 runs longer than 6 hours and their characteristic timescales
+are within the range of about $\sim15-25$ minutes.
+This results is generally consistent with ~\cite{Racine1996}, where a timescale of 
 $\tau = 17 \pm 1$ minutes was found.
 
-The temporal PSD of the FWHM can also be well-fitted using a power
-law,
+The data consistently show a shallower high-frequency behavior than predicted
+by damped random walk ($\propto 1/f^2$). In order to quantitatively describe 
+the high-frequency tail of the PSD, we fit a simple power law,
 \begin{equation}
 \textrm{PSD}(f) = B f^\beta,
 \end{equation}
-where $B$ is the normalization factor, and $\beta$ is the power-law
-index.
-Fits to data in run 4874, $r$-band are shown in
-Fig.~\ref{fig:psd} as dashed lines.
-Combining fit results for all camera columns and optical bands for run 4874
-gives $\beta = -1.29\pm 0.09$.
-Making the same fits for all the 108 runs in Stripe 82, 
-we obtained the $\beta$ distribution vs. the duration each
-run, as shown in Fig.~\ref{fig:hist} (right).
-The shorter runs give $\beta$ values with a larger variance.
-Most of the longer runs have power-law index roughly between $-1.5$ and $-1.0$.
+where $B$ is the normalization factor, and $\beta$ is the power-law index.
+Best-fits are illustrated for run 4874 are in Fig.~\ref{fig:psd} (dashed lines).
+Combining fit results for all camera columns and filters gives $\beta = -1.29\pm 0.09$ 
+for run 4874. Making the same fits for all the 108 runs in Stripe 82, we obtained the 
+$\beta$ distribution vs. the duration of each run shown in Fig.~\ref{fig:hist} (right).
+The shorter runs give $\beta$ values with a larger variance, but nevertheless it is 
+clear that for most runs the high-frequency behavior can be described with a 
+power-law index in the range $-1.5$ to $-1.0$. On the other hand, a single 
+power law cannot explain the turnover at low frequencies. 
 
-The power law fit systematically over predicts the low-frequency part of the PSD,
-while $1/f^2$ high-frequency behavior of the DRW model is too steep. One could argue that
-some hybrid model would work, but that's beyond the scope of our work. 
+Therefore, neither model provides a satifactory fit over the entire frequency range: 
+the power law fit systematically over predicts the low-frequency part of the PSD,
+while the $1/f^2$ high-frequency behavior of damped random walk model is too 
+steep. It is likely that a hybrid model would work, but we leave detailed analysis
+for future work. 
 
-\begin{figure}
+
+\begin{figure}[th]
 \centering
-\includegraphics[width=0.9\textwidth]{FIGURES/temporalPSD.png}
-\caption{PSF size temporal power spectral density for run 4874, r-band. 
-The solid lines are fits using the damped random walk model. 
-The dashed lines show fits to the power-law model.
-\label{fig:psd}}
-\end{figure}
-
-\begin{figure}
-\centering
-\includegraphics[width=0.9\textwidth]{FIGURES/taubeta.png}
-\caption{Left: The damped random walk characteristic
-  timescale $\tau$ for all 108 runs in Stripe 82 vs. the duration of 
-each run. Right: The power-law index $\beta$ for all 108 runs vs. the
-duration of each run.
+\includegraphics[width=0.99\textwidth]{FIGURES/taubeta.png}
+\vskip -0.2in
+\caption{Left: The symbols show the best-fit characteristic timescale $\tau$ in 
+damped random walk for all 108 runs in Stripe 82 vs. the duration of 
+each run. It is plausible that short runs cannot reliably constrain $\tau$.
+Right: The power-law index $\beta$ for a single power law fit for all 108 
+runs vs. the duration of each run. Note that for the majority of runs, $\beta$
+is larger than the value appropriate for damped random walk ($\beta = -2$). 
 \label{fig:hist}}
 \end{figure}
 
 
-Following~\cite{Racine1996}, we also define the structure-function-like quantity
+
+\subsubsection{Structure function analysis} 
+
+
+\begin{figure}[th]
+\centering
+\includegraphics[width=0.9\textwidth]{FIGURES/fdt.png}
+\caption{Left: The average normalized seeing difference, $<f(\Delta t)>$, as
+  a function of the time separation, $\Delta t$, for run 4874, camera
+   column 1, in the $r$-band. The fit to Eq.~(\ref{eq:fdt}) gives $f(\Delta t) ^\infty =  
+   0.08$, $\tau = 25.9$ minutes and $\gamma$ = 1.49. The dashed line is the 
+   structure function predicted by damped random walk model with the same 
+   $f(\Delta t) ^\infty$ and $\tau$. 
+Right: The timescale $\tau$ for all 108 runs vs. the duration of each run.
+ Note that for most runs $\tau$ is in the range 15-25 minutes
+    ($\tau$ is set to zero for runs shorter than 20 minutes).  
+\label{fig:fdt}}
+\end{figure}
+
+
+An alternative approach to power spectrum analysis is offered by auto-correlation 
+and structure function analysis. Following~\cite{Racine1996}, we define a 
+structure-function-like quantity
 \begin{equation}
        f(\Delta t) = {| \theta(t+\Delta t) - \theta(t)| \over  \theta(t+\Delta t) + \theta(t) },
 \end{equation} 
-where $\theta$ is seeing.
-We then fit the mean value of $f(\Delta t)$ to 
+where $\theta$ is seeing. We then fit the mean value of $f(\Delta t)$ to 
 \begin{equation}
     < f(\Delta t) > =  f(\Delta t) ^\infty \, \left[ 1 - \exp(-\Delta
       t/\tau)^\gamma \right],
 \label{eq:fdt}
 \end{equation} 
 with $f(\Delta t) ^\infty$, $\tau$ and $\gamma$ as free parameters.
-The timescale $\tau$ is found to be mostly within the range of 15 to
-25 minutes, and $\gamma$ between 1.0 and 1.5.
-Fig.~\ref{fig:fdt} (left) shows one example of such fits.
-The distribution of $\tau$ vs. the duration of each
-run is shown in Fig.~\ref{fig:fdt} (right). The runs shorter than 20
-minutes are obviously not good for measuring the timescale. We have
-set $\tau$ to zero for those runs.
-Still, the short runs have larger variances in $\tau$.
-If we look at only those runs longer than 6 hours,
-the timescale $\tau$ is mostly between 15 and 25 minutes.
+Fig.~\ref{fig:fdt} (left) shows one example of such fits. This functional form is 
+somewhat inspired by damped random walk model, where $\gamma=1$ and the 
+term in brackets is raised to the power of a half. For illustration, Fig.~\ref{fig:fdt} 
+also shows a damped random walk model fit with the same $f(\Delta t) ^\infty$
+and $\tau$. 
 
-\begin{figure}
-\centering
-\includegraphics[width=0.9\textwidth]{FIGURES/fdt.png}
-\caption{Left: The average normalized seeing difference, $<f(\Delta t)>$, as
-  a function of the time separation, $\Delta t$, for run 4874, camera
-  column 1, in the $r$-band.
-The fit to Eq.~(\ref{eq:fdt}) gives $\tau = 25.9$ minutes and $\gamma$
-= 1.49.
-Right: The timescale $\tau$ for all 108 runs vs. the duration of each run.
-\label{fig:fdt}}
-\end{figure}
+The best-fit timescale $\tau$ is found to be mostly in the range 15-20
+minutes, and $\gamma$ in the range 1.0 -1.5. The distribution of $\tau$ vs. 
+the duration of each run is shown in Fig.~\ref{fig:fdt} (right) (somewhat 
+arbitrarily, we set $\tau$ to zero for runs shorter than 20 minutes).  
+While the short runs show a larger variance in $\tau$, it is evident that 
+for most runs the timescale $\tau$ is in the range 15-25 minutes.
+Therefore, this analysis seems better at constraining the characteristic time
+scale than fitting a damped random walk model to empirical PSD. 

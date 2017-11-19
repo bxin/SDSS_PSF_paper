@@ -16,9 +16,12 @@ PSF through the Optical Transfer Function.
 The radial profiles of the \vk~PSF with a few different values of
 outer scale is shown in Fig.~\ref{fig:vonK}.
 The shape variation due to uncertainty in the outer scale, $L_0$, is seen to
-be small.
-In this work, we have assumed a fiducial
-outer scale of 30 meters.
+be small. In this work, we have assumed a fiducial outer scale of 30 meters.
+The impact of the exact value of $L_0$ is small, as illustrated in Fig.~\ref{fig:vonK}. 
+We note that a fixed value of $L_0$ induces a small systematic uncertainty in 
+the normalization of the contribution of instrumental PSF, discussed in \S~\ref{sec:instrPSF} 
+below. 
+
 Ideally, the Fried parameter $r_0$ would be used as the free
 parameter in the fit to the \vk~model. However, 
 that would require us to calculate the special functions and do the
@@ -28,9 +31,10 @@ Instead, we opted to generate a single \vk~PSF template with the FWHM of
 the template radially to get the best match with the data, in the
 least-square sense.
 
-\begin{figure}
+\begin{figure}[ht]
 \centering
-\includegraphics[width=0.5\textwidth]{FIGURES/vonK.png}
+\includegraphics[width=0.8\textwidth]{FIGURES/vonK.png}
+\vskip -0.2in 
 \caption{PSF radial profiles with the \vk~model for a few different
   outer scale ($L_0$) values. All profiles have FWHM of 1 arcsec, and
   are normalized to unit peak intensity. The \vk~model becomes
@@ -39,9 +43,11 @@ least-square sense.
 \end{figure}
 
 
+
+
 Although the fitted
 curves agree with the input data points very well, generally much better than the
-original 6-parameter double-Gaussian fit, they don't always describe
+original 6-parameter double-Gaussian fit by SDSS, they do not always describe
 the PSF tail beyond $\sim 15$ arcsec radius. This discrepancy is easily understood
 because it is well known that the PSF tails in the optical bands can be quite
 different due to the properties of the CCDs.
@@ -50,6 +56,10 @@ because of scattering in the CCD.  The Si is transparent at long $i$-band wavele
 so light goes all the way through the chip and is reflected off the solder, and passes 
 back up through the Si. This effect is not visible in the $z$-band because in this case
 thick front-side chips are used (in all other bands, thin back-side chips are used). 
+
+
+
+\subsection{Instrumental PSF \label{sec:instrPSF}} 
 
 To improve the fit quality at large radii, in the second fitting step we introduce an
 empirical instrumental PSF, so that the observed PSF can be expressed as
@@ -68,21 +78,42 @@ too wide because the \vk~term already well describes the core of the PSF.
 On the other hand, if $\sigma$ is close to zero, once the
 total intensity of the instrumental PSF is normalized to 1, too much
 widening power would be given to the instrumental PSF tail.
-We found $\sigma = 0.1$ arcsec a reasonable choice for all the fits.
+We found that $\sigma = 0.1$ arcsec is an acceptable choice for all the fits.
 Because the shape of the instrumental PSF tail should not vary with
 time, the parameters $a$, $b$, and $c$ in Eq.~(\ref{eq:psfinst}) are
 fixed for each band-camera-column combination.
 Their values come from a one-time fit using the same PSF functions,
 but with $a$, $b$, and $c$ as additional free parameters.
-We used here run 94, field 0 for these one-time fits, but verified that 
+We used here run 94, field 12 for these one-time fits, but verified that 
 the results are stable for other choices of run and field. 
 These fits are very slow but need to be done only once.
-The values of $a$, $b$, and $c$ are given in Tab.~\ref{tab:abc}
+The best-fit values of $a$, $b$, and $c$ are listed in Table~\ref{tab:abc}
 Although this second fitting step involves a 2-dimensional convolution,
 there is only one free parameter in the fit: $\eta$, the normalization of the
-instrument PSF tail. Each two-step PSF fit can be done in a few seconds.
+instrumental PSF tail. Each two-step PSF fit can be done in a few seconds.
 
-\begin{table}
+Fig.~\ref{fig:psffit} shows the results of our PSF fits from run 4874. The two-parameter
+best fits describe the PSF profiles quite well, both in the core and in the tails. There are 
+a total of 108 runs in the SDSS Stripe 82 dataset. Among them, run 4874 is the longest, 
+with 981 fields. In the rest of this paper, whenever we illustrate results from a single run, 
+we always use run 4874 as the fiducial example run. 
+
+
+\begin{figure}[th]
+\centering
+\includegraphics[width=1.0\textwidth]{FIGURES/psffit.png}
+\vskip -0.3in
+\caption{Fits to the PSF profiles from run 4874, field 11. Symbols are SDSS data. 
+  Red dashed curves are the best one-parameter \vk~fits. Blue curves are the red
+  curve convolved with the instrumental PSF, where the scaling factor (normalization) 
+  for the tail component is allowed to vary. The addition of the instrumental PSF 
+  significantly improves the fit quality, especially in the i band. Note that the y axis 
+  is shown on the logarithmic scale.
+\label{fig:psffit}}
+\end{figure}
+
+
+\begin{table}[th]
 \begin{center}
 \caption{Values for instrumental PSF shape parameters $a$, $b$, and $c$.\label{tab:abc}}
 \begin{tabular}{c|c|rrrrrr}
@@ -109,22 +140,3 @@ instrument PSF tail. Each two-step PSF fit can be done in a few seconds.
 \end{center}
 \end{table}
 
-
-
-
-\begin{figure}
-\centering
-\includegraphics[width=0.9\textwidth]{FIGURES/psffit.png}
-\caption{Fit to the PSF profiles from run 4874, field 0. Red curves
-  are results of one-parameter \vk~fits. Blue curves are the red
-  curve convolved with the instrument PSF, where the scaling factor for
-  the tail component is allowed to vary. Note that the y-axis is shown on
-  a logarithmic scale.
-\label{fig:psffit}}
-\end{figure}
-
-Fig.~\ref{fig:psffit} shows the results of our PSF fits from run 4874,
-field 0. The fits describe the PSF profiles quite well, both in the core and in the tails.
-There are a total of 108 runs in the SDSS Stripe 82 dataset. Among them, run 4874 
-is the longest, with 981 fields. In the rest of this paper, whenever we show 
-results for single runs, we always use run 4874 as the example.
