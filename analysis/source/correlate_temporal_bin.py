@@ -282,8 +282,9 @@ def main():
                 
                 #ax1[iRow, iCol].set_title('run%d, %s, %s, camcol=%s' %
                 #            (run, fwhmStr, sdss.band[band], camcol))
-                ax1[iRow, iCol].set_title('%s, %s-band, camcol=%s' %
-                            (fwhmStr.upper(), sdss.band[band], camcol))                
+                # ax1[iRow, iCol].set_title('%s, %s-band, camcol=%s' %
+                #            (fwhmStr.upper(), sdss.band[band], camcol))
+                ax1[iRow, iCol].set_title('camcol=%s' % camcol)
                 ax1[iRow, iCol].grid()
                 #plt.show()
 

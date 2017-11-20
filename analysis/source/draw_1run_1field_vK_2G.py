@@ -51,7 +51,7 @@ def main():
     run = args.irun
     print('------ running on run# %d ---------' % run)
     f, ax1 = plt.subplots(nBand, nCamcol, sharex='col',
-                          sharey='row', figsize=(12, 8))  # a plot is for a run
+                          sharey='row', figsize=(15, 10))  # a plot is for a run
 
     outdir = "%s/%d/" % (rootName, run)
     for camcol in range(1, nCamcol + 1): #(2,3): #
@@ -94,24 +94,27 @@ def main():
             #    psf.chi2, psf.G2chi2, psf.chi2lr, psf.G2chi2lr, psf.chi2hr, psf.G2chi2hr))
 
             if args.yscale == 'log' or args.yscale == 'logzoom':
-                ax1[iBand, camcol - 1].plot(psf.vR, np.log10(psf.vv), '-b')
+                ax1[iBand, camcol - 1].semilogy(psf.vR, psf.vv, '-b')
                 # draw double Gaussian as Red
                 # ax1[iBand, camcol -
                 #    1].plot(psf.r, psf.LpsfModel + np.log10(psf.scaleV), 'r')
-                ax1[iBand, camcol - 1].plot(psf.vvR, np.log10(psf.vvv), '--r')
-                ax1[iBand, camcol - 1].errorbar(psf.OKprofRadii, psf.OKprofile,
-                                                psf.OKprofileErr, fmt='ok')
+                ax1[iBand, camcol - 1].semilogy(psf.vvR, psf.vvv, '--r')
+                lower_error = 10**(psf.OKprofile)-10**(psf.OKprofile-psf.OKprofileErr)
+                upper_error = 10**(psf.OKprofile+psf.OKprofileErr)-10**(psf.OKprofile)
+                asymmetric_error = [lower_error, upper_error]
+                ax1[iBand, camcol - 1].errorbar(psf.OKprofRadii, 10**psf.OKprofile,
+                                                asymmetric_error, fmt='ok')
                 if args.yscale == 'log':
                     ax1[iBand, camcol - 1].set_xlim(0, 30.0)
-                    ax1[iBand, camcol - 1].set_ylim(-6, 0.5)
+                    ax1[iBand, camcol - 1].set_ylim(1e-6, 10**0.5)
                     if camcol == 1:
                         text = 'band: %s' % band[iBand]
                         ax1[iBand, camcol -
-                            1].text(10, -2, text, fontsize=15, ha='left',
+                            1].text(10, 1e-2, text, fontsize=15, ha='left',
                                     va='center')
                 elif args.yscale == 'logzoom':
                     ax1[iBand, camcol - 1].set_xlim(0, 2)
-                    ax1[iBand, camcol - 1].set_ylim(-1.5, 0.1)
+                    ax1[iBand, camcol - 1].set_ylim(10**-1.5, 10**0.1)
             elif args.yscale == 'linear':
                 ax1[iBand, camcol - 1].plot(psf.vR, psf.vv, '-b')
                 # draw double Gaussian as Red
@@ -133,7 +136,15 @@ def main():
             if iBand == 0:
                 ax1[iBand, camcol - 1].set_title('camcol=%d' % camcol)
 
-    plt.suptitle('run %d, field %d, dashed: vK only, solid: vK+instrument ' % (run, args.ifield))
+    # plt.suptitle('run %d, field %d, dashed: vK only, solid: vK+instrument ' % (run, args.ifield))
+
+    f.add_subplot(111, frameon=False)
+    # hide tick and tick label of the big axes
+    plt.tick_params(labelcolor='none', top='off', bottom='off', left='off', right='off')
+    plt.grid(False)
+    plt.xlabel("Radius (arcsec)", {'fontsize': 16})
+    # plt.ylabel("Normalized intensity", {'fontsize': 20})
+    
     # plt.tight_layout()
     # plt.show()
     plt.savefig('output/run%d_fld%d_psf_vK_2G_%s.png' %
