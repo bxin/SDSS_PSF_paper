@@ -84,10 +84,10 @@ time, the parameters $a$, $b$, and $c$ in Eq.~(\ref{eq:psfinst}) are
 fixed for each band-camera-column combination.
 Their values come from a one-time fit using the same PSF functions,
 but with $a$, $b$, and $c$ as additional free parameters.
-We used here run 94, field 12 for these one-time fits, but verified that 
+We used here run 94, field 11 for these one-time fits, but verified that 
 the results are stable for other choices of run and field. 
 These fits are very slow but need to be done only once.
-The best-fit values of $a$, $b$, and $c$ are listed in Table~\ref{tab:abc}
+The best-fit values of $a$, $b$, and $c$ are listed in Table~\ref{tab:abc}.
 Although this second fitting step involves a 2-dimensional convolution,
 there is only one free parameter in the fit: $\eta$, the normalization of the
 instrumental PSF tail. Each two-step PSF fit can be done in a few seconds.
@@ -103,11 +103,11 @@ we always use run 4874 as the fiducial example run.
 \centering
 \includegraphics[width=1.0\textwidth]{FIGURES/psffit.png}
 \vskip -0.3in
-\caption{Fits to the PSF profiles from run 4874, field 11. Symbols are SDSS data. 
+\caption{Fits to the PSF profiles from run 4874, field 21. Symbols are SDSS data. 
   Red dashed curves are the best one-parameter \vk~fits. Blue curves are the red
   curve convolved with the instrumental PSF, where the scaling factor (normalization) 
   for the tail component is allowed to vary. The addition of the instrumental PSF 
-  significantly improves the fit quality, especially in the i band. Note that the y axis 
+  significantly improves the fit quality, especially in the $i$-band. Note that the y-axis 
   is shown on the logarithmic scale.
 \label{fig:psffit}}
 \end{figure}
@@ -121,19 +121,19 @@ we always use run 4874 as the fiducial example run.
 \multicolumn{2}{c|}{} & \multicolumn{6}{c}{Camera Column} \\\cline{3-8}
 \multicolumn{2}{c|}{} & 1 & 2 & 3 & 4 & 5 & 6\\\hline
    & a($\times 10^{-3}$) & 2.2 & 2.2 & 1.1 & 2.2 & 2.2& 2.2\\
- u& b($\times 10^{-1}$) & $-$1.7 & $-$1.7& $-$7.7 & $-$2.3 &$-$2.3 & $-$2.3\\
+ $u$& b($\times 10^{-1}$) & $-$1.7 & $-$1.7& $-$7.7 & $-$2.3 &$-$2.3 & $-$2.3\\
    & c                             & $-$5.0 & $-$5.0& $-$6.0 & $-$5.0 & $-$5.0&$-$5.0 \\ \hline
   & a($\times 10^{-3}$) & 2.7 & 2.7 & 2.2 & 2.2 & 2.7&2.7 \\
- g& b($\times 10^{-1}$) & $-$1.7 & $-$1.7 & $-$1.7 & $-$1.7 &$-$1.7 & $-$1.7\\
+ $g$& b($\times 10^{-1}$) & $-$1.7 & $-$1.7 & $-$1.7 & $-$1.7 &$-$1.7 & $-$1.7\\
    & c                             & $-$5.0 & $-$5.0 & $-$5.0& $-$5.0 &$-$5.0 & $-$5.0\\\hline
   & a($\times 10^{-3}$) & 2.4 & 2.4 & 2.4 & 2.9 &2.2 & 2.2\\
- r& b($\times 10^{-1}$) & $-$1.6 & $-$1.6 & $-$1.6 & $-$1.6 &$-$1.7 & $-$1.7\\
+ $r$& b($\times 10^{-1}$) & $-$1.6 & $-$1.6 & $-$1.6 & $-$1.6 &$-$1.7 & $-$1.7\\
    & c                             & $-$5.0 & $-$5.0 & $-$5.0& $-$5.0&$-$5.0 & $-$5.0\\\hline
   & a($\times 10^{-3}$) & 0.7 & 1.1& 0.7 & 0.7 & 0.8& 0.2\\
- i& b($\times 10^{-1}$) & $-$0.8 & $-$0.9 & $-$0.8 & $-$0.8 &$-$0.9 & $-$0.8\\
+ $i$& b($\times 10^{-1}$) & $-$0.8 & $-$0.9 & $-$0.8 & $-$0.8 &$-$0.9 & $-$0.8\\
    & c                             & $-$5.0 & $-$5.0 & $-$5.0 & $-$5.0 &$-$5.0 & $-$5.0\\\hline
   & a($\times 10^{-3}$) & 3.1 & $-$2.2 & 3.1 & 2.2 &3.1 & 2.2\\
- z& b($\times 10^{-1}$) & $-$2.0 & $-$1.0 & $-$2.0 & $-$1.5 &$-$2.2 & $-$2.3\\
+ $z$& b($\times 10^{-1}$) & $-$2.0 & $-$1.0 & $-$2.0 & $-$1.5 &$-$2.2 & $-$2.3\\
    & c                             & $-$5.0 & $-$5.0 & $-$5.0 & $-$5.0&$-$5.0 & $-$5.0\\
 \tableline
 \end{tabular}
