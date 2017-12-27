@@ -17,7 +17,8 @@ The radial profiles of the \vk~PSF with a few different values of
 outer scale is shown in Fig.~\ref{fig:vonK}.
 The shape variation due to uncertainty in the outer scale, $L_0$, is seen to
 be small. In this work, we have assumed a fiducial outer scale of 30 meters.
-The impact of the exact value of $L_0$ is small, as illustrated in Fig.~\ref{fig:vonK}. 
+The impact of the exact value of $L_0$ is small, as illustrated in
+Fig.~\ref{fig:vonK} (left). 
 We note that a fixed value of $L_0$ induces a small systematic uncertainty in 
 the normalization of the contribution of instrumental PSF, discussed in \S~\ref{sec:instrPSF} 
 below. 
@@ -27,18 +28,27 @@ parameter in the fit to the \vk~model. However,
 that would require us to calculate the special functions and do the
 Fourier Transform on a large array for each function evaluation.
 Instead, we opted to generate a single \vk~PSF template with the FWHM of 
-1 arcsec. In our one-parameter \vk~fit, we only stretch or compress
+1.0 arcsec. In our one-parameter \vk~fit, we only stretch or compress
 the template radially to get the best match with the data, in the
 least-square sense.
+Fig.~\ref{fig:vonK} (right) shows a comparison of three PSF profiles,
+one generated with FWHM of 1.0 arcsec, the other two generated with
+FWHM of 0.5 and 2.0 arcsec, respectively, then stretched and
+compressed to 1.0 arcsec. The three curves are seen to be almost
+indistinguishable.
 
 \begin{figure}[ht]
 \centering
 \includegraphics[width=0.8\textwidth]{FIGURES/vonK.png}
 \vskip -0.2in 
 \caption{PSF radial profiles with the \vk~model for a few different
-  outer scale ($L_0$) values. All profiles have FWHM of 1 arcsec, and
+  outer scale ($L_0$) values (left) and $r_0$ values (right). 
+All profiles have FWHM of 1.0 arcsec, and
   are normalized to unit peak intensity. The \vk~model becomes
   Kolmogorov when $L_0 = \infty$.
+In the right plot, the dashed and dotted profiles are created with
+$L_0 = 30$m, and 
+FWHM of 0.5 arcsec and 2.0 arcsec, respectively, then stretched and compressed to 1.0 arcsec.
 \label{fig:vonK}}
 \end{figure}
 
@@ -89,7 +99,7 @@ the results are stable for other choices of run and field.
 These fits are very slow but need to be done only once.
 The best-fit values of $a$, $b$, and $c$ are listed in Table~\ref{tab:abc}.
 Although this second fitting step involves a 2-dimensional convolution,
-there is only one free parameter in the fit: $\eta$, the normalization of the
+there is only one free parameter in the fit: $\eta$, the relative normalization of the
 instrumental PSF tail. Each two-step PSF fit can be done in a few seconds.
 
 Fig.~\ref{fig:psffit} shows the results of our PSF fits from run 4874. The two-parameter
@@ -105,7 +115,8 @@ we always use run 4874 as the fiducial example run.
 \vskip -0.3in
 \caption{Fits to the PSF profiles from run 4874, field 21. Symbols are SDSS data. 
   Red dashed curves are the best one-parameter \vk~fits. Blue curves are the red
-  curve convolved with the instrumental PSF, where the scaling factor (normalization) 
+  curve convolved with the instrumental PSF, where the scaling factor
+  (relative normalization) 
   for the tail component is allowed to vary. The addition of the instrumental PSF 
   significantly improves the fit quality, especially in the $i$-band. Note that the y-axis 
   is shown on the logarithmic scale.
