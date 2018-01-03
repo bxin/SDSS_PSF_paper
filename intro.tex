@@ -14,7 +14,8 @@ profile, can be understood as manifestations of atmospheric instabilities due to
 Although turbulence is a complex physical phenomenon, the basic properties of the atmospheric
 seeing can be predicted from first principles \citep{Racine2009}. The
 \vk~turbulence theory, 
-an extension of the Komogorov theory that introduces a finite size for turbulent eddies (the so-called
+an extension of the Komogorov theory that introduces a finite maximum 
+size for turbulent eddies (the so-called
 outer scale parameter), quantitatively predicts the seeing profile and the variation of seeing
 with wavelength \citep{vk1, vk2}. Therefore, seeing measurements can be used to test the theory and estimate
 the relevant physical parameters. 
@@ -29,10 +30,11 @@ information from the images allows reliable star-galaxy separation to $r<21.5$ \
 The SDSS camera (Gunn et al. 1998) used drift-scanning observing mode (scanning along great circles
 at the sidereal rate) and detected objects in the order 
 $r$-$i$-$u$-$z$-$g$, with detections in two successive bands separated in time by 72 s. Each of the six camera
-columns produces a 13.5 arcmin wide scan; the scans are split into fields 9.0 arcmin long, corresponding
+columns produces a 13.5 arcmin wide scan; the scans are split into ``fields'' 9.0 arcmin long, corresponding
 to 36 seconds of time (the exposure time is 54.1 seconds because the sensor size is 2k by 2k pixels,
 with 0.396 arcsec per pixel). 
-The point-spread function (PSF) is estimated for each field and in each bandpass - there are about 
+The point-spread function (PSF) is estimated as a function of position
+within each field, although we only use one estimate per field, and in each bandpass - there are about 
 148 seeing estimates for each square degree of scanned sky. As a result, the SDSS measurements can
 be used to explore the seeing dependence on time (on time scales from 1 minute to 10 hours) and 
 wavelength (from the UV to the near-IR), as well as its angular correlation on the sky on scales from 
@@ -43,8 +45,9 @@ same as the seeing, since the PSF is dominated by the atmosphere. But we do
 keep in mind that the instrument also contributes to the PSF. This is
 especially important when we analyze the shape of the PSF in the next Section.}.
 
-The SDSS seeing measurements represent an excellent database that has not been systematically 
-explored yet. Here we utilize about a million SDSS seeing estimates to study the seeing profile 
+The SDSS seeing measurements represent an excellent database that has
+not yet been systematically 
+explored. Here we utilize about a million SDSS seeing estimates to study the seeing profile 
 and its behavior as a function of time and wavelength, and compare our results to theoretical 
 expectations. The outline of this paper is as follows. In \S2, we give a brief description of the 
 observations and the data used in analysis. We describe the PSF profile analysis, 

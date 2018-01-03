@@ -66,7 +66,7 @@ def main():
                 nbin = txtdata.shape[1]
                 myN = np.zeros(nbin)
                 mySF = np.zeros(nbin)
-                if args.oneplot:
+                if args.oneplot and iBand == 0:
                     mySFallband = np.zeros(nbin)
                     myErrallband = np.zeros(nbin)
             idx = ~np.isnan( txtdata[useRow, :])
@@ -122,14 +122,14 @@ def main():
                 ax1[iRow, iCol].set_xlabel('Spatial separation (deg)')
             #ax1[iRow, iCol].set_ylabel('Covariance (arcsec^2)')
             if iCol == 0:
-                ax1[iRow, iCol].set_ylabel('PSF size structure function')
+                ax1[iRow, iCol].set_ylabel('PSF size structure function (arcsec)')
             ax1[iRow, iCol].grid()
             #plt.show()
-            yymax = np.max(np.hstack((mySF, yymax)))
-            xxmax = np.max(np.hstack((mySep, xxmax)))
+            yymax = np.max(np.hstack((mySF, psall, cfhtall, yymax)))
+            xxmax = np.max(np.hstack((mySep, psr, cfhtr, xxmax)))
         else:
             w = 1/myN**2
-            mySFallband += mySF**2 * w
+            mySFallband += mySF * w
             myErrallband += w
 
     if not args.oneplot:
@@ -139,23 +139,24 @@ def main():
         for iBand in range(0, sdss.nBand):
             iRow = np.uint8(np.ceil((iBand+1) / nCol)) - 1
             iCol = np.mod(iBand, nCol)
-            ax1[iRow, iCol].set_ylim(0, yymax*2)
+            ax1[iRow, iCol].set_ylim(0, yymax*1.5)
             ax1[iRow, iCol].set_xlim(0,xxmax*1.1)
-            
+        pngname = 'SDSSdata/correlate_spatial/runALL_%s_byBand.png' %(fwhmStr) 
     else:
         mySFallband = mySFallband/myErrallband
         myErrallband = np.sqrt(1/myErrallband)
-        plt.errorbar(mySep, mySF, myN, fmt='-ok', label='SDSS')
+        plt.errorbar(mySep, mySFallband, myErrallband, fmt='-ok', label='SDSS')
         plt.errorbar(psr, psall, psallE, fmt=':xr', label='PhoSim/LSST',markersize=6)
         plt.errorbar(cfhtr, cfhtall, cfhtallE, fmt='--vg', label='CFHT')
         leg = plt.legend(loc="upper left", fontsize=10)
         leg.get_frame().set_alpha(0.5)
         
         plt.xlabel('Spatial separation (deg)')
-        plt.ylabel('PSF size structure function')
+        plt.ylabel('PSF size structure function (arcsec)')
         plt.grid()
             
-    pngname = 'SDSSdata/correlate_spatial/runALL_%s.png' %(fwhmStr)        
+        pngname = 'SDSSdata/correlate_spatial/runALL_%s.png' %(fwhmStr)
+        
     # plt.tight_layout()
     plt.savefig(pngname,dpi=500)
     plt.close()
