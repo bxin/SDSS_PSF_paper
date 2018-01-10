@@ -80,6 +80,8 @@ def main():
             y3 =psf.tailP[8]
             abcM = np.array([[x1**2, x1, 1], [x2**2, x2, 1], [x3**2, x3, 1]])
             abc = np.dot(np.linalg.inv(abcM), np.array([[y1] ,[y2], [y3]]))
+            print('a (x 10^-4) = %.1f\n'%(abc[0][0]/abc[2][0]*1e4))
+            print('b (x 10^-2) = %.1f\n'%(abc[1][0]/abc[2][0]*1e2))
             # end of ----
     
             psf.fit2vonK_curve_fit(vonK1arcsec, vonK2D, grid1d)
@@ -94,11 +96,11 @@ def main():
             #    psf.chi2, psf.G2chi2, psf.chi2lr, psf.G2chi2lr, psf.chi2hr, psf.G2chi2hr))
 
             if args.yscale == 'log' or args.yscale == 'logzoom':
-                ax1[iBand, camcol - 1].semilogy(psf.vR, psf.vv, '-b')
-                # draw double Gaussian as Red
-                # ax1[iBand, camcol -
-                #    1].plot(psf.r, psf.LpsfModel + np.log10(psf.scaleV), 'r')
-                ax1[iBand, camcol - 1].semilogy(psf.vvR, psf.vvv, '--r')
+                ax1[iBand, camcol - 1].semilogy(psf.vR, psf.vv, '-k')
+                # draw double Gaussian as blue
+                ax1[iBand, camcol -
+                   1].semilogy(psf.r, 10**psf.LpsfModel * psf.scaleV, ':b', linewidth=3)
+                ax1[iBand, camcol - 1].semilogy(psf.vvR, psf.vvv, '--r', linewidth=3)
                 lower_error = 10**(psf.OKprofile)-10**(psf.OKprofile-psf.OKprofileErr)
                 upper_error = 10**(psf.OKprofile+psf.OKprofileErr)-10**(psf.OKprofile)
                 asymmetric_error = [lower_error, upper_error]
@@ -148,7 +150,7 @@ def main():
     # plt.tight_layout()
     # plt.show()
     plt.savefig('output/run%d_fld%d_psf_vK_2G_%s.png' %
-                (run, args.ifield, args.yscale))
+                (run, args.ifield, args.yscale), dpi=500)
     end = time.time()
     print('time = %8.2fs' % (end - start))
     sys.exit()

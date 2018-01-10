@@ -129,6 +129,9 @@ def main():
             xxmax = np.max(np.hstack((mySep, psr, cfhtr, xxmax)))
         else:
             w = 1/myN**2
+            # if drawing r-band only with the oneplot option
+            if iBand != 2:
+                w = 0
             mySFallband += mySF * w
             myErrallband += w
 

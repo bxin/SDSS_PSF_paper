@@ -2,11 +2,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 usebands = 'ugriz'
-a=np.loadtxt('SDSSdata/%s/Stripe82_r_col3.txt'%usebands, skiprows =1);
+a=np.loadtxt('SDSSdata/%s/Stripe82_r_col-16.txt'%usebands, skiprows =1);
+#a=np.loadtxt('SDSSdata/%s/Stripe82_r_col-25.txt'%usebands, skiprows =1);
 alpha = a[:,1]
-beta = a[:, 2]
-tau = a[:, 3]
-seeing = a[:, 4]
+alphaErr = a[:, 2]
+seeing = a[:, 3]
 
 #plt.figure(figsize=(10,4.5))
 plt.figure(figsize=(6,4.5))

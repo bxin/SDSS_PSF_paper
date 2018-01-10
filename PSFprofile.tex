@@ -59,7 +59,9 @@ FWHM of 0.5 arcsec and 2.0 arcsec, respectively, then stretched and compressed t
 Although the fitted
 curves agree with the input data points very well, generally much better than the
 original 6-parameter double-Gaussian fit by SDSS, they do not always describe
-the PSF tail beyond $\sim 15$ arcsec radius. This discrepancy is easily understood
+the PSF tail beyond $\sim 15$ arcsec radius. 
+Some examples of such fits are shown in Fig.~\ref{fig:psffit}.
+This discrepancy is easily understood
 because it is well known that the PSF tails in the optical bands can be 
 different due to the properties of the CCDs.
 The SDSS $u$-, $g$-, $r$-, and $z$-bands only differ slightly due to
@@ -81,33 +83,53 @@ the instrumental PSF,
 \begin{equation}
         \textrm{PSF} = \textrm{vonK} (\textrm{FWHM}) \otimes \textrm{PSF}_{\textrm{inst}},
 \end{equation} 
-where vonK is the \vk~shape, whose only parameter is its FWHM, and
+where vonK is the \vk~shape, whose only parameter is its FWHM.
+We use the instrumental PSF to account for any tail components that
+are not accounted for by the \vk, including but not limited to
+scattering in the CCD, dusts on the mirror, and aerosol scattering.
+Looking at Fig.~\ref{fig:psffit}, the tails of the PSF can be well
+described using a second order polynomial in the logarithm space of
+the intensity.
+We define the functional form of the instrumental PSF as
 \begin{equation}
-        \textrm{PSF}_{\textrm{inst}} = \exp(-\frac{r^2}{2\sigma^2}) + 10^{\eta(ar^2+br+c)}.
+        \textrm{PSF}_{\textrm{inst}} = \exp(-\frac{r^2}{2\sigma^2}) + 10^p,
 \label{eq:psfinst}
 \end{equation} 
-The standard deviation of the central Gaussian, $\sigma$, cannot be
-too wide because the \vk~term already well describes the core of the PSF.
-On the other hand, if $\sigma$ is close to zero, once the
-total intensity of the instrumental PSF is normalized to 1, too much
-widening power would be given to the instrumental PSF tail.
-We found that $\sigma = 0.1$ arcsec is an acceptable choice for all the fits.
+where $p$ is a second order polynomial.
+The central Gaussian is needed to avoid too much widening power going
+into the instrumental PSF tail during the convolution.
+Its standard deviation, $\sigma$, cannot be
+too wide because the \vk~term already well describes the core of the
+PSF.
+We found that $\sigma = 0.1$ arcsec is an acceptable choice.
+
 Because the shape of the instrumental PSF tail should not vary with
-time, the parameters $a$, $b$, and $c$ in Eq.~(\ref{eq:psfinst}) are
+time, we define the second order polynomial $p$ as
+\begin{equation}
+        p = \eta(ar^2+br+1).
+\label{eq:psfinstp}
+\end{equation} 
+The parameters $a$ and $b$ are
 fixed for each band-camera-column combination.
-Their values come from a one-time fit using the same PSF functions,
-but with $a$, $b$, and $c$ as additional free parameters.
+$\eta$, the relative normalization of the 
+tail in the logarithm-space, is the only free
+parameter of the instrumental PSF.
+The $a$ and $b$ values come from a one-time fit using the same PSF functions,
+but with $a$, $b$, and $\eta$ as additional free parameters.
 We used here run 94, field 11 for these one-time fits, but verified that 
 the results are stable for other choices of run and field. 
 These fits are very slow but need to be done only once.
-The best-fit values of $a$, $b$, and $c$ are listed in Table~\ref{tab:abc}.
+The best-fit values of $a$ and $b$ are listed in Table~\ref{tab:abc}.
 Although this second fitting step involves a 2-dimensional convolution,
-there is only one free parameter in the fit: $\eta$, the relative normalization of the
-instrumental PSF tail\footnote{More accurately, $\eta$ is the relative
-normalization in the logarithm-space.}. Each two-step PSF fit can be done in a few seconds.
+there is only one free parameter in the fit: $\eta$. 
+Each two-step PSF fit can be done in a few seconds.
 
 Fig.~\ref{fig:psffit} shows the results of our PSF fits from run 4874. The two-parameter
-best fits describe the PSF profiles quite well, both in the core and in the tails. There are 
+best fits describe the PSF profiles quite well, both in the core and
+in the tails. 
+The addition of the instrumental PSF 
+  significantly improves the fit quality, especially in the $i$-band. 
+There are 
 a total of 108 runs in the SDSS Stripe 82 dataset. Among them, run 4874 is the longest, 
 with 981 fields. In the rest of this paper, whenever we illustrate results from a single run, 
 we always use run 4874 as the fiducial example run. 
@@ -117,12 +139,14 @@ we always use run 4874 as the fiducial example run.
 \centering
 \includegraphics[width=1.0\textwidth]{FIGURES/psffit.png}
 \vskip -0.3in
-\caption{Fits to the PSF profiles from run 4874, field 21. Symbols are SDSS data. 
-  Red dashed curves are the best one-parameter \vk~fits. Blue curves are the red
+\caption{Fits to the PSF profiles from run 4874, field 121. Symbols are SDSS data. 
+  Red dashed curves are the best one-parameter \vk~fits. Black solid curves are the red
   curve convolved with the instrumental PSF, where the scaling factor
   (relative normalization) 
-  for the tail component is allowed to vary. The addition of the instrumental PSF 
-  significantly improves the fit quality, especially in the $i$-band. Note that the y-axis 
+  for the tail component is allowed to vary. 
+As reference, the original SDSS double Gaussian fits are shown in blue
+dotted lines.
+Note that the y-axis 
   is shown on the logarithmic scale.
 \label{fig:psffit}}
 \end{figure}
@@ -135,21 +159,16 @@ we always use run 4874 as the fiducial example run.
 \tableline\tableline
 \multicolumn{2}{c|}{} & \multicolumn{6}{c}{Camera Column} \\\cline{3-8}
 \multicolumn{2}{c|}{} & 1 & 2 & 3 & 4 & 5 & 6\\\hline
-   & a($\times 10^{-3}$) & 2.2 & 2.2 & 1.1 & 2.2 & 2.2& 2.2\\
- $u$& b($\times 10^{-1}$) & $-$1.7 & $-$1.7& $-$7.7 & $-$2.3 &$-$2.3 & $-$2.3\\
-   & c                             & $-$5.0 & $-$5.0& $-$6.0 & $-$5.0 & $-$5.0&$-$5.0 \\ \hline
-  & a($\times 10^{-3}$) & 2.7 & 2.7 & 2.2 & 2.2 & 2.7&2.7 \\
- $g$& b($\times 10^{-1}$) & $-$1.7 & $-$1.7 & $-$1.7 & $-$1.7 &$-$1.7 & $-$1.7\\
-   & c                             & $-$5.0 & $-$5.0 & $-$5.0& $-$5.0 &$-$5.0 & $-$5.0\\\hline
-  & a($\times 10^{-3}$) & 2.4 & 2.4 & 2.4 & 2.9 &2.2 & 2.2\\
- $r$& b($\times 10^{-1}$) & $-$1.6 & $-$1.6 & $-$1.6 & $-$1.6 &$-$1.7 & $-$1.7\\
-   & c                             & $-$5.0 & $-$5.0 & $-$5.0& $-$5.0&$-$5.0 & $-$5.0\\\hline
-  & a($\times 10^{-3}$) & 0.7 & 1.1& 0.7 & 0.7 & 0.8& 0.2\\
- $i$& b($\times 10^{-1}$) & $-$0.8 & $-$0.9 & $-$0.8 & $-$0.8 &$-$0.9 & $-$0.8\\
-   & c                             & $-$5.0 & $-$5.0 & $-$5.0 & $-$5.0 &$-$5.0 & $-$5.0\\\hline
-  & a($\times 10^{-3}$) & 3.1 & $-$2.2 & 3.1 & 2.2 &3.1 & 2.2\\
- $z$& b($\times 10^{-1}$) & $-$2.0 & $-$1.0 & $-$2.0 & $-$1.5 &$-$2.2 & $-$2.3\\
-   & c                             & $-$5.0 & $-$5.0 & $-$5.0 & $-$5.0&$-$5.0 & $-$5.0\\
+   & a($\times 10^{-4}$) & $-$4.4 & $-$4.4 & $-$1.9 & $-$4.4 & $-$4.4& $-$4.4\\
+ $u$& b($\times 10^{-2}$) & 3.3   & 3.3       & 1.3       &      4.7 &4.7   & 4.7\\ \hline
+  & a($\times 10^{-4}$) & $-$5.3 & $-$5.3 & $-$4.4 & $-$4.4 & $-$5.3&$-$5.3 \\
+ $g$& b($\times 10^{-2}$) & 3.5  & 3.5      & 3.3       &        3.3 &3.5 & 3.5\\\hline
+  & a($\times 10^{-4}$) & $-$4.9 & $-$4.9 & $-$4.9 & $-$5.8 &$-$4.4 & $-$4.4\\
+ $r$& b($\times 10^{-2}$) & 3.1 & 3.1         & 3.1     &        3.3 &3.3 & 3.3\\\hline
+  & a($\times 10^{-4}$) & $-$1.3 & $-$2.2& $-$1.3 & $-$1.3 & $-$1.8& -0.4\\
+ $i$& b($\times 10^{-2}$) & 1.7 & 1.8        & 1.7      &        1.7 &1.7 & 1.5\\\hline
+  & a($\times 10^{-4}$) & $-$6.2 & 4.4     & $-$6.2 & $-$4.4  &$-$6.2 & $-$4.4\\
+ $z$& b($\times 10^{-2}$) & 4.0 & 2.0      & 4.0      &        3.1 &4.4 & 4.7\\
 \tableline
 \end{tabular}
 \end{center}

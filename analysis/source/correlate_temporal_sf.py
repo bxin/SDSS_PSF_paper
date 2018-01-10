@@ -14,7 +14,7 @@ import time
 
 def fdt(dt, A, tau, gamma):
     # print('A = %e, f0 = %f'% (A, f0))
-    return A*(1-(np.exp(-dt/tau))**gamma )
+    return A*np.sqrt(1-(np.exp(-(dt/tau)**gamma )))
     #return A*(1-(np.exp(-dt/tau))*gamma )
     # return A*(1-np.exp((-dt/tau)**gamma) )  # (-dt/tau)**gamma -> nan
 
@@ -22,7 +22,7 @@ def fdtChi2(dt, Atg, y, yerr):
     A = Atg[0]
     tau = Atg[1]
     gamma = Atg[2]
-    yp = A*(1-(np.exp(-dt/tau))**gamma)
+    yp = A*np.sqrt(1-(np.exp(-(dt/tau)**gamma)))
     #yp = A*(1-(np.exp(-dt/tau))*gamma)
     #yp = A*(1-np.exp((-dt/tau)**gamma))
     chi2 = np.sum(((yp - y)/yerr)**2)
@@ -85,7 +85,7 @@ def sf1run(argList):
                     t2 = Time(mjdbf[j], format='mjd')
                     dt = t2 - t1
                     sfArray[ii, 0] = abs(TimeDelta(dt).sec)/60
-                    if sfArray[ii, 0]>140:
+                    if sfArray[ii, 0]>300:
                         break
                     sfArray[ii, 1] = abs(fwhmbf[i] - fwhmbf[j])/(fwhmbf[i] + fwhmbf[j])
                     ii += 1

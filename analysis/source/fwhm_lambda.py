@@ -142,7 +142,7 @@ def main():
             if runNo < 0:
                 if camcol == 1:
                     fidw.write('%d\t' % run)
-                fidw.write('%5.2f\t' % powerfit)
+                fidw.write('%6.3f\t %7.4f \t' % (powerfit, powerfiterr))
                 if camcol == sdss.nCamcol:
                     fidw.write('\n')
 
