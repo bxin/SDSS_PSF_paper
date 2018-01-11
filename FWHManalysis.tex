@@ -2,8 +2,10 @@
 %  \section{The analysis of FWHM behavior} 
 
 Given that the observed seeing is by and large described by a single parameter, FWHM, 
-we study three aspects of its variation in detail, as follows.
-
+we study here three aspects of its variation in detail: dependence on wavelength,
+the spatial (angular) structure function, and temporal behavior. We note that details 
+about the seeing profile tails, including the contribution of the instrumental profile and
+the $i$ band behavior, do not matter here because we focus only on the FWHM behavior. 
 
 \subsection{The FWHM dependence on wavelength} 
 
@@ -16,6 +18,7 @@ seeing-limited PSF in a large telescope,
 Here $\lambda$ is the wavelength, $X$ is the airmass, and $r_0$ is the Fried parameter.
 We use $\lambda = 500$ nm as the reference wavelength,
 \begin{equation}
+\label{eq:airmass}
 r_0(\lambda,X) = r_0(500) \left(\frac{\lambda}{500}\right)^{1.2}
 \frac{1}{X^{0.6}},
 \label{eq:r0}
@@ -58,18 +61,21 @@ Symbols are SDSS data and solid line is the best power-law fit, with the best-fi
 \includegraphics[width=0.8\textwidth]{FIGURES/alpha_fwhm.png}
 \caption{The variation of the best-fit power-law index for the wavelength dependence of FWHM, $\alpha$, 
 vs. the FWHM in the $r$-band for all the 108 Stripe 82 runs. The symbols are SDSS
-measurements in camera column No. 3. The curves are predictions of the 
+measurements of $\alpha$ based on the $ugri$ data and averaged over camera columns 1 to 5. 
+The curves are predictions of the 
 \vk~model, with $L_0$ ranging from 2 meters to infinity, as labeled. The data are clearly
 inconsistent with Kolmogorov predictions ($L_0=\infty$) and reasonably well described by
-\vk~model and $L_0$ in the range from 10m to 30m.  \label{fig:alpha_fwhm}}
+\vk~model and $L_0$ in the range from 5m to $\sim$100m.  \label{fig:alpha_fwhm}}
 \end{figure}
 
  
 For each run from SDSS Stripe 82 data, and each camera column, we make
-a least-square fit to
-all the simultaneous FWHM measurements across the optical bands, to
-estimate the power-law index $\alpha$.
-All FWHM values are multiplied by $1/X^{0.6}$ to correct for the airmass effects.
+a least-square fit to all the simultaneous FWHM measurements across the optical bands, to
+estimate the power-law index $\alpha$. All FWHM values are multiplied by $1/X^{0.6}$ to 
+correct for the airmass effects\footnote{The airmass dependence for the \vk~model 
+has a slightly different power-law index, 0.63, from 0.6 given in eq.~\ref{eq:airmass}; 
+we ignored this difference as it results in seeing variations below 1\% for the probed 
+range of airmass.}.
 We take into account that the same field number does not correspond to the same
 time in all filters. The scanning order in the SDSS camera is $r$-$i$-$u$-$z$-$g$, with the delay between the two 
 successive filters corresponding to 2 fields. That is, if we take the field number $F$ for the $r$-band, then
@@ -79,19 +85,22 @@ from $F-4$, and so on.
 Fig.~\ref{fig:fwhm_lambda} shows such fits for run 4874. All FWHM are normalized using 
 corresponding FWHM in the $r$-band taken at the same moment in time. Significant deviation 
 from $\alpha = -0.2$, predicted by the Kolmogorov model, can be seen in most bands.
-
-
+We find that fits in columns 1-5 are always similar, while in column 6 the slope is 
+systematically lower. Similarly, the data in the $ugri$ bands are well fit by the power law, 
+while the $z$ band the data are systematically larger than the power-law fit. 
+For this reason, we refit the data using only $ugri$ bands and average results
+over columns 1-5.  Fig.~\ref{fig:alpha_fwhm} shows a scatter plot of the resulting
+best-fit $\alpha$ vs. the FWHM in the $r$-band, for all the analyzed runs.
+ 
 As discussed above, according to the \vk~atmosphere model, the
 power index $\alpha$ should be a function of the outer scale $L_0$ and 
-FWHM. 
-Fig.~\ref{fig:alpha_fwhm} shows a scatter plot of best-fit $\alpha$ (averaged
-over six columns) versus the FWHM in the $r$-band, for all analyzed runs.
-A correlation between $\alpha$ and the FWHM seems to be present.
-Similar correlations have been seen in Subaru images and reported by~\cite{subaruSeeing2016}.
+FWHM. A correlation between $\alpha$ and the FWHM is discernible in
+Fig.~\ref{fig:alpha_fwhm}. Similar correlations have been seen in Subaru images 
+and reported by~\cite{subaruSeeing2016}.
 The data points are overlaid with curves predicted by the 
 \vk~model, with $L_0$ varying from 2 m to infinity.
 The data clearly deviate from the Kolmogorov model prediction, which is
-the horizontal line at $\alpha = -0.20$, with infinite $L_0$.
+the horizontal line at $\alpha = -0.20$, with an infinite $L_0$.
 For example, for LSST's fiducial FWHM of 0.6 arcsec and the commonly assumed 
 $L_0 = 30$ m, the \vk~model predicts an $\alpha$ value close to $-0.31$.
 
@@ -104,18 +113,19 @@ $L_0 = 30$ m, the \vk~model predicts an $\alpha$ value close to $-0.31$.
 \includegraphics[width=0.8\textwidth]{FIGURES/spatial.png}
 \caption{The angular structure function for the PSF size determined using 
   CFHT data from \cite{heymans2012}, SDSS data analyzed here, and LSST image simulations. 
-  SDSS measurements are averaged over 86 runs with number of fields larger than 100. 
+  SDSS measurements are averaged over 86 runs with the number of fields larger than 100. 
 \label{fig:spatial}}
 \end{figure}
 
 To examine the angular (spatial) correlation of the FWHM, we compute the angular
 structure function using PSF measurements from all 6 camera columns.
 Our structure function is defined as the root-mean-square scatter of the PSF size 
-differences of pairs of stars in the same angular bin\footnote{The adopted form 
+differences of pairs of stars in the same distance bin along the direction perpendicular
+to the scanning direction\footnote{The adopted form 
 of the structure function, $SF$, is closely related to the autocorrelation function, $ACF$, as 
 $SF \propto (1-ACF)^{1/2}$.} .
-The SDSS curves are combined for 86 out of the 108 Stripe 82 runs with the number 
-of fields larger than 100.
+The SDSS curves are combined for 86 Stripe 82 runs with the number of fields larger than 
+100 (out of 108 runs) 
 We also compared the structure functions for each band
 separately, and found no statistically significant differences.
 Results for the $r$-band are shown in Fig.~\ref{fig:spatial}.
@@ -125,9 +135,9 @@ $\sim 0.5 - 1.0$ degree, with an asymptotic value of about $\sim 0.05$ arcsec.
 In other words, the seeing rms variation at large angular scales is about 5\%,
 but we emphasize that our data do not probe scales beyond 2.5 degree. 
 
-For comparison, Fig. ~\ref{fig:spatial} also shows simulated PSF angular
-structure functions obtained using PhoSim~\citep{phosim},
-and results from the CFHT PSF measurements~\citep{heymans2012}.
+For comparison, Fig. ~\ref{fig:spatial} also shows results from the CFHT PSF 
+measurements~\citep{heymans2012}, and simulated PSF angular
+structure functions obtained using image simulation code PhoSim~\citep{phosim}. 
 The PhoSim PSF profiles are obtained by simulating a grid of stars
 spaced by 6 arcminutes with non-perturbed LSST telescope and ideal sensors.
 The results are averaged over 9 different atmosphere realizations with
@@ -137,7 +147,11 @@ The CFHT PSF size measurements were made in the $i$-band, and provided
 by the authors of~\cite{heymans2012}.
 The three curves in Fig.~\ref{fig:spatial} appear to be quantitatively
 consistent with each other, even though they correspond to telescopes at
-different sites and with different optics.
+different sites and with different optics. 
+
+We note that the PhoSim code could be used to further quantitatively study the variation
+of seeing with outer scale and the impact of telescope diameter; however,
+such detailed modeling studies are beyond the scope of this report. 
 
 
 \subsection{Temporal behavior}
@@ -203,8 +217,8 @@ power law cannot explain the turnover at low frequencies.
 Therefore, neither model provides a satifactory fit over the entire frequency range: 
 the power law fit systematically over predicts the low-frequency part of the PSD,
 while the $1/f^2$ high-frequency behavior of damped random walk model is too 
-steep. It is likely that a hybrid model would work, but we leave detailed analysis
-for future work. 
+steep. It is likely that a hybrid model would work, but we leave detailed analysis,
+perhaps informed by the Phosim modeling, for future work. 
 
 
 \begin{figure}[th]
@@ -249,8 +263,8 @@ structure-function-like quantity
 \end{equation} 
 where $\theta$ is seeing. We then fit the mean value of $f(\Delta t)$ to 
 \begin{equation}
-    < f(\Delta t) > =  f(\Delta t) ^\infty \, \left[ 1 - \exp(-(\Delta
-      t/\tau)^\gamma) \right]^{1/2},
+    < f(\Delta t) > =  f(\Delta t) ^\infty \, \left( 1 - \exp[-(\Delta
+      t/\tau)^\gamma] \right)^{1/2},
 \label{eq:fdt}
 \end{equation} 
 with $f(\Delta t) ^\infty$, $\tau$ and $\gamma$ as free parameters.
