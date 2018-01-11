@@ -83,9 +83,9 @@ by the \vk, and the instrumental PSF,
         \textrm{PSF} = \textrm{vonK} (\textrm{FWHM}) \otimes \textrm{PSF}_{\textrm{inst}},
 \end{equation} 
 where vonK is the \vk~shape, whose only parameter is its FWHM.
-We use the instrumental PSF to account for any tail components that
-are not accounted for by the \vk, including but not limited to
-scattering in the CCD, dusts on the mirror, and aerosol scattering.
+%We use the instrumental PSF to account for any tail components that
+%are not accounted for by the \vk, including but not limited to
+%scattering in the CCD, dusts on the mirror, and aerosol scattering.
 Looking at Fig.~\ref{fig:psffit}, the tails of the PSF can be well
 described using a second order polynomial in the logarithm space of
 the intensity.
@@ -143,7 +143,8 @@ we always use run 4874 as the fiducial example run.
   curve convolved with the instrumental PSF, where the scaling factor
   (relative normalization) 
   for the tail component is allowed to vary. 
-As reference, the original SDSS double Gaussian fits are shown in blue
+As reference, the original SDSS double Gaussian fits with power-law wings
+ are shown in blue
 dotted lines.
 Note that the y-axis 
   is shown on the logarithmic scale.
