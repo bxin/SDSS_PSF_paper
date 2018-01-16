@@ -35,10 +35,11 @@ With the \vk~atmosphere model, the FWHM as in
 Eq.~(\ref{eq:fwhmkolm}) needs an additional correction factor
 which is a function of the outer scale $L_0$~\citep{Tokovinin2002},
 \begin{equation}
+\label{eq:FWHMvK}
 \textrm{FWHM}^{\rm vonK}(\lambda, X) = \frac{0.976\lambda}{r_0(\lambda,X)}
 \sqrt{1-2.183\left( \frac{r_0(\lambda,X) }{L_0} \right)^{0.356}}.
 \end{equation}
-If power-law approximation is attempted,  FWHM$^{\rm vonK} \propto \lambda^{\alpha} $, 
+If a power-law approximation is attempted,  FWHM$^{\rm vonK} \propto \lambda^{\alpha} $, 
 $\alpha$ becomes a function of $L_0$ and $r_0$ at a specified
 wavelength and airmass, or equivalently, a function of $L_0$ and FWHM$^{\rm vonK}$.
 For the subsequent analysis, we adopt the $r$ band as the fiducial band (with
@@ -61,7 +62,7 @@ Symbols are SDSS data and solid line is the best power-law fit, with the best-fi
 \includegraphics[width=0.8\textwidth]{FIGURES/alpha_fwhm.png}
 \caption{The variation of the best-fit power-law index for the wavelength dependence of FWHM, $\alpha$, 
 vs. the FWHM in the $r$-band for all the 108 Stripe 82 runs. The symbols are SDSS
-measurements of $\alpha$ based on the $ugri$ data and averaged over camera columns 1 to 5. 
+measurements of $\alpha$ based on the $ugri$ data and averaged over camera columns 2 to 5. 
 The curves are predictions of the 
 \vk~model, with $L_0$ ranging from 2 meters to infinity, as labeled. The data are clearly
 inconsistent with Kolmogorov predictions ($L_0=\infty$) and reasonably well described by
@@ -73,9 +74,11 @@ For each run from SDSS Stripe 82 data, and each camera column, we make
 a least-square fit to all the simultaneous FWHM measurements across the optical bands, to
 estimate the power-law index $\alpha$. All FWHM values are multiplied by $1/X^{0.6}$ to 
 correct for the airmass effects\footnote{The airmass dependence for the \vk~model 
-has a slightly different power-law index, 0.63, from 0.6 given in eq.~\ref{eq:airmass}; 
-we ignore this difference as it results in seeing variations below 1\% for the probed 
-range of airmass.}.
+is not strictly a power law, but can be approximated by a power law with good precision.
+By numerically fitting a power law to eq.~\ref{eq:FWHMvK}, we obtained a power-law index 
+of 0.63. We ignore the difference between 0.63 and 0.6 as it results in seeing variations 
+below 1\% for the probed range of airmass.}.
+
 We take into account that the same field number does not correspond to the same
 time in all filters. The scanning order in the SDSS camera is $r$-$i$-$u$-$z$-$g$, with the delay between the two 
 successive filters corresponding to 2 fields. That is, if we take the field number $F$ for the $r$-band, then

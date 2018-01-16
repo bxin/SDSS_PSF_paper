@@ -76,18 +76,16 @@ thick front-side illuminated chips are used (in all other bands, thin back-side 
 
 To improve the fit quality at large radii, in the second fitting step we introduce an
 empirical ``instrumental'' PSF. Despite the name, this component might also include 
-effects not modeled by the \vk theory, such as aerosol scattering in the atmosphere. 
-The observed PSF can be expressed as a convolution of the atmosphere, represented 
+effects not modeled by the \vk theory, such as aerosol scattering in the atmosphere,
+dust on the mirrors, and scattering in the CCDs. The observed PSF can be expressed 
+as a convolution of the atmosphere, represented 
 by the \vk, and the instrumental PSF,
 \begin{equation}
         \textrm{PSF} = \textrm{vonK} (\textrm{FWHM}) \otimes \textrm{PSF}_{\textrm{inst}},
 \end{equation} 
 where vonK is the \vk~shape, whose only parameter is its FWHM.
-%We use the instrumental PSF to account for any tail components that
-%are not accounted for by the \vk, including but not limited to
-%scattering in the CCD, dusts on the mirror, and aerosol scattering.
-Looking at Fig.~\ref{fig:psffit}, the tails of the PSF can be well
-described using a second order polynomial in the logarithm space of
+Fig.~\ref{fig:psffit} shows that the tails of the PSF can be well
+described using a second order polynomial in the logarithmic space of
 the intensity.
 We define the functional form of the instrumental PSF as
 \begin{equation}
@@ -125,11 +123,16 @@ Each two-step PSF fit can be done in a few seconds.
 
 Fig.~\ref{fig:psffit} shows the results of our PSF fits from run 4874. The two-parameter
 best fits describe the PSF profiles quite well, both in the core and
-in the tails. 
-The addition of the instrumental PSF 
-  significantly improves the fit quality, especially in the $i$-band. 
-There are 
-a total of 108 runs in the SDSS Stripe 82 dataset. Among them, run 4874 is the longest, 
+in the tails. The addition of the instrumental PSF significantly improves the fit quality, 
+especially in the $i$-band. 
+
+Fig.~\ref{fig:psffit} also shows the original SDSS ``double Gaussian plus power-law wing'' fits,
+described by eq.~\ref{eq:SDSSPSF}. They sometimes fail catastrophically; our analysis revealed
+two kinds of failures: one case is characterized by $p_0 =1e-7$ and another by $\beta=10$.
+Inspection of the SDSS code reveals that these values signal bad fits which did not 
+converge for various (unknown) reasons. 
+
+There are a total of 108 runs in the SDSS Stripe 82 dataset. Among them, run 4874 is the longest, 
 with 981 fields. In the rest of this paper, whenever we illustrate results from a single run, 
 we always use run 4874 as the fiducial example run. 
 
@@ -143,11 +146,10 @@ we always use run 4874 as the fiducial example run.
   curve convolved with the instrumental PSF, where the scaling factor
   (relative normalization) 
   for the tail component is allowed to vary. 
-As reference, the original SDSS double Gaussian fits with power-law wings
- are shown in blue
-dotted lines.
-Note that the y-axis 
-  is shown on the logarithmic scale.
+As a reference, the original ``SDSS double Gaussian plus power-law wing'' fits,
+described by eq.~\ref{eq:SDSSPSF}, 
+ are shown in blue dotted lines -- they sometimes fail catastrophically (see text). 
+Note that the y-axis is shown on the logarithmic scale.
 \label{fig:psffit}}
 \end{figure}
 
