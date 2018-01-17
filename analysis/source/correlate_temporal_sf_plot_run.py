@@ -125,7 +125,7 @@ def main():
                     
                 bindata = np.loadtxt(dataname)
                 try:
-                    idx = (bindata[2,:]>1) #*(bindata[0, :]<300)
+                    idx = (bindata[2,:]>1) *(bindata[0, :]<140)
                     if band == 0 and camcol == 1:
                         mySF = np.zeros((np.sum(idx), 5, 6))
                         mySFstd = np.zeros((np.sum(idx), 5, 6))
@@ -138,17 +138,17 @@ def main():
                 except IndexError as e:
                     mySep = np.zeros(1)
 
-        c1 = 2
-        c2 = 5
+        c1 =2 #1 # 2
+        c2 = 5 #6 # 5
         b2 = 4 #without z-band
         #b2 = 5 #with z-band
         mySFRun = np.mean(mySF[:,:b2,c1-1:c2],(1,2))
         mySFstdRun = np.sqrt(np.mean(mySFstd[:,:b2,c1-1:c2]**2, (1,2))) #approximate, cannot recover original (x_i -x_0) and replace x_0 with mySFRun
-        if mySep.shape[0]>6: # we cannot fit to 2 data points
+        if mySep.shape[0]>2: # we do not fit to <=3 data points
             # mySFstd = mySFstd/100 #playing around, checking why pcov is large
             # curve_fit gives the error
-            popt, pcov = optimize.curve_fit(fdt, mySep, mySFRun, p0=[0.1, 30, 0.8],
-                                                    bounds = ([0, 5, 0], [0.3, 3000, 5]),
+            popt, pcov = optimize.curve_fit(fdt, mySep, mySFRun, p0=[0.1, np.min((30,np.max(mySep))), 0.8],
+                                                    bounds = ([0, 5, 0], [0.3, np.max(mySep), 5]),
                                                 sigma = mySFstdRun)
             A = popt[0]
             tau = popt[1]
@@ -166,12 +166,12 @@ def main():
             # gamma = popt[2]
 
             # debugging -----
-            fig, (ax0, ax1) = plt.subplots(ncols=2, figsize=(8,4))
-            ax0.errorbar(mySep, mySFRun, mySFstdRun, fmt = 'ok')
-            myX = np.linspace(0, mySep[0]+mySep[-1], 100)
-            myY = fdt(myX, A, tau, gamma)
-            ax0.plot(myX, myY, 'r-')
-            plt.show()
+            # fig, (ax0, ax1) = plt.subplots(ncols=2, figsize=(8,4))
+            # ax0.errorbar(mySep, mySFRun, mySFstdRun, fmt = 'ok')
+            # myX = np.linspace(0, mySep[0]+mySep[-1], 100)
+            # myY = fdt(myX, A, tau, gamma)
+            # ax0.plot(myX, myY, 'r-')
+            # plt.show()
             if (run == 4874):
                 #ax0.errorbar(mySep, mySF, mySFstd, fmt = 'ok')
                 ax0.plot(mySep, mySFRun, 'ok')
@@ -224,10 +224,12 @@ def main():
         ax1.set_ylabel(r'$\tau$ (minutes)', {'fontsize': 16})
         ax1.set_xlabel('Duration of run (minutes)', {'fontsize': 16})
         ax1.set_xlim(0, 600)
-        #ax1.set_ylim(0, 70)
+        ax1.set_ylim(0, 120)
+        ax1.plot([0,120],[0,120],'--b')
+        ax1.plot([0,240],[0,120],'--b')
         
         plt.tight_layout()
-        plt.savefig(pngname)
+        plt.savefig(pngname, dpi=500)
         plt.close()
         
 if __name__ == "__main__":

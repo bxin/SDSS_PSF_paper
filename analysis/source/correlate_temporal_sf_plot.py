@@ -58,7 +58,9 @@ def main():
     runNo = args.run
     objlist = np.loadtxt('data/Stripe82RunList.dat')
     bandlist = np.arange(0,5)
+    # bandlist = np.arange(0,4)
     camcollist = np.arange(1,6+1)
+    # camcollist = np.arange(2,5+1)
     if runNo > 0:
         # remove all lines but one
         objlist = objlist[objlist[:, 0] == runNo, :]
@@ -114,8 +116,8 @@ def main():
 
         tauAll = np.zeros((5, 6))
         gammaAll = np.zeros((5, 6))
-        tauerrAll = np.zeros((5, 6))
-        gammaerrAll = np.zeros((5, 6))
+        tauerrAll = np.ones((5, 6))*1e8
+        gammaerrAll = np.ones((5, 6))*1e8
                 
         for band in bandlist:
             print('band = %d'%band)
@@ -176,7 +178,7 @@ def main():
                         myN = bindata[2, :]
                         mySFstd = bindata[3, :]
                         
-                        idx = (myN>1) * (mySep<300)
+                        idx = (myN>1) * (mySep<140)
                         mySep = mySep[idx]
                         mySF = mySF[idx]
                         myN = myN[idx]
@@ -185,11 +187,11 @@ def main():
                     except IndexError as e:
                         mySep = np.zeros(1)
 
-                if mySep.shape[0]>6: # we cannot fit to 2 data points
+                if mySep.shape[0]>2: # we do not fit to <=3 data points
                     # mySFstd = mySFstd/100 #playing around, checking why pcov is large
                     # curve_fit gives the error
-                    popt, pcov = optimize.curve_fit(fdt, mySep, mySF, p0=[0.1, 30, 0.8],
-                                                            bounds = ([0, 5, 0], [0.3, 3000, 5]),
+                    popt, pcov = optimize.curve_fit(fdt, mySep, mySF, p0=[0.1, np.min((30,np.max(mySep))), 0.8],
+                                        bounds = ([0, 5, 0], [0.3, np.max(mySep), 5]),
                                                         sigma = mySFstd)
                     A = popt[0]
                     tau = popt[1]
@@ -197,6 +199,26 @@ def main():
                     Aerr = np.sqrt(pcov[0, 0])
                     tauerr = np.sqrt(pcov[1, 1])
                     gammaerr = np.sqrt(pcov[2, 2])
+                    if tauerr<1e-5:
+                        tauerr = 1e8
+                    if gammaerr< 1e-5:
+                        gammaerr = 1e8
+
+                    # 2-par fits...
+                    # popt, pcov = optimize.curve_fit(lambda dt, A, tau:fdt(dt, A, tau, 1), mySep, mySF, p0=[0.1, np.min((30,np.max(mySep)))],
+                    #                     bounds = ([0, 5], [0.3, np.max(mySep)]),
+                    #                                     sigma = mySFstd)
+                    # A = popt[0]
+                    # tau = popt[1]
+                    # gamma = 1
+                    # Aerr = np.sqrt(pcov[0, 0])
+                    # tauerr = np.sqrt(pcov[1, 1])
+                    # gammaerr = 0
+                    # if tauerr<1e-5:
+                    #     tauerr = 1e8
+                    # if gammaerr< 1e-5:
+                    #     gammaerr = 1e8
+                        
                     print('curve_fit: tau = %6.1f\t %6.1f'%(tau, tauerr))
                     print('curve_fit: gamma = %6.3f\t %6.3f'%(gamma, gammaerr))
                     # fmin does not give the error
@@ -205,13 +227,14 @@ def main():
                     # A = popt[0]
                     # tau = popt[1]
                     # gamma = popt[2]
-                    fig, (ax0, ax1) = plt.subplots(ncols=2, figsize=(8,4))
-                    ax0.errorbar(mySep, mySF, mySFstd, fmt = 'ok')
-                    myX = np.linspace(0, mySep[0]+mySep[-1], 100)
-                    myY = fdt(myX, A, tau, gamma)
-                    ax0.plot(myX, myY, 'r-')
-                    plt.show()
-                    A = popt[0]
+                    # for debugging -------
+                    # fig, (ax0, ax1) = plt.subplots(ncols=2, figsize=(8,4))
+                    # ax0.errorbar(mySep, mySF, mySFstd, fmt = 'ok')
+                    # myX = np.linspace(0, mySep[0]+mySep[-1], 100)
+                    # myY = fdt(myX, A, tau, gamma)
+                    # ax0.plot(myX, myY, 'r-')
+                    # plt.show()
+                    # A = popt[0]
                 else:
                     tau = 0
                     tauerr = 1e8
@@ -225,16 +248,16 @@ def main():
                 tauerrAll[band,camcol-1] = tauerr
                 gammaerrAll[band, camcol-1] = gammaerr
 
-                if (run == 4874 and band == 2 and camcol == 1):
+                if (run == 4874 and band == 2 and camcol == camcollist[0]):
                     #ax0.errorbar(mySep, mySF, mySFstd, fmt = 'ok')
                     ax0.plot(mySep, mySF, 'ok')
                     myX = np.linspace(0, mySep[0]+mySep[-1], 100)
                     myY = fdt(myX, A, tau, gamma)
-                    chi2 = fdtChi2(mySep, popt, mySF, mySFstd)
+                    #chi2 = fdtChi2(mySep, popt, mySF, mySFstd)
                     ax0.plot(myX, myY, 'r-')
 
                     myYDRW = A*np.sqrt(1-(np.exp(-myX/tau)))
-                    ax0.plot(myX, myYDRW, 'b--')
+                    #ax0.plot(myX, myYDRW, 'b--')
                     # ax0.set_title('run%d, %s-band, camcol=%s' %
                     #        (run, sdss.band[band], camcol))
                     ax0.grid()
@@ -264,16 +287,28 @@ def main():
         tau = a[:, 2]
         tauerr = a[:, 3]
         
-        idx = totalT>0
+        idx = (totalT>0) * (1.5*tau < totalT)
+
+        #plot tau
         ax1.scatter(totalT[idx], tau[idx], s=10, c='r', edgecolors='r')
         ax1.grid()
         ax1.set_ylabel(r'$\tau$ (minutes)', {'fontsize': 16})
         ax1.set_xlabel('Duration of run (minutes)', {'fontsize': 16})
         ax1.set_xlim(0, 600)
-        #ax1.set_ylim(0, 70)
+        ax1.set_ylim(0, 120)
+
+        # plot gamma
+        # gamma = a[:, 4]
+        #ax1.scatter(totalT[idx], gamma[idx], s=10, c='r', edgecolors='r')
+        # ax1.scatter(tau[idx], gamma[idx], s=10, c='r', edgecolors='r')
+        # ax1.grid()
+        # ax1.set_ylabel(r'$\gamma$', {'fontsize': 16})
+        # ax1.set_xlabel('Duration of run (minutes)', {'fontsize': 16})
+        # ax1.set_xlim(0, 600)
+        # #ax1.set_ylim(0, 20)
         
         plt.tight_layout()
-        plt.savefig(pngname)
+        plt.savefig(pngname, dpi=500)
         plt.close()
         
 if __name__ == "__main__":

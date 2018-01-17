@@ -197,7 +197,7 @@ run, as shown in Fig.~\ref{fig:hist} (left).
 The shorter runs tend to give smaller timescale. It is plausible that short runs 
 cannot reliably constrain $\tau$ due to the lack of data toward the low-frequency 
 end of the spectra. There are 12 runs longer than 6 hours and their characteristic timescales
-are within the range of about $\sim10-30$ minutes.
+are within the range of about $\sim5-30$ minutes.
 This results is generally consistent with ~\cite{Racine1996}, where a timescale of 
 $\tau = 17 \pm 1$ minutes was found.
 
@@ -248,11 +248,14 @@ is larger than the value appropriate for damped random walk ($\beta = -2$).
 \caption{Left: The average normalized seeing difference, $<f(\Delta t)>$, as
   a function of the time separation, $\Delta t$, for run 4874, camera
    column 1, in the $r$-band. The fit to Eq.~(\ref{eq:fdt}) gives $f(\Delta t) ^\infty =  
-   0.08$, $\tau = 25.9$ minutes and $\gamma$ = 1.49. The dashed line is the 
-   structure function predicted by damped random walk model with the same 
-   $f(\Delta t) ^\infty$ and $\tau$. 
+   0.088\pm0.005$, $\tau = 45.1\pm10.3$ minutes and $\gamma$ =
+   1.016$\pm$0.102. 
+A damped random walk model has $\gamma=1$.
+%The dashed line is the 
+%   structure function predicted by damped random walk model with the same 
+%   $f(\Delta t) ^\infty$ and $\tau$. 
 Right: The timescale $\tau$ for all 108 runs vs. the duration of each run.
- Note that for most runs $\tau$ is in the range 10-30 minutes
+ Note that for most runs $\tau$ is in the range 5-30 minutes
     ($\tau$ is set to zero for runs shorter than 20 minutes).  
 \label{fig:fdt}}
 \end{figure}
@@ -273,15 +276,20 @@ where $\theta$ is seeing. We then fit the mean value of $f(\Delta t)$ to
 with $f(\Delta t) ^\infty$, $\tau$ and $\gamma$ as free parameters.
 Fig.~\ref{fig:fdt} (left) shows one example of such fits. This functional form is 
 somewhat inspired by damped random walk model, where $\gamma=1$ and the 
-term in brackets is raised to the power of a half. For illustration, Fig.~\ref{fig:fdt} 
-also shows a damped random walk model fit with the same $f(\Delta t) ^\infty$
-and $\tau$. 
+term in brackets is raised to the power of a half. 
+For this particular fit in Fig.~\ref{fig:fdt} (left), $\gamma$ is very close to 1.
+%For illustration, Fig.~\ref{fig:fdt} 
+%also shows a damped random walk model fit with the same $f(\Delta t) ^\infty$
+%and $\tau$. 
 
-The best-fit $\gamma$ is found to be mostly in the range 1.0 -1.5. 
+The best-fit $\gamma$ is found to be mostly in the range 0.5 -1.5. 
 The distribution of $\tau$ vs. 
 the duration of each run is shown in Fig.~\ref{fig:fdt} (right) (somewhat 
-arbitrarily, we set $\tau$ to zero for runs shorter than 20 minutes).  
-While the short runs show a larger variance in $\tau$, it is evident that 
-for most runs the timescale $\tau$ is in the range 10-30 minutes.
+arbitrarily, we set $\tau$ to zero for runs shorter than 20 minutes,
+and those fits where the fitted $\tau$ is longer than 2/3 of the duration
+of the run are deemed unreliable and not shown).  
+%While the short runs show a larger variance in $\tau$, 
+It is evident that 
+for most runs the timescale $\tau$ is in the range 5-30 minutes.
 Therefore, this analysis seems more robust at constraining the characteristic time
 scale than fitting a damped random walk model to empirical PSD. 
