@@ -54,6 +54,10 @@ FWHM of 0.5 arcsec and 2.0 arcsec, respectively, then stretched and compressed t
 \label{fig:vonK}}
 \end{figure}
 
+The $\chi^2$ is defined using the first four data points on the
+measured radial profiles, at 0.16, 0.51, 0.87 and 1.44 arcsec,
+respectively. These points correspond to highest photon counts, and 
+also are least susceptible to errors in the background brightness estimates. 
 
 Although the fitted
 curves agree with the input data points very well, generally much better than the
@@ -76,14 +80,15 @@ thick front-side illuminated chips are used (in all other bands, thin back-side 
 
 To improve the fit quality at large radii, in the second fitting step we introduce an
 empirical ``instrumental'' PSF. Despite the name, this component might also include 
-effects not modeled by the \vk theory, such as aerosol scattering in the atmosphere,
+effects not modeled by the \vk~theory, such as aerosol scattering in the atmosphere,
 dust on the mirrors, and scattering in the CCDs. The observed PSF can be expressed 
 as a convolution of the atmosphere, represented 
 by the \vk, and the instrumental PSF,
 \begin{equation}
         \textrm{PSF} = \textrm{vonK} (\textrm{FWHM}) \otimes \textrm{PSF}_{\textrm{inst}},
 \end{equation} 
-where vonK is the \vk~shape, whose only parameter is its FWHM.
+where vonK is the \vk~shape, whose only parameter, FWHM, is fixed to
+the value from step one.
 Fig.~\ref{fig:psffit} shows that the tails of the PSF can be well
 described using a second order polynomial in the logarithmic space of
 the intensity.
@@ -111,25 +116,27 @@ fixed for each band-camera-column combination.
 $\eta$, the relative normalization of the 
 tail in the logarithm-space, is the only free
 parameter of the instrumental PSF.
-The $a$ and $b$ values come from a one-time fit using the same PSF functions,
+The $a$ and $b$ values come from a one-time least-square fit using the same PSF functions,
 but with $a$, $b$, and $\eta$ as additional free parameters.
 We used here run 94, field 11 for these one-time fits, but verified that 
 the results are stable for other choices of run and field. 
 These fits are very slow but need to be done only once.
 The best-fit values of $a$ and $b$ are listed in Table~\ref{tab:abc}.
-Although this second fitting step involves a 2-dimensional convolution,
+This second fitting step is also a least-square fit, using all the data points
+with radii up to $\sim$30 arcsec.
+Although it involves a 2-dimensional convolution,
 there is only one free parameter in the fit: $\eta$. 
 Each two-step PSF fit can be done in a few seconds.
 
 Fig.~\ref{fig:psffit} shows the results of our PSF fits from run 4874. The two-parameter
-best fits describe the PSF profiles quite well, both in the core and
+fits describe the PSF profiles quite well, both in the core and
 in the tails. The addition of the instrumental PSF significantly improves the fit quality, 
 especially in the $i$-band. 
 
 Fig.~\ref{fig:psffit} also shows the original SDSS ``double Gaussian plus power-law wing'' fits,
 described by eq.~\ref{eq:SDSSPSF}. They sometimes fail catastrophically; our analysis revealed
 two kinds of failures: one case is characterized by $p_0 =1E-7$ and
-another by $\beta=3 or 10$.
+another by $\beta$=3 or 10.
 For the sample of 947,400 PSF fits analyzed here, each failure case occurs with a frequency of about 12\%. 
 Inspection of the SDSS code (findPsf.c) reveals that these values signal bad fits which did not 
 converge for various (unknown) reasons. 

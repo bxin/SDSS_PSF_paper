@@ -17,7 +17,7 @@ processing pipeline, but here it is modeled with two free model parameters, rath
 than six as in SDSS pipeline (of course, the SDSS image processing pipeline had
 to be designed with adequate flexibility to be able to efficiently and robustly 
 handle various unanticipated behavior). We find that the PSF profile is well 
-described by theoretical predictions based theoretical predictions based on both 
+described by theoretical predictions based on both 
 Kolmogorov and \vk's turbulence theory (see Fig.~\ref{fig:psffit}). Given the extra 
 degree of freedom due to the instrumental PSF, the shape of the measured profile alone 
 is insufficient to reliably rule out either of the two theoretical profiles.  
@@ -32,6 +32,8 @@ We note that most of the long-term seeing statistics are measured at visible
 wavelengths. The knowledge of the wavelength-dependence of the seeing is useful 
 for extrapolating the seeing statistics to other wavelengths, for example, to
 the near-infrared where a lot of the adaptive optics programs operate. 
+PSF-sensitive galaxy measurements require that the PSFs measured from
+stars be interpolated both spatially and in color into galactic PSFs.
 
 We have also measured the characteristic angular and temporal scales on which 
 the seeing decorrelates. The angular structure function saturates at scales beyond 
