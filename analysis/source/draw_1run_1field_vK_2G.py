@@ -19,6 +19,8 @@ def main():
                         help='Run Number')
     parser.add_argument('ifield', type=int,
                         help='Field Number')
+    parser.add_argument('-fitab', help='slow fits to get a and b values for the tail',
+                        action='store_true')
     args = parser.parse_args()
 
     start = time.time()
@@ -46,7 +48,10 @@ def main():
     vonK1arcsec = np.vstack((radius, vonK))
     grid1d = np.linspace(-50, 50, 1001)
     vonK2D = np.loadtxt('data/vonK1.0.txt')
-    tailPar = np.loadtxt('data/tailPar.txt')
+    if args.fitab:
+        tailPar = np.loadtxt('data/tailPar0.txt')
+    else:
+        tailPar = np.loadtxt('data/tailPar.txt')
 
     run = args.irun
     print('------ running on run# %d ---------' % run)
@@ -54,6 +59,9 @@ def main():
                           sharey='row', figsize=(15, 10))  # a plot is for a run
 
     outdir = "%s/%d/" % (rootName, run)
+    if args.fitab:
+        outputFile = 'data/tailPar.txt'
+        fidw = open(outputFile, 'w')
     for camcol in range(1, nCamcol + 1): #(2,3): #
         print('running on camcol#%d' % camcol)
         datafile = outdir + "photoField-%06d-%d.fits" % (run, camcol)
@@ -71,27 +79,38 @@ def main():
             psf = sdsspsf(hdu1, args.ifield, iBand, run, camcol)
             psf.tailP = tailPar[iBand*nCamcol + camcol-1]
 
-            # convert tailP into abc, so that we can put them in Latex table.----
-            x1= psf.tailP[3]
-            y1= psf.tailP[4]
-            x2 =psf.tailP[5]
-            y2 =psf.tailP[6]
-            x3 =psf.tailP[7]
-            y3 =psf.tailP[8]
-            abcM = np.array([[x1**2, x1, 1], [x2**2, x2, 1], [x3**2, x3, 1]])
-            abc = np.dot(np.linalg.inv(abcM), np.array([[y1] ,[y2], [y3]]))
-            print('a (x 10^-4) = %.1f\n'%(abc[0][0]/abc[2][0]*1e4))
-            print('b (x 10^-2) = %.1f\n'%(abc[1][0]/abc[2][0]*1e2))
-            # end of ----
+            if args.fitab:
+                # convert tailP into abc, so that we can put them in Latex table.----
+                x1= psf.tailP[3]
+                y1= psf.tailP[4]
+                x2 =psf.tailP[5]
+                y2 =psf.tailP[6]
+                x3 =psf.tailP[7]
+                y3 =psf.tailP[8]
+                abcM = np.array([[x1**2, x1, 1], [x2**2, x2, 1], [x3**2, x3, 1]])
+                abc = np.dot(np.linalg.inv(abcM), np.array([[y1] ,[y2], [y3]]))
+                print('a (x 10^-4) = %.1f\n'%(abc[0][0]/abc[2][0]*1e4))
+                print('b (x 10^-2) = %.1f\n'%(abc[1][0]/abc[2][0]*1e2))
+                print('eta (x 10^-2) = %e\n'%(abc[2][0]))
+                # end of ----
     
-            psf.fit2vonK_curve_fit(vonK1arcsec, vonK2D, grid1d)
+            psf.fit2vonK_curve_fit(vonK1arcsec)
             if psf.scaleR < -1:
                 psf.fit2vonK_fmin(vonK1arcsec, vonK2D, grid1d)
-            psf.fit2convEta_curve_fit(vonK2D, grid1d)
-            # psf.fit2conv_curve_fit(vonK2D, grid1d, sigma=0.2)
-            # psf.fit2conv_curve_fit(vonK2D, grid1d, tailB = psf.tailB)
-
+            if args.fitab:
+                psf.fit2conv_curve_fit_fitab(vonK2D, grid1d) # fit for a and b
+            else:
+                # psf.fit2convEta_curve_fit(vonK2D, grid1d)  #initially used this
+                # psf.fit2conv_curve_fit(vonK2D, grid1d, sigma=0.2)
+                # psf.fit2conv_curve_fit(vonK2D, grid1d, tailB = psf.tailB)
+                # psf.fit2convEta_curve_fit_log(vonK2D, grid1d)  #fit in log space
+                psf.fit2conv_curve_fit_log_ab(vonK2D, grid1d)
+                
             print('eta = %.2f\n'%psf.tailEta)
+            if args.fitab:
+                fidw.write('%d \t %d \t %.8f \t %.8f \t %.8f\n'%(
+                    iBand, camcol, psf.tailA, psf.tailB, psf.tailEta))
+            
             #print('chi2=%4.1f/%4.1f, chi2lr = %4.1f/%4.1f, chi2hr=%4.1e/%4.1e' %(
             #    psf.chi2, psf.G2chi2, psf.chi2lr, psf.G2chi2lr, psf.chi2hr, psf.G2chi2hr))
 
@@ -151,6 +170,10 @@ def main():
     # plt.show()
     plt.savefig('output/run%d_fld%d_psf_vK_2G_%s.png' %
                 (run, args.ifield, args.yscale), dpi=500)
+
+    if args.fitab:
+        fidw.close()
+        
     end = time.time()
     print('time = %8.2fs' % (end - start))
     sys.exit()

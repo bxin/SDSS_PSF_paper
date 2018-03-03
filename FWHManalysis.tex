@@ -12,19 +12,19 @@ the $i$ band behavior, do not matter here because we focus only on the FWHM beha
 The Kolmogorov turbulence theory gives a standard formula for the FWHM of a long-exposure
 seeing-limited PSF in a large telescope,
 \begin{equation}
-\textrm{FWHM}^{\rm Kolm}(\lambda, X) = \frac{0.976\lambda}{r_0(\lambda,X)}.
+\textrm{FWHM}^{\rm Kolm}(\lambda, X) = \frac{0.976\lambda}{r_0(\lambda,X)},
 \label{eq:fwhmkolm}
 \end{equation}
-Here $\lambda$ is the wavelength, $X$ is the airmass, and $r_0$ is the Fried parameter.
-We use $\lambda = 500$ nm as the reference wavelength,
 \begin{equation}
-\label{eq:airmass}
-r_0(\lambda,X) = r_0(500) \left(\frac{\lambda}{500}\right)^{1.2}
+r_0(\lambda,X) = r_0(\lambda_0, 1) \left(\frac{\lambda}{\lambda_0}\right)^{1.2}
 \frac{1}{X^{0.6}},
 \label{eq:r0}
 \end{equation}
-where $r_0(500)$ is the $r_0$ for $\lambda=500$ nm and $X$=1, and $\lambda$ is 
-expressed in nm.
+where $\lambda$ is the wavelength in meter, $X$ is the airmass,
+$r_0$ is the Fried parameter in meter, and $\textrm{FWHM}^{\rm Kolm}$
+is in radian.
+We use $\lambda_0$ as the reference wavelength.
+$r_0(\lambda_0, 1)$ is the $r_0$ for $\lambda=\lambda_0$ and $X$=1.
 Substituting Eq.~(\ref{eq:r0}) into (\ref{eq:fwhmkolm}), it is easy to show that 
 \begin{equation}
 \textrm{FWHM}^{\rm Kolm} \propto \lambda^{-0.2}.
@@ -39,7 +39,11 @@ which is a function of the outer scale $L_0$~\citep{Tokovinin2002},
 \textrm{FWHM}^{\rm vonK}(\lambda, X) = \frac{0.976\lambda}{r_0(\lambda,X)}
 \sqrt{1-2.183\left( \frac{r_0(\lambda,X) }{L_0} \right)^{0.356}}.
 \end{equation}
-If a power-law approximation is attempted,  FWHM$^{\rm vonK} \propto \lambda^{\alpha} $, 
+If a power-law approximation is attempted,  
+\begin{equation}
+\textrm{FWHM}^{\rm vonK} \propto \lambda^{\alpha},
+\label{eq:fwhmvonk} 
+\end{equation}
 $\alpha$ becomes a function of $L_0$ and $r_0$ at a specified
 wavelength and airmass, or equivalently, a function of $L_0$ and FWHM$^{\rm vonK}$.
 For the subsequent analysis, we adopt the $r$ band as the fiducial band (with
@@ -72,21 +76,25 @@ inconsistent with Kolmogorov predictions ($L_0=\infty$) and reasonably well desc
  
 For each run from SDSS Stripe 82 data, and each camera column, we make
 a least-square fit to all the simultaneous FWHM measurements across the optical bands, to
-estimate the power-law index $\alpha$. All FWHM values are multiplied by $1/X^{0.6}$ to 
+estimate the power-law index $\alpha$ (see Eq.~\ref{eq:fwhmvonk}). 
+The errors on the FWHM measurements in each optical band comes from
+averaging over all the fields.
+All FWHM values are multiplied by $1/X^{0.6}$ to 
 correct for the airmass effects\footnote{The airmass dependence for the \vk~model 
 is not strictly a power law, but can be approximated by a power law with good precision.
 By numerically fitting a power law to eq.~\ref{eq:FWHMvK}, we obtained a power-law index 
 of 0.63. We ignore the difference between 0.63 and 0.6 as it results in seeing variations 
 below 1\% for the probed range of airmass.}.
 
+All FWHM are normalized using 
+corresponding FWHM in the $r$-band taken at the same moment in time. 
 We take into account that the same field number does not correspond to the same
 time in all filters. The scanning order in the SDSS camera is $r$-$i$-$u$-$z$-$g$, with the delay between the two 
 successive filters corresponding to 2 fields. That is, if we take the field number $F$ for the $r$-band, then
 we need to take FWHM for the $i$-band from field $F-2$, for the $u$-band
 from $F-4$, and so on. 
 
-Fig.~\ref{fig:fwhm_lambda} shows such fits for run 4874. All FWHM are normalized using 
-corresponding FWHM in the $r$-band taken at the same moment in time. Significant deviation 
+Fig.~\ref{fig:fwhm_lambda} shows such fits for run 4874. Significant deviation 
 from $\alpha = -0.2$, predicted by the Kolmogorov model, can be seen in most bands.
 We find that fits in columns 1-5 are always similar, while in column 6 the slope is 
 systematically lower. Similarly, the data in the $ugri$ bands are well fit by the power law, 
@@ -231,7 +239,9 @@ perhaps informed by the PhoSim modeling, for future work.
 \vskip -0.2in
 \caption{Left: The symbols show the best-fit characteristic timescale $\tau$ in 
 damped random walk for all 108 runs in Stripe 82 vs. the duration of 
-each run. It is plausible that short runs cannot reliably constrain $\tau$.
+each run. It is plausible that short runs cannot reliably constrain
+$\tau$.
+The vertical dashed line indicates run duration of 6 hours.
 Right: The power-law index $\beta$ for a single power law fit for all 108 
 runs vs. the duration of each run. Note that for the majority of runs, $\beta$
 is larger than the value appropriate for damped random walk ($\beta = -2$). 
@@ -257,7 +267,8 @@ A damped random walk model has $\gamma=1$.
 %   $f(\Delta t) ^\infty$ and $\tau$. 
 Right: The timescale $\tau$ vs. the duration of each run.
  Note that for most runs $\tau$ is in the range 5-30 minutes
-    ($\tau$ is set to zero for runs shorter than 20 minutes).  
+    (runs shorter than 20 minutes or where the fitted $\tau$ is longer than 2/3 of the duration
+    of the run are left out).  
 \label{fig:fdt}}
 \end{figure}
 
@@ -286,9 +297,9 @@ For this particular fit in Fig.~\ref{fig:fdt} (left), $\gamma$ is very close to 
 The best-fit $\gamma$ is found to be mostly in the range 0.5 -1.5. 
 The distribution of $\tau$ vs. 
 the duration of each run is shown in Fig.~\ref{fig:fdt} (right) (somewhat 
-arbitrarily, we set $\tau$ to zero for runs shorter than 20 minutes,
-and those fits where the fitted $\tau$ is longer than 2/3 of the duration
-of the run are deemed unreliable and not shown).  
+arbitrarily,
+runs shorter than 20 minutes and those where the fitted $\tau$ is longer than 2/3 of the duration
+    of the run are deemed unreliable and not shown).  
 %While the short runs show a larger variance in $\tau$, 
 It is evident that 
 for most runs the timescale $\tau$ is in the range 5-30 minutes.

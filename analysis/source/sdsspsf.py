@@ -167,90 +167,17 @@ class sdsspsf(object):
             self.scaleR = -999
             self.scaleV = -999
             # sys.exit()
-
-    def fit2conv_curve_fit(self, vonK2D, grid1d, sigma=None, tailB=None):
-        try:
-            self.tailA = 2e-5
-            if (sigma is None) and (tailB is None):
-                errLinear = self.OKprofileLinear.copy()
-                errLinear[:self.nprofErr] = 100
-                popt, pcov = optimize.curve_fit(
-                    lambda r, sigma, b: convVonK(
-                        vonK2D, grid1d, r, self.scaleR, self.scaleV, sigma, self.tailA, b),
-                    self.OKprofRadii, self.OKprofileLinear, p0=[0.2, -7],
-                    bounds = ([0.1, -10], [0.4, -5]), 
-                    sigma=errLinear, absolute_sigma=True)
-
-                self.tailSigma = popt[0]
-                self.tailB = popt[1]
-            elif (not tailB is None): #tail is known
-                errLinear = self.OKprofileLinear.copy()
-                # errLinear[:self.nprofErr] = 100 #self.OKprofileErrLinear[:self.nprofErr]
-                popt, pcov = optimize.curve_fit(
-                    lambda r, sigma: convVonK(
-                        vonK2D, grid1d, r, self.scaleR, self.scaleV, sigma, self.tailA, tailB),
-                    self.OKprofRadii, self.OKprofileLinear, p0=[0.1],
-                    sigma=errLinear, absolute_sigma=True)
-
-                self.tailSigma = popt[0]
-                self.tailB = tailB
-            elif (not sigma is None): #sigma is known
-                errLinear = self.OKprofileLinear.copy()
-                errLinear[:-1] = 100                
-                popt, pcov = optimize.curve_fit(
-                    lambda r, tailB: convVonK(
-                        vonK2D, grid1d, r, self.scaleR, self.scaleV, sigma, self.tailA, tailB),
-                    self.OKprofRadii, self.OKprofileLinear, p0=[-7],
-                    sigma=errLinear, absolute_sigma=True)
-
-                self.tailSigma = sigma
-                self.tailB = popt[0]
-
-            newN = convVonK2D(vonK2D, grid1d, self.scaleR,
-                              self.scaleV, self.tailSigma, self.tailA, self.tailB)
-            m = int((len(grid1d) - 1) / 2)
-            self.vR = grid1d[m:]
-            m1 = max(np.argmax(newN == np.max(newN), axis=0))
-            m2 = max(np.argmax(newN == np.max(newN), axis=1))
-            self.vv = newN[m1, m2:m2 + m + 1]
-
-            yy = convVonK(vonK2D, grid1d, self.OKprofRadii, self.scaleR, self.scaleV,
-                          self.tailSigma, self.tailA, self.tailB)
-            self.chi2 = sum(((yy - self.OKprofileLinear) / errLinear)
-                            ** 2) / (len(self.OKprofRadii) - 2)
-            idx = self.OKprofRadii < 2
-            self.chi2lr = sum(
-                ((yy[idx] - self.OKprofileLinear[idx]) / errLinear[idx])**2) / (sum(idx))
-            idx = self.OKprofRadii >= 2
-            self.chi2hr = sum(
-                ((yy[idx] - self.OKprofileLinear[idx]) / errLinear[idx])**2) / sum(idx)
-
-        except (RuntimeError, ValueError) as e:
-            print('in fit2conv_curve_fit\n')
-            print(e)
-            print('run#=%d, camcol=%d, field=%d, band=%d\n' % (
-                self.runNo, self.camcol, self.field, self.band))
-            print('x=\n')
-            print(self.OKprofRadii)
-            print('y=\n')
-            print(self.OKprofileLinear)
-            print('err=\n')
-            print(errLinear)
-            self.tailSigma = -999
-            self.tailA = -999
-            self.tailB = -999
-            # sys.exit()
             
-    def fit2convEta_curve_fit(self, vonK2D, grid1d):
+    def fit2conv_curve_fit(self, vonK2D, grid1d):
         # use gaussian+10^[eta*(ax^2+bx+c)] as instrumental PSF 
         try:
-            errLinear = self.OKprofileLinear.copy()
+            errLinear = self.OKprofileErrLinear.copy()
             errLinear[self.nprofErr:] = 100
-            assert self.scaleR>-1, "Exiting fit2convEta_curve_fit, scaleR<-1" 
+            assert self.scaleR>-1, "Exiting fit2conv_curve_fit, scaleR<-1" 
             idx = min(abs(self.OKprofRadii - 15)) == abs(self.OKprofRadii - 15)
             errLinear[idx] = 1e-10
             popt, pcov = optimize.curve_fit(
-                lambda r, eta: convVonKEta(
+                lambda r, eta: convVonK(
                     vonK2D, grid1d, r, self.scaleR, self.scaleV, eta, self.tailP),
                 self.OKprofRadii, self.OKprofileLinear, p0=[1],
                 bounds = (0.1, 10), 
@@ -266,7 +193,7 @@ class sdsspsf(object):
             m2 = max(np.argmax(newN == np.max(newN), axis=1))
             self.vv = newN[m1, m2:m2 + m + 1]
 
-            yy = convVonKEta(vonK2D, grid1d, self.OKprofRadii, self.scaleR, self.scaleV,
+            yy = convVonK(vonK2D, grid1d, self.OKprofRadii, self.scaleR, self.scaleV,
                           self.tailEta, self.tailP)
             self.chi2 = sum(((yy - self.OKprofileLinear) / errLinear)
                             ** 2) / (len(self.OKprofRadii) - 2)
@@ -299,7 +226,198 @@ class sdsspsf(object):
                 self.vv = -999
             
             # sys.exit()
+            
+    def fit2conv_curve_fit_log(self, vonK2D, grid1d):
+        # use gaussian+10^[eta*(ax^2+bx+c)] as instrumental PSF 
+        try:
+            errLog = self.OKprofileErr.copy()
+            # errLinear[self.nprofErr:] = 100
+            assert self.scaleR>-1, "Exiting fit2conv_curve_fit_log, scaleR<-1" 
+            # idx = min(abs(self.OKprofRadii - 15)) == abs(self.OKprofRadii - 15)
+            # errLinear[idx] = 1e-10
+            popt, pcov = optimize.curve_fit(
+                lambda r, eta: logConvVonK(
+                    vonK2D, grid1d, r, self.scaleR, self.scaleV, eta, self.tailP),
+                self.OKprofRadii, self.OKprofile, p0=[1],
+                bounds = (0.1, 10), 
+                sigma=errLog, absolute_sigma=True)
 
+            self.tailEta = popt[0]
+
+            newN = convVonK2D(vonK2D, grid1d, self.scaleR,
+                              self.scaleV, self.tailEta, self.tailP)
+            m = int((len(grid1d) - 1) / 2)
+            self.vR = grid1d[m:]
+            m1 = max(np.argmax(newN == np.max(newN), axis=0))
+            m2 = max(np.argmax(newN == np.max(newN), axis=1))
+            self.vv = newN[m1, m2:m2 + m + 1]
+
+            yy = logConvVonK(vonK2D, grid1d, self.OKprofRadii, self.scaleR, self.scaleV,
+                          self.tailEta, self.tailP)
+            self.chi2 = sum(((yy - self.OKprofile) / errLog)
+                            ** 2) / (len(self.OKprofRadii) - 2)
+            idx = self.OKprofRadii < 2
+            self.chi2lr = sum(
+                ((yy[idx] - self.OKprofile[idx]) / errLog[idx])**2) / (sum(idx))
+            idx = self.OKprofRadii >= 2
+            self.chi2hr = sum(
+                ((yy[idx] - self.OKprofile[idx]) / errLog[idx])**2) / sum(idx)
+
+        except (RuntimeError, ValueError, AssertionError) as e:
+            print('in fit2conv_curve_fit\n')
+            print(e)
+            print('run#=%d, camcol=%d, field=%d, band=%d\n' % (
+                self.runNo, self.camcol, self.field, self.band))
+            print('x=\n')
+            print(self.OKprofRadii)
+            print('y=\n')
+            print(self.OKprofileLinear)
+            print('err=\n')
+            print(errLinear)
+            self.tailEta= -999
+            if self.scaleR < -1:
+                self.chi2 = -999
+                self.chi2lr = -999
+                self.chi2hr = -999
+                self.vvR = -999
+                self.vvv = -999
+                self.vR = -999
+                self.vv = -999
+            
+            # sys.exit()
+
+    def fit2conv_curve_fit_log_ab(self, vonK2D, grid1d):
+        # use gaussian+10^[eta*(ax^2+bx+c)] as instrumental PSF 
+        try:
+            errLog = self.OKprofileErr.copy()
+            # errLinear[self.nprofErr:] = 100
+            assert self.scaleR>-1, "Exiting fit2conv_curve_fit_log, scaleR<-1" 
+            # idx = min(abs(self.OKprofRadii - 15)) == abs(self.OKprofRadii - 15)
+            # errLinear[idx] = 1e-10
+            popt, pcov = optimize.curve_fit(
+                lambda r, eta: logConvVonKAB(
+                    vonK2D, grid1d, r, self.scaleR, self.scaleV, eta, self.tailP[2], self.tailP[3]),
+                self.OKprofRadii, self.OKprofile, p0=[self.tailP[4]],
+                bounds = (min(self.tailP[4]*10, self.tailP[4]*0.1), max(self.tailP[4]*10, self.tailP[4]*0.1)), 
+                sigma=errLog, absolute_sigma=True)
+
+            self.tailEta = popt[0]
+
+            newN = convVonKAB2D(vonK2D, grid1d, self.scaleR,
+                              self.scaleV, self.tailEta, self.tailP[2], self.tailP[3])
+            m = int((len(grid1d) - 1) / 2)
+            self.vR = grid1d[m:]
+            m1 = max(np.argmax(newN == np.max(newN[100:-100,100:-100]), axis=0))
+            m2 = max(np.argmax(newN == np.max(newN[100:-100,100:-100]), axis=1))
+            self.vv = newN[m1, m2:m2 + m + 1]
+
+            yy = logConvVonKAB(vonK2D, grid1d, self.OKprofRadii, self.scaleR, self.scaleV,
+                          self.tailEta, self.tailP[2], self.tailP[3])
+            self.chi2 = sum(((yy - self.OKprofile) / errLog)
+                            ** 2) / (len(self.OKprofRadii) - 2)
+            idx = self.OKprofRadii < 2
+            self.chi2lr = sum(
+                ((yy[idx] - self.OKprofile[idx]) / errLog[idx])**2) / (sum(idx))
+            idx = self.OKprofRadii >= 2
+            self.chi2hr = sum(
+                ((yy[idx] - self.OKprofile[idx]) / errLog[idx])**2) / sum(idx)
+
+        except (RuntimeError, ValueError, AssertionError) as e:
+            print('in fit2conv_curve_fit\n')
+            print(e)
+            print('run#=%d, camcol=%d, field=%d, band=%d\n' % (
+                self.runNo, self.camcol, self.field, self.band))
+            print('x=\n')
+            print(self.OKprofRadii)
+            print('y=\n')
+            print(self.OKprofileLinear)
+            print('err=\n')
+            print(errLinear)
+            self.tailEta= -999
+            if self.scaleR < -1:
+                self.chi2 = -999
+                self.chi2lr = -999
+                self.chi2hr = -999
+                self.vvR = -999
+                self.vvv = -999
+                self.vR = -999
+                self.vv = -999
+            
+            # sys.exit()
+            
+    def fit2conv_curve_fit_fitab(self, vonK2D, grid1d):
+        # use gaussian+10^[eta*(ax^2+bx+c)] as instrumental PSF 
+        try:
+            errLog = self.OKprofileErr.copy()
+            # errLinear[self.nprofErr:] = 100
+            assert self.scaleR>-1, "Exiting fit2conv_curve_fit_ab, scaleR<-1" 
+            # idx = min(abs(self.OKprofRadii - 15)) == abs(self.OKprofRadii - 15)
+            # errLinear[idx] = 1e-10
+            x1= self.tailP[3]
+            y1= self.tailP[4]
+            x2 =self.tailP[5]
+            y2 =self.tailP[6]
+            x3 =self.tailP[7]
+            y3 =self.tailP[8]
+            abcM = np.array([[x1**2, x1, 1], [x2**2, x2, 1], [x3**2, x3, 1]])
+            abc = np.dot(np.linalg.inv(abcM), np.array([[y1] ,[y2], [y3]]))
+            tailA0 = abc[0][0]/abc[2][0]
+            tailB0 = abc[1][0]/abc[2][0]
+            tailEta0 = abc[2][0]
+            popt, pcov = optimize.curve_fit(
+                lambda r, eta, tailA, tailB: logConvVonKAB(
+                    vonK2D, grid1d, r, self.scaleR, self.scaleV, eta, tailA, tailB),
+                self.OKprofRadii, self.OKprofile, p0=[tailEta0, tailA0, tailB0],
+                bounds = ([min(tailEta0*10, tailEta0*0.1),-2*abs(tailA0),-2*abs(tailB0)],[max(tailEta0*10, tailEta0*0.1),2*abs(tailA0),2*abs(tailB0)]),
+                sigma=errLog, absolute_sigma=True)
+
+            self.tailEta = popt[0]
+            self.tailA = popt[1]
+            self.tailB = popt[2]
+            print('From fit: tailA = %.1f, tailB = %.1f\n'%(self.tailA*1e4, self.tailB*1e2))
+
+            newN = convVonKAB2D(vonK2D, grid1d, self.scaleR,
+                              self.scaleV, self.tailEta, self.tailA, self.tailB)
+            m = int((len(grid1d) - 1) / 2)
+            self.vR = grid1d[m:]
+            m1 = max(np.argmax(newN == np.max(newN), axis=0))
+            m2 = max(np.argmax(newN == np.max(newN), axis=1))
+            self.vv = newN[m1, m2:m2 + m + 1]
+
+            yy = logConvVonKAB(vonK2D, grid1d, self.OKprofRadii, self.scaleR, self.scaleV,
+                          self.tailEta, self.tailA, self.tailB)
+            self.chi2 = sum(((yy - self.OKprofile) / errLog)
+                            ** 2) / (len(self.OKprofRadii) - 2)
+            idx = self.OKprofRadii < 2
+            self.chi2lr = sum(
+                ((yy[idx] - self.OKprofile[idx]) / errLog[idx])**2) / (sum(idx))
+            idx = self.OKprofRadii >= 2
+            self.chi2hr = sum(
+                ((yy[idx] - self.OKprofile[idx]) / errLog[idx])**2) / sum(idx)
+
+        except (RuntimeError, ValueError, AssertionError) as e:
+            print('in fit2conv_curve_fit\n')
+            print(e)
+            print('run#=%d, camcol=%d, field=%d, band=%d\n' % (
+                self.runNo, self.camcol, self.field, self.band))
+            print('x=\n')
+            print(self.OKprofRadii)
+            print('y=\n')
+            print(self.OKprofileLinear)
+            print('err=\n')
+            print(errLog)
+            self.tailEta= -999
+            if self.scaleR < -1:
+                self.chi2 = -999
+                self.chi2lr = -999
+                self.chi2hr = -999
+                self.vvR = -999
+                self.vvv = -999
+                self.vR = -999
+                self.vv = -999
+            
+            # sys.exit()
+            
     # used to use fminbound(), but it is for 1D optimization
     # tried fmin_cg(), but our gradient can only be calculated numerically
     # fmin() takes longer and should be more accurate,
@@ -405,26 +523,8 @@ def scaleVonKRChi2(vonK1arcsec, r, scaleRV, y, err):
     return chi2
 
 
-def convVonK(vonK2D, grid1d, r, scaleR, scaleV, sigma, a, b):
 
-    newN = convVonK2D(vonK2D, grid1d, scaleR, scaleV, sigma, a, b)
-    m = int((len(grid1d) - 1) / 2)
-    vR = grid1d[m:]
-    m1 = max(np.argmax(newN == np.max(newN), axis=0))
-    m2 = max(np.argmax(newN == np.max(newN), axis=1))
-    vv = newN[m1, m2:m2 + m + 1]
-
-    # stepR = vR[1] - vR[0]
-    p = np.zeros(len(r))
-    if scaleR > 0:
-        f = interpolate.interp1d(vR, vv, bounds_error=False)
-        p = f(r)
-
-        print('scaleR = %7.4f, f0=%7.4f, f[-1]=%7.2e, sigma=%.2f, b=%.1f' % (
-            scaleR, p[0], p[-1], sigma, b))
-    return p
-
-def convVonKEta(vonK2D, grid1d, r, scaleR, scaleV, eta, tailP):
+def convVonK(vonK2D, grid1d, r, scaleR, scaleV, eta, tailP):
 
     newN = convVonK2D(vonK2D, grid1d, scaleR, scaleV, eta, tailP)
     m = int((len(grid1d) - 1) / 2)
@@ -443,6 +543,37 @@ def convVonKEta(vonK2D, grid1d, r, scaleR, scaleV, eta, tailP):
         #     scaleR, eta, f(15)))
     return p
 
+def convVonKAB(vonK2D, grid1d, r, scaleR, scaleV, eta, tailA, tailB):
+
+    newN = convVonKAB2D(vonK2D, grid1d, scaleR, scaleV, eta, tailA, tailB)
+    m = int((len(grid1d) - 1) / 2)
+    vR = grid1d[m:]
+    m1 = max(np.argmax(newN == np.max(newN[100:-100,100:-100]), axis=0))
+    m2 = max(np.argmax(newN == np.max(newN[100:-100,100:-100]), axis=1))
+    vv = newN[m1, m2:m2 + m + 1]
+    # print('m1=%d, m2=%d, eta=%e, tailA=%e, tailB=%e\n'%(m1, m2, eta, tailA, tailB))
+    
+    # stepR = vR[1] - vR[0]
+    p = np.zeros(len(r))
+    if (scaleR > 0) and (vv.shape[0]==vR.shape[0]):
+        f = interpolate.interp1d(vR, vv, bounds_error=False)
+        p = f(r)
+
+        # print('scaleR = %7.4f, eta=%7.4f, p(15arcsec)=%e' % (
+        #     scaleR, eta, f(15)))
+    # print(np.any(~np.isfinite(vv)))
+    return p
+
+def logConvVonK(vonK2D, grid1d, r, scaleR, scaleV, eta, tailP):
+    return np.log10(convVonK(vonK2D, grid1d, r, scaleR, scaleV, eta, tailP))
+
+def logConvVonKAB(vonK2D, grid1d, r, scaleR, scaleV, eta, tailA, tailB):
+    aaa = convVonKAB(vonK2D, grid1d, r, scaleR, scaleV, eta, tailA, tailB)
+    # print(aaa)
+    if np.any(aaa==0):
+        return aaa
+    else:
+        return np.log10(aaa)
 
 def convVonK2D(vonK2D, grid1d, scaleR, scaleV, eta, tailP):
 
@@ -464,6 +595,27 @@ def convVonK2D(vonK2D, grid1d, scaleR, scaleV, eta, tailP):
     abc = np.dot(np.linalg.inv(abcM), np.array([[y1] ,[y2], [y3]]))
     G12d = 10**(eta*(abc[0][0]*rm*rm+abc[1][0]*rm+abc[2][0]))
 
+    g2d = np.exp(-(xm * xm + ym * ym) / 2 / sigma**2) + G12d
+    psffft = np.fft.fftshift(np.fft.fft2(np.fft.fftshift(g2d), s=g2d.shape))
+    prodfft = psffft * vkfft
+
+    new = np.absolute(np.fft.fftshift(np.fft.ifft2(np.fft.fftshift(prodfft),
+                                                   s=prodfft.shape)))
+    newN = new / np.max(new) * scaleV
+    return newN
+
+def convVonKAB2D(vonK2D, grid1d, scaleR, scaleV, eta, tailA, tailB):
+
+    x1 = grid1d * scaleR
+    f = interpolate.RectBivariateSpline(x1, x1, vonK2D, kx=1, ky=1)
+    vk = f(grid1d, grid1d)
+    vkfft = np.fft.fftshift(np.fft.fft2(np.fft.fftshift(vk), s=vk.shape))
+
+    xm, ym = np.meshgrid(grid1d, grid1d)
+    rm = np.sqrt(xm*xm+ym*ym)
+    G12d = 10**(eta*(tailA*rm*rm+tailB*rm+1))
+
+    sigma = 0.1
     g2d = np.exp(-(xm * xm + ym * ym) / 2 / sigma**2) + G12d
     psffft = np.fft.fftshift(np.fft.fft2(np.fft.fftshift(g2d), s=g2d.shape))
     prodfft = psffft * vkfft

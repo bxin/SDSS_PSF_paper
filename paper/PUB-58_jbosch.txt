@@ -1,0 +1,90 @@
+PUB-58 Notes
+============
+
+OVERALL
+-------
+
+The paper is a very useful analysis of a dataset that (to my knowledge) has never been used for this purpose.  I'd like to see more detail about the methodology - essentially being explicit about how models are being fit, what the data points are, and what parameters are free at each step.  There are also a couple of places where I have some questions about whether certain approximations are valid.  Since my primary concerns are about clarity rather than correctness, I have no objection to these being addressed during the project-wide review period rather than before it starts.
+
+Also, this may reflect my personal background and biases as much as the paper itself, but I naturally interpret statements like "profile can be parameterized by only two parameters" (which are present in the abstract, introduction, and conclusion) to be a statement about what's needed for per-epoch PSF modeling, not a statement about the average behavior of the profile w.r.t. e.g. wavelength.  I don't know if there's a better way to phrase this (maybe using the word "statistical" more), but that would have helped my initial expectation of this paper to align better with its content.
+
+Our Response:
+Instead of "profile", we now use "radial profile" at those a few places where it may not be obvious that we mean the PSF as a function of radius.
+
+Section 1
+---------
+
+Fig. 1: These plots really don't show much difference between the profiles.  Would using log(radius) or changing the axes limits help with that?  I think showing the differences is mor eimportant than showing the profile at zero radius, for instance, if the profiles are most similar there.
+
+Our Response:
+Great suggestion. We now use log(radius) as the x-axis.
+
+To Zeljko:
+I think this is better than having a 2x2 figure, which occupies a lot of space. I now do as Jim suggests.
+Nevertheless, I made the 2x2 figure, as we discussed. It can be found in analysis/output/vonK_2x2.png
+
+Section 3
+---------
+
+Section 3, paragraph 3: Does "fit the measured PSF profile" mean fitting the K-L model, fitting stars directly, or using the large-aperture photometry ssequence?  I think it's got to be the aperture photometry, but this should definitely be made more clear.
+
+Our Response:
+Instead of "profile", we now use "radial profile" at those a few places where it may not be obvious that we mean the PSF as a function of radius. Hope this helps clarify things.
+
+
+Section 3, paragraph 4: I don't have the necessary background to judge whether the approximation described here is an appropriate one, but it does seem that the entire analysis rests on it.  I'd like to confirm that one of the other internal reviewers of the paper is qualified to comment more authoritatively on it.  It would be even better if the authors could directly demonstrate with some analysis on a small subset of the data that this approximation does not significantly affect their results.
+
+Our Response:
+The justification for this approximation is provided in Fig. 1. Fig. 1 (left) shows that "the impact of the exact value of L0 on the profile shape is small", while Fig. 1 (right) shows that the von Karman radial profile generated with FWHM=1.0" differs negligibly from those "stretched or compressed" to FWHM=1.0". Hopefully after the above clarifications with the "radial PSF profile", and the remaking of Fig. 1, this message should be clearer. As we also point out at the end of Sec. 5, paragraph 2, the radial profile itself is insufficent for determining the value of L0. Rather, only when we look at FWHM measurements across the optical bands, it is the wavelength dependence of the FWHM that is more consistent with the von Karman model than the Kolmogorov.
+
+Section 3.1, paragraph 1: I don't understand the need for the Gaussian core being "too much widening power...".  If you added that term after an attempt to fit without it failed, it might be clearer if you tell that story.
+
+Our Response:
+This appears to be a point a confusion so far. We have rewritten this part a bit, pointing out explicitly that PSF_inst, as a convolution kernel, needs to have a central core. That is what this narrow Gaussian represents. Hope that clarifies things.
+
+Section 3.1: it'd be good to report *exactly* what function you're optimizing when you're performing the fitting (i.e., if this is a least-squares fit, how do you compute \chi^2).  How the data points are distributed in radius would also be welcome information, as that leads to an implicit weighting even if you're not adding any explicit weights to the data point.  This applies to the first-step fitting in Section 3.0 as well.
+
+Our Response:
+Yes we agree that these are important details about fits which should not have been left out.
+We've added clarifications on how the error bars are obtained, and how the data points are distributed. 
+
+Section 3.1, paragraph 2: this paragraph confusingly goes back and forth between talking about the one-time fits to $a$ and $b$ in the special field and the fits for $\eta$ when also including the convolution van Kalman term.  It's also not clear which of the von Kalman parameters are free vs. fixed to their "step 1" values in the two-step fits.  Expanding this section to include the fitting objective functions as suggested above would help clarify all of this, but I also think it'd be good not start talking about the two-step overall PSF fits until you're completely done talking about the one-time instrumental PSF fits.
+
+Our Reponse:
+The FWHM of the von Karman profile is fixed in step two fitting. Good point. Josh spotted the same thing. This is now added to the text. In response to the "going back and forth" comment, we have rewritten, actually split, this paragraph, by talking about the one-time fits first, then moving onto describing the step-two fits.
+
+Section 3.1, paragraph 3: "best fits" -> "fits" (I don't think the wording makes sense).
+
+Our Reponse:
+Done. Thanks.
+
+Section 4
+---------
+
+Section 4.1, eqn 6: I'm pretty sure this equation is part of the Kolmogorov theory for the wavelength-dependence of the FWHM (along with eqn 5), but it isn't completely obvious from the text; might be better to give both equations up front, and then define the variables within them.
+
+Our Reponse:
+Done. Thanks.
+
+Section 4.1, paragraph 2: since you're about to use it for the actual fitting, it'd be good to have a numbered-equation version of the equation in the text in which you approximate eqn. 8 as a power law.
+
+Our Reponse:
+Done. Thanks.
+
+Section 4.1, paragraphs 3-4: As in Section 3, it'd also be good to report exactly what objective function you're optimizing in the fit, and what the data points are.  At first I thought you were fitting one free r-band FWHM per run, but from paragraph 4 it seems like you're fitting one FWHM free r-band per (band-offset) field.
+
+Our Reponse:
+We've added more details to describe how the error on each FWHM data point is obtained.
+Also, the reason the scanning order is relevant here is that "All FWHM are normalized using 
+corresponding FWHM in the $r$-band taken at the same moment in time. " We moved this sentence from paragraph 5 to paragraph 4, before we explain the scanning order.
+
+Figure 4: If this can be considered a measurement of the typical values of $L_0$, it would imply that the nominal $L_0=30$ used in the profile fits of Section 3 was a somewhat high value, and it makes me curious what would change if you went back and ref-fit each run with $L_0$ taken from this plot.
+
+Our Response:
+If we go back and re-fit the radial profiles with a different L0, the results will not change. The reason is because, as we show with Figure 1, and the surrounding text, the exact value of L0 does not have much impact on the PSF shape. Our conclusion that the von Karman model is more plausible than the Kolmogorov is based on the wavelength dependence of the FWHM, not the radial PSF profiles.
+
+Section 4.3, eqn 9: I assume $\tau$, $f$, and $SF_{\infty}$ are all free parameters?  Also, it might format better to either use a single symbol for $SF_{\infty}$ or $\mathrm{SF}$
+
+Our Response:
+Thanks. You are correct - $\tau$, $f$, and $SF_{\infty}$ are all free parameters. This has been added to the text.
+The current form of Eq. 9 is consistent with the book by Ivezic et al. If we change the form here it may create confusion.

@@ -26,16 +26,31 @@ def logpsdfuncChi2(logf, Af0, y):
     # print('A = %e, f0 = %f, chi2 = %f'% (A, f0, chi2))
     return chi2
 
-def logpsdLinear(logf, B, alpha):
-    #print('B = %e, alpha = %f'% (B, alpha))
-    return B+logf*alpha
+def logpsdHYfunc(logf, A, f0, gamma):
+    # HY for hybrid model
+    f = 10**logf
+    # print('A = %e, f0 = %f'% (A, f0))
+    return np.log10(A/(1+(f/f0)**gamma))
 
-def logpsdLinearChi2(logf, Balpha, y):
-    B = Balpha[0]
-    alpha = Balpha[1]
-    yp = B+logf*alpha
+def logpsdHYfuncChi2(logf, Af0, y, gamma):
+    f = 10**logf
+    A = Af0[0]
+    f0 = Af0[1]
+    yp = np.log10(A/(1+(f/f0)**gamma))
     chi2 = np.sum((yp - y)**2)
-    # print('B = %e, alpha = %f, chi2 = %f'% (B, alpha, chi2))
+    # print('A = %e, f0 = %f, chi2 = %f'% (A, f0, chi2))
+    return chi2
+
+def logpsdLinear(logf, B, beta):
+    #print('B = %e, beta = %f'% (B, beta))
+    return B+logf*beta
+
+def logpsdLinearChi2(logf, Bbeta, y):
+    B = Bbeta[0]
+    beta = Bbeta[1]
+    yp = B+logf*beta
+    chi2 = np.sum((yp - y)**2)
+    # print('B = %e, beta = %f, chi2 = %f'% (B, beta, chi2))
     return chi2
 
 def main():
@@ -120,9 +135,9 @@ def main():
         tauAll = 0
         tauErrAll = 0
         tauN = 0
-        alphaAll = 0
-        alphaErrAll = 0
-        alphaN = 0
+        betaAll = 0
+        betaErrAll = 0
+        betaN = 0
         for band in bandlist:
             print('band = %d'%band)
             f, ax1 = plt.subplots(nRow, nCol, sharex='col',
@@ -240,17 +255,33 @@ def main():
                     # ax1[iRow, iCol].loglog(fW2, PSDW2,'-r')
                     ax1[iRow, iCol].loglog(myX*3600, myY, 'r-')
                     # ax1[iRow, iCol].loglog(myX, myY1, 'b-')
+                    #---- end of random walk model
 
                     #----fit to power law model (linear in log space)
                     popt, pcov = optimize.curve_fit(logpsdLinear, mySep, mySF, p0=[0, -0.5],
                                                         bounds = ([-8, -4], [5, 0]), sigma=mySFstd)
-                    alpha = popt[1]
-                    alphaErr = np.sqrt(pcov[1, 1])
+                    beta = popt[1]
+                    betaErr = np.sqrt(pcov[1, 1])
                     if args.run > 0 and args.writefitp:
                         fid.write('%d\t %d\t %d\t %e\t %e \n'%(run, band, camcol, popt[0], popt[1]))
                     myYLinear = 10**logpsdLinear(np.log10(myX), popt[0], popt[1])
                     ax1[iRow, iCol].loglog(myX*3600, myYLinear, 'b--')
-                    #---- end of random walk model
+                    #---- end of power law model
+
+                    #----fit to modified random walk model
+                    popt, pcov = optimize.curve_fit(logpsdHYfunc, mySep, mySF, p0=[1e5, 1e-3, 2],
+                                                        bounds = ([0.01, 1e-5, 1], [1e5, 1e-2, 3]),
+                                                        sigma=mySFstd)
+                    tauHY = 1/(2*np.pi*popt[1])
+                    tauHYErr = 1/(2*np.pi*popt[1]**2)*np.sqrt(pcov[1, 1])
+                    # print('A=%e, f0=%e, tau = %5.0f s' %(popt[0], popt[1], tau))
+                    gamma = popt[2]
+                    gammaErr = np.sqrt(pcov[2, 2])
+                    if args.run > 0 and args.writefitp:
+                        fid.write('%d\t %d\t %d\t %e\t %e \n'%(run, band, camcol, popt[0], popt[1]))
+                    myYHY = 10**logpsdHYfunc(np.log10(myX), popt[0], popt[1], popt[2])
+                    ax1[iRow, iCol].loglog(myX*3600, myYHY, 'k-')
+                    #---- end of modified random walk model
                     
                     ax1[iRow, iCol].set_xlim(min(myX*3600), max(myX*3600))
                     # ax1[iRow, iCol].set_xlabel('Frequency (Hz)')
@@ -259,16 +290,16 @@ def main():
                     if iCol == 0:
                         ax1[iRow, iCol].set_ylabel('PSD (arcsec$^2$ second)')
 
-                    print('%d\t %d\t %d\t %e\t %e\t %6.1f +/- %6.1f \t %6.2f +/- %6.2f \n'%(
+                    print('%d\t %d\t %d\t %e\t %e\t %6.1f +/- %6.1f \t %6.2f +/- %6.2f \t %6.1f +/- %6.1f\n'%(
                         run, band, camcol, popt[0], popt[1], tau/60, tauErr/60,
-                        alpha, alphaErr))
+                        beta, betaErr, tauHY/60, tauHYErr/60))
 
                     w = 1/tauErr**2
                     tauAll += tau*w
                     tauErrAll += w
-                    w= 1/alphaErr**2
-                    alphaAll += alpha*w
-                    alphaErrAll += w
+                    w= 1/betaErr**2
+                    betaAll += beta*w
+                    betaErrAll += w
 
                 elif args.type == 'autocor':
                     result = np.correlate(fwhm[idx], fwhm[idx], mode='full')
@@ -302,12 +333,12 @@ def main():
         tauAll = tauAll/tauErrAll
         tauErrAll = np.sqrt(1/tauErrAll)
         print('%6.1f +/- %6.1f \n'% (tauAll/60, tauErrAll/60))
-        alphaAll = alphaAll/alphaErrAll
-        alphaErrAll = np.sqrt(1/alphaErrAll)
-        print('%6.2f +/- %6.2f \n'% (alphaAll, alphaErrAll))
+        betaAll = betaAll/betaErrAll
+        betaErrAll = np.sqrt(1/betaErrAll)
+        print('%6.2f +/- %6.2f \n'% (betaAll, betaErrAll))
         if args.run<0 and args.writefitp:
             fid.write('%d \t %d \t %6.1f \t %6.1f \t %6.2f \t %6.2f\n'% (
-                run, nfields, tauAll/60, tauErrAll/60, alpha, alphaErr))
+                run, nfields, tauAll/60, tauErrAll/60, beta, betaErr))
         
     if args.writefitp:
         fid.close()

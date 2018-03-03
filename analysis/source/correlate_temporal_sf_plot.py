@@ -287,7 +287,7 @@ def main():
         tau = a[:, 2]
         tauerr = a[:, 3]
         
-        idx = (totalT>0) * (1.5*tau < totalT)
+        idx = (totalT>0) * (1.5*tau < totalT) * (tau != 0)
 
         #plot tau
         ax1.scatter(totalT[idx], tau[idx], s=10, c='r', edgecolors='r')

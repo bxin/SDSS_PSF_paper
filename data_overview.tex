@@ -14,9 +14,9 @@ one hundred times) by SDSS to study time-domain phenomena (such as supernovae, a
 variability).  An observing stretch of SDSS imaging data is called a ``run''. Often there is only a single
 run for a given observing night, though sometimes there are multiple
 runs per night. In this paper we use seeing data for 
-108 runs, with a total of 31,580 fields, obtained between September, 1998 and September 2008). 
-For each field, there are 30 seeing estimates (there are 6 camera columns, each with 5 filters; for more
-details please \citealt{Gunn2006}). All runs are obtained during the Fall observing season (September to 
+108 runs, with a total of 947,400 fields, obtained between September,
+1998 and September 2008 (there are 6 camera columns, each with 5 filters; for more
+details please see \citealt{Gunn2006}). All runs are obtained during the Fall observing season (September to 
 December). Astrometric and photometric aspects of this dataset have been discussed in detail by 
 \cite{Ivezic2007} and \cite{Sesar2007}. 
 
@@ -27,27 +27,28 @@ Even in the absence of atmospheric inhomogeneities, the SDSS telescope delivers 
 FWHMs vary by up to 15\% from one side of a CCD to the other; the worst effects are seen in 
 the chips farthest from the optical axis \citep{Gunn2006}. Moreover, since the atmospheric 
 seeing varies with time, the delivered image quality is a complex two-dimensional function 
-even on the scale of a single frame (for an example of the instantaneous image quality across 
+even on the scale of a single field (for an example of the instantaneous image quality across 
 the imaging camera, see Figure 7 in \citealt{SDSSEDR}). 
  
 The SDSS imaging PSF is modeled 
 heuristically in each band using a Karhunen-Lo\'{e}ve (K-L) transform \citep{Lupton2002}. 
 Using stars brighter than roughly 20$^{th}$ magnitude, the PSF images from a series of five 
-frames are expanded into eigenimages and the first three terms are kept (K-L transform is 
+fields are expanded into eigenimages and the first three terms are kept (K-L transform is 
 also known as the Principal Component Analysis). The angular variation of the eigencoefficients
-is fit with polynomials, using data from the frame in question, plus the immediately preceding 
-and following half-frames. The success of this K-L expansion is gauged by comparing PSF 
+is fit with polynomials, using data from the field in question, plus the immediately preceding 
+and following half-fields. The success of this K-L expansion is gauged by comparing PSF 
 photometry based on the modeled K-L PSFs with large-aperture photometry for the same 
 (bright) stars \citep{SDSSEDR}. 
 Parameters that characterize seeing for one field of imaging data are stored in the so-called psField 
 files\footnote{https://data.sdss.org/datamodel/files/PHOTO\_REDUX/RERUN/RUN/objcs/CAMCOL/psField.html}. 
-The status parameter flag for each frame indicates the success of the K-L decomposition.
+The status parameter flag for each field indicates the success of the K-L decomposition.
 
 In addition to the K-L decomposition, the SDSS processing pipeline computes parameters of the 
-best-fit double Gaussian, evaluated at the center of each frame. The measured PSF profiles are 
+best-fit circular double Gaussian, evaluated at the center of each field. The measured PSF profiles are 
 extended to $\sim$30 arcsec using observations of bright stars and at such large radii 
 double Gaussian fits underpredict the measured profiles. For this reason, the fits are extended 
-to include the so-called ``power-law wings''
+to include the so-called ``power-law wings'', which is reminiscent of
+the Moffat function,
 \begin{equation}
 \label{eq:SDSSPSF}
         PSF(r) = {\exp(-{r^2\over 2\,\sigma_1^2}) + b\,\exp(-{r^2\over 2\,\sigma_2^2})

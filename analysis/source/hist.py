@@ -20,6 +20,8 @@ ax0.grid()
 ax0.set_ylabel(r'$\tau$ (minutes)', {'fontsize': 16})
 ax0.set_xlabel('Duration of run (minutes)', {'fontsize': 16})
 ax0.set_xlim(0, 600)
+ax0.set_ylim(-5, 30)
+ax0.plot([360, 360],[-5, 30],'b--')
 
 ax1.scatter(totalT[idx], alpha[idx], s=10, c='r', edgecolors='r')
 ax1.grid()

@@ -1,0 +1,151 @@
+This paper presents a valuable analysis of several aspects of the PSF measured by SDSS, including its profile, wavelength dependence, and the spatial and temporal statistical behavior of the PSF full-width-half-maximum.  The conclusion that the von Karman model for turbulence is supported over the Kolmogorov model seems particularly important.  
+
+The analysis seems generally fine; most of my comments are simple clarifications.  I am curious if the exact von Karman profile can be reasonably used for the fits instead of the FWHM=1 stretched version though.  It's not obvious to me that this would be prohibitively expensive (see below).
+
+
+Abstract:
+
+• "folows" -> "follows"
+• "and correlated" -> "and is correlated"
+
+Our Response:
+Thanks. These are fixed.
+
+§ 2.1  Stripe 82 dataset
+• "For each field, there are 30 seeing estimates (there are 6 camera columns, each with 5 filters...)"
+  I'm confused, I thought from the earlier description in § 1 "Each of the six camera columns ..." that a field was a 13.5 arcmin x 9 arcmin patch of sky.  This sentence seems to say a field is a 2.5 deg x 9 arcmin patch of sky.  What am I missing?
+
+Our Response:
+You are correct. A field is a 13.5 arcmin x 9 arcmin patch of sky. We have fixed this sentence in Sec 2.1 paragraph 1.
+
+To Zeljko:
+Reading this again, I think Josh is right. A field doesn't include 6 camcol and 5 filters.
+
+§ 2.2  The treatment of seeing in SDSS
+• First paragraph.  I think this is the first time that "frame" is mentioned.  Please define what you mean by "frame".
+
+Our Response:
+We'd been using "frame" and "field" interchangeably. We've now replaced all "frame" with "field".
+
+
+• "In addition to the K-L decomposition ..."  It's clear from equation (1), but I still think it's worth stating that the double Gaussians are concentric and circular.
+
+Our Response:
+Done.
+
+• It looks to me that the "power-law wings" are equivalent to a Moffat function, which seems worth mentioning.
+
+Our Response:
+Done.
+
+To Zeljko:
+See Eq. 1 in the paper below for the form of the Moffat function.
+https://arxiv.org/pdf/astro-ph/0109067.pdf
+
+§ 3.0  The PSF profile analysis
+• When generating your model images, are you including integration over the area of a pixel?
+
+Our Response:
+Yes, we used a oversampling factor of 5 for the integration over a pixel (25 in terms of area).
+
+• I'm curious what it would take to actually fit r0 (and potentially L0) for each PSF.  GalSim recently gain a VonKarman PSF model, which on my laptop takes about 100 ms to create and then render a 1 arcmin by 1 arcmin image, including integration over pixels (or ~80ms without pixel integration).  For your ~10^6 PSFs, if we assume ~100 iterations per fit, that adds up to about 3000 core-hours, which would be inconvenient on a laptop I suppose, but easy on a small cluster.
+
+Our Response:
+First, we want to point out that Fig. 1 and the surrounding text demonstrate that the impact of L0 on the PSF shape is small, and that stretching/compressing the 0.5/2.0 arcsec PSFs into FWHM of 1.0 arcsec produces negligible difference from generating the profile using a r0 value corresponding to FWHM of 1.0 arcsec. So adding this additional computation is not justified.
+Second, how exactly does GalSim calculate the von Karman PSF? Most likely we are using different methods. Do you generate a phase screen directly from the power spectrum? How do you integrate over time? can you point us to a reference?
+As described in the paper, we use Eq 18 in Tokovinin 2002, and calculate the PSF through the OTF. Of course, the estimation of the computation needed also depends on factors such as the padding around the pupil, the size of the PSF stamp, the oversampling factor for pixel integration, and the computer being used. Our estimated time is about 50 times longer than your estimates.
+
+§ 3.1  Instrumental PSF
+• "... there is only one free parameter in the fit ... "  I think it would be helpful to state here that the FWHM from step 1 remains fixed during step 2.
+
+Our Response:
+Yes, Jim pointed out the same thing. This is fixed. Thanks.
+
+• Table 1:  Does the a coefficient for z-band camcol 2 need a minus sign perhaps?  (Looking at fig. 2, I guess the + sign is probably right).  If not, any idea why this CCD is so different compared to the rest?
+
+Our Response:
+Yes the + sign is right. We don't think this CCD is any more special than the others, other than that it being one the CCDs close to the edge of the field, which probably led to it having fewer data points at large radii.
+In this particular case, the lack of data points at large radii made the PSF measurements less capable of constraining the shape parameters of the tail. In fact, the parameters a and b are of the order 1e-4 and 1e-2 respectively. Their impact on the PSF tail is much less than the overall normalization of the 2nd order polynomial, \eta.
+Another point to make here is that the purpose of making these fits with the instrumental PSF is just to demonstrate that by introducing a convolution kernel representing the instrumental PSF we can model the PSF tail as well. None of the subsequent analyses presented in Section 3 and 4 has anything to do with the instrumental PSF discussed here.
+
+To Zeljko:
+I did make a few more sets of "slow" fits using other fields, for example, run 4872, field 21. Band-z-camcol-2 does turn from convex into concave, but there are a few other fits that simply turns from concave into convex.
+The results of the fits depends a lot on the error estimates on the data points, of course. For those data points with radii larger than 2 arcsec (point#5 and beyond), I am simply using the 2% error that came with the original SDSS data, but making the fits in logarithm space. If we do the fits in linear space, then the data point with the largest radius would dominate, due to the reasons we talked about before.
+
+§ 4.1  The FWHM dependence on wavelength
+• It would be helpful to clarify that eq (5) gives the FWHM in radians.
+
+Our Response:
+Done.
+
+§ 4.2  Angular structure function
+•  "The PhoSim PSF profiles ... with non-perturbed LSST telescope ... "  Can you run phoSim with an ideal telescope instead of just a non-perturbed telescope?  It's probably a small effect, but I suppose the FWHM from the LSST optics design must imprint the structure function at some level.
+
+Our Response:
+Our understanding of this question is that you want us to look at the PSF size structure function without the atmosphere, and see how much spatial correlation in PSF size is due to the optical design. (The differece between the "non-perturbed telescope" and the "optical design" should be that one is with atmosphere, the other without. That is how we understand it.)
+We do not think this is necessary - as we stated in the paper, we consider more detailed analysis using PhoSim to be out of the scope of this paper. Also, we note that the optical design PSF has a average FWHM of 80mas, while the LSST fiducial atmosphere is 600mas.
+
+•  Could you also compare here PhoSim run with Kolmogorov screens vs. Von Karman screens to see if that makes any distinction that would support one model over the other?
+
+Our Response:
+We agree that this would be an interesting study. But as we stated in the paper, we consider more detailed analysis using PhoSim to be out of the scope of this paper. Also, the angular structure function comparison we make in Figure 5 is meant to be a qualitative rather than quantitative comparison, since the results being compared are for different telescope optics at different sites.
+
+§ 4.3.1  Power spectrum analysis
+• Fig 6.  Are the data points correlated?  Is that taken into account during the fit?
+
+Our Response:
+The error bars on the data points come from binning discrete PSD data. They are treated as uncorrelated in the least-square fits.
+
+• Could you state whether SF_{inf}^2 is a parameter of the fit?  (As opposed to being measured from the temporal SF directly?)
+
+Our Response:
+This clarification is now added.
+
+• "This results" -> "This result"
+
+Our Response:
+Done. Thanks.
+
+• "... is generally consistent with Racine (1996)"  Possibly the wrong reference?  I was curious about this one so I looked up Racine (1996), but can't see anything about temporal behavior there (in my quick scan at least).
+
+Our Response:
+We looked again. We do not see anything wrong with this reference. This is Racine, R. 1996, PASP, 108, 372. The temporal behavior is discussed in Sec. 3.2 of that paper.
+
+• I suspect the hybrid PSD model you're looking for may be something like what's in Dunkley et al. (2005) MNRAS 356 eq 19 (in a completely different context), which I think is a generalization of your equation (9).  I'd be very interested to see what characteristic times that parameterization would yield.
+
+Our Response:
+Following your suggestion, we tried to fit the PSDs to Eq. 9 of Dunkley et al. (2005) MNRAS 356, which is simply to make the 2 on the power as in the random walk model into a free parameter. The result of the fits is shown as solid black curves in
+https://github.com/bxin/SDSS_PSF_paper/blob/master/FIGURES/temporalPSD_p3.png
+As can be seen in the plots, the power index is very close to the the values we get from fitting to a simple power law. This is not surprising, because most the data points are on the high-frequency slope. Compared to the fits with the random walk model, this parameterization has 3 free parameters instead of 2. As the result, the uncertainties on the characteristic times is much larger. Therefore these fits are not very useful in telling us much about the characteristic timescale.
+
+• Fig 7.  It would be helpful to add a vertical line to the left panel at 6 hours to indicate the 12 points you believe are long enough to not have biased tau measurements.
+
+Our Response:
+Done.
+
+§ 4.3.2.  Structure function analysis
+• Again, Racine (1996) wrong reference?
+
+Our Response:
+This is Racine, R. 1996, PASP, 108, 372. The temporal behavior is discussed in Sec. 3.2 of that paper.
+
+• What is the motivation for using the "structure-function-like quantity" as opposed to the actual structure function?
+
+Our Response:
+Zeljko will answer this....
+
+• Fig 8.  Right panel. I think it would be better to just leave the points for runs shorter than 20 minutes out, rather than placing them at tau=0.
+
+Our Response:
+Done.
+
+§ 5. Discussion and Conclusions
+• "... described by theoretical predictions based theoretical predictions based ..." -> "... described by theoretical predictions based ..."
+
+Our Response:
+Fixed. Thanks.
+
+• "The knowledge of the wavelength-dependence of the seeing is useful for extrapolating the seeing statistics to other wavelengths ... "  You might also add that the knowledge of the wavelength-dependence is critical for performing PSF-sensitive galaxy measurements, where the PSFs measured from stars need to be interpolated both spatially and in color into galactic PSFs.
+
+Our Response:
+This clause has been added. Thanks.

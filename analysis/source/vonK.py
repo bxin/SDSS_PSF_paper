@@ -20,15 +20,16 @@ rinf = rinf/np.max(rinf)
 
 fig, (ax0, ax1) = plt.subplots(ncols=2, figsize=(8,4))
 
-ax0.semilogy(x, r10, '--', label=r'$L_0=10$m')
-ax0.semilogy(x, r30, '-',  label=r'$L_0=30$m')
-ax0.semilogy(x, r100, ':', label=r'$L_0=100$m')
-ax0.semilogy(x, rinf, '-.', label=r'$L_0=\infty$')
+ax0.loglog(x, r10, '--', label=r'$L_0=10$m')
+ax0.loglog(x, r30, '-',  label=r'$L_0=30$m')
+ax0.loglog(x, r100, ':', label=r'$L_0=100$m')
+ax0.loglog(x, rinf, '-.', label=r'$L_0=\infty$')
 
+ax0.set_xlim(0, np.max(x))
 ax0.grid()
 ax0.set_xlabel('Radius (arcsec)', {'fontsize': 16})
 ax0.set_ylabel('Surface brightness', {'fontsize': 16})
-leg = ax0.legend(loc="upper right", fontsize=11)
+leg = ax0.legend(loc="lower left", fontsize=11)
 
 ## right panel.
 b03  = np.loadtxt('data/vonK0.5.txt')
@@ -42,16 +43,16 @@ r20 = r20/np.max(r20)
 r03 = r03/np.max(r03)
 
 x2 = np.arange(x2+1) * 0.1 #.1 arcsec per pixel #x2 used to be a number, now a vector
-ax1.semilogy(x/0.5, r03, '--', label='FWHM=0.5" (stretched to 1.0")')
-ax1.semilogy(x, r10, '-',  label='FWHM=1.0')
-ax1.semilogy(x2/2.0, r20, ':', label='FWHM=2.0" (compressed to 1.0")')
+ax1.loglog(x/0.5, r03, '--', label='FWHM=0.5" (stretched to 1.0")')
+ax1.loglog(x, r10, '-',  label='FWHM=1.0')
+ax1.loglog(x2/2.0, r20, ':', label='FWHM=2.0" (compressed to 1.0")')
 
 ax1.set_xlim(0, np.max(x))
 ax1.set_ylim(1e-8,1)
 ax1.grid()
 ax1.set_xlabel('Radius (arcsec)', {'fontsize': 16})
 ax1.set_ylabel('Surface brightness', {'fontsize': 16})
-leg = ax1.legend(loc="upper right", fontsize=9)
+leg = ax1.legend(loc="lower left", fontsize=9)
 
 ## for both panels.
 plt.tight_layout()
