@@ -51,7 +51,8 @@ def main():
     if args.fitab:
         tailPar = np.loadtxt('data/tailPar0.txt')
     else:
-        tailPar = np.loadtxt('data/tailPar.txt')
+        tailPar = np.loadtxt('data/tailPar0.txt') #initially used this 
+        # tailPar = np.loadtxt('data/tailPar.txt')
 
     run = args.irun
     print('------ running on run# %d ---------' % run)
@@ -100,11 +101,9 @@ def main():
             if args.fitab:
                 psf.fit2conv_curve_fit_fitab(vonK2D, grid1d) # fit for a and b
             else:
-                # psf.fit2convEta_curve_fit(vonK2D, grid1d)  #initially used this
-                # psf.fit2conv_curve_fit(vonK2D, grid1d, sigma=0.2)
-                # psf.fit2conv_curve_fit(vonK2D, grid1d, tailB = psf.tailB)
-                # psf.fit2convEta_curve_fit_log(vonK2D, grid1d)  #fit in log space
-                psf.fit2conv_curve_fit_log_ab(vonK2D, grid1d)
+                psf.fit2conv_curve_fit(vonK2D, grid1d)  #initially used this
+                # psf.fit2conv_curve_fit_log(vonK2D, grid1d)  #fit in log space
+                # psf.fit2conv_curve_fit_log_ab(vonK2D, grid1d)  #use fitted a/b values
                 
             print('eta = %.2f\n'%psf.tailEta)
             if args.fitab:
@@ -115,11 +114,12 @@ def main():
             #    psf.chi2, psf.G2chi2, psf.chi2lr, psf.G2chi2lr, psf.chi2hr, psf.G2chi2hr))
 
             if args.yscale == 'log' or args.yscale == 'logzoom':
-                ax1[iBand, camcol - 1].semilogy(psf.vR, psf.vv, '-k')
-                # draw double Gaussian as blue
+                ax1[iBand, camcol - 1].semilogy(psf.vR, psf.vv, '-k') #with tail
                 ax1[iBand, camcol -
-                   1].semilogy(psf.r, 10**psf.LpsfModel * psf.scaleV, ':b', linewidth=3)
-                ax1[iBand, camcol - 1].semilogy(psf.vvR, psf.vvv, '--r', linewidth=3)
+                   1].semilogy(psf.r, 10**psf.LpsfModel * psf.scaleV, ':b',
+                                   linewidth=3) #double Gaussian
+                ax1[iBand, camcol - 1].semilogy(psf.vvR, psf.vvv, '--r', linewidth=3) #no tail
+                ax1[iBand, camcol - 1].semilogy(psf.vR, psf.vtail, '-.g', linewidth=3) #tail
                 lower_error = 10**(psf.OKprofile)-10**(psf.OKprofile-psf.OKprofileErr)
                 upper_error = 10**(psf.OKprofile+psf.OKprofileErr)-10**(psf.OKprofile)
                 asymmetric_error = [lower_error, upper_error]

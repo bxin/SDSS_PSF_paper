@@ -193,6 +193,20 @@ class sdsspsf(object):
             m2 = max(np.argmax(newN == np.max(newN), axis=1))
             self.vv = newN[m1, m2:m2 + m + 1]
 
+            # get the tail
+            sigma = self.tailP[2]
+            x1= self.tailP[3]
+            y1= self.tailP[4]
+            x2 = self.tailP[5]
+            y2 = self.tailP[6]
+            x3 = self.tailP[7]
+            y3 = self.tailP[8]
+            abcM = np.array([[x1**2, x1, 1], [x2**2, x2, 1], [x3**2, x3, 1]])
+            abc = np.dot(np.linalg.inv(abcM), np.array([[y1] ,[y2], [y3]]))
+            G1 = 10**(self.tailEta*(abc[0][0]*self.vR*self.vR+abc[1][0]*self.vR+abc[2][0]))
+
+            self.vtail = np.exp(-(self.vR**2) / 2 / sigma**2) + G1
+    
             yy = convVonK(vonK2D, grid1d, self.OKprofRadii, self.scaleR, self.scaleV,
                           self.tailEta, self.tailP)
             self.chi2 = sum(((yy - self.OKprofileLinear) / errLinear)
@@ -311,6 +325,10 @@ class sdsspsf(object):
             m2 = max(np.argmax(newN == np.max(newN[100:-100,100:-100]), axis=1))
             self.vv = newN[m1, m2:m2 + m + 1]
 
+            G1 = 10**(self.tailEta*(self.tailP[2]*self.vR*self.vR+self.tailP[3]*self.vR+1))
+            sigma = 0.1
+            self.vtail = np.exp(-(self.vR**2) / 2 / sigma**2) + G1
+            
             yy = logConvVonKAB(vonK2D, grid1d, self.OKprofRadii, self.scaleR, self.scaleV,
                           self.tailEta, self.tailP[2], self.tailP[3])
             self.chi2 = sum(((yy - self.OKprofile) / errLog)
