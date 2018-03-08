@@ -1,0 +1,47 @@
+Bo etal,
+
+   Congratulations on a nice paper with a very interesting set of results.  
+
+  Here are my comments & questions
+ # "It is known that the I-band PSF has stronger tails..."   - you need a reference for this factoid, even if it is only personal communication.
+
+Our Response:
+Zeljko will address this.
+
+ # Figure 1 - hard to see the small differences in the left-hand side.  Data in Fig. 2 only goes out to 30 arcsec, so you could do the same here and zoom in on the tail for more clarity.
+
+Our Response:
+Jim made the excellent suggestion that we use log(radius) as the x-axis. This allows readers to see more detail in the left-hand side. We also changed the range of the radius from 50 arcsec to 30 arcsec.
+
+ # Is Figure 2 for one star, or all stars in a column from that run? - guess the latter, but you should specify
+
+Our Response:
+As we mention in Sec 1, paragraph 4, there is one PSF estimate per field. Therefore, each subpanel in Figure 2 is for one band and one camcol in a specific run. Let us know if you still think this is not clear, in which case we can add more clarification.
+
+ # Would be helpful to show a plot of the VonKarman shape and the 'instrumental PSF' overlaid.
+
+Our Response:
+We have added the instrumental PSFs on Fig. 2.
+
+ # Figure 3.  None of these look like good fits to the data, even with dropping z-band.  I think you need to comment on that.  And, your conclusion that the data favors a power of -0.3 instead of -0.2 is then hard to support, given that you've cut out data in this way.
+
+Our Response:
+Zeljko, please add comments on the rationale for dropping camcol 1 and 6, and z-band.
+
+ # Columns used:  You argue to drop camcol=6 based on difference in its fit vs. wavelength and z-band based on the quality of the fit.  Find.  But then I don't understand why you use camcol=6 for any other studies in the paper?
+
+Our Response:
+Our understanding is that what affects the FWHM variation across the bands is not affecting its spatial variation and temporal behavior. To prove this, we actually repeated the spatial and temporal analyses by removing the z-band and camcol 1 and 6. That produced insignificant differences in results as compared to those presented in the main analysis. One example is shown in Fig 6, which clearly shows that the temporal PSD obtained from camcol 6 is no different from those from other columns. This is an good point though. We need to note this in the paper. A short discussion on this has been added to the paper.
+
+ # Next Fig 4. says it uses data in columns 2-5 Why is Col=1 dropped here?
+
+Our Response:
+Bo has asked Zeljko to clarify. Please see above.
+
+ # You may be interested to look at our paper [http://adsabs.harvard.edu/abs/2016SPIE.9906E..42S]. on the temporal PSD using GPI & Gemini South - its looking at a much different freq range, but is interesting to compare.
+
+Our Response:
+Thanks. We read your paper in 2016 soon after it came out. It is interesting to compare the results.
+To Zeljko - the slope they measured from their data is steeper. But it is very high frequency. What do you think about the comparison?
+
+
