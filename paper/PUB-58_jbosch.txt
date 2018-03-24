@@ -19,10 +19,6 @@ Fig. 1: These plots really don't show much difference between the profiles.  Wou
 Our Response:
 Great suggestion. We now use log(radius) as the x-axis.
 
-To Zeljko:
-I think this is better than having a 2x2 figure, which occupies a lot of space. I now do as Jim suggests.
-Nevertheless, I made the 2x2 figure, as we discussed. It can be found in analysis/output/vonK_2x2.png
-
 Section 3
 ---------
 

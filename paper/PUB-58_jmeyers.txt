@@ -18,8 +18,6 @@ Thanks. These are fixed.
 Our Response:
 You are correct. A field is a 13.5 arcmin x 9 arcmin patch of sky. We have fixed this sentence in Sec 2.1 paragraph 1.
 
-To Zeljko:
-Reading this again, I think Josh is right. A field doesn't include 6 camcol and 5 filters.
 
 § 2.2  The treatment of seeing in SDSS
 • First paragraph.  I think this is the first time that "frame" is mentioned.  Please define what you mean by "frame".
@@ -38,9 +36,6 @@ Done.
 Our Response:
 Done.
 
-To Zeljko:
-See Eq. 1 in the paper below for the form of the Moffat function.
-https://arxiv.org/pdf/astro-ph/0109067.pdf
 
 § 3.0  The PSF profile analysis
 • When generating your model images, are you including integration over the area of a pixel?
@@ -68,9 +63,6 @@ Yes the + sign is right. We don't think this CCD is any more special than the ot
 In this particular case, the lack of data points at large radii made the PSF measurements less capable of constraining the shape parameters of the tail. In fact, the parameters a and b are of the order 1e-4 and 1e-2 respectively. Their impact on the PSF tail is much less than the overall normalization of the 2nd order polynomial, \eta.
 Another point to make here is that the purpose of making these fits with the instrumental PSF is just to demonstrate that by introducing a convolution kernel representing the instrumental PSF we can model the PSF tail as well. None of the subsequent analyses presented in Section 3 and 4 has anything to do with the instrumental PSF discussed here.
 
-To Zeljko:
-I did make a few more sets of "slow" fits using other fields, for example, run 4872, field 21. Band-z-camcol-2 does turn from convex into concave, but there are a few other fits that simply turns from concave into convex.
-The results of the fits depends a lot on the error estimates on the data points, of course. For those data points with radii larger than 2 arcsec (point#5 and beyond), I am simply using the 2% error that came with the original SDSS data, but making the fits in logarithm space. If we do the fits in linear space, then the data point with the largest radius would dominate, due to the reasons we talked about before.
 
 § 4.1  The FWHM dependence on wavelength
 • It would be helpful to clarify that eq (5) gives the FWHM in radians.
@@ -82,7 +74,7 @@ Done.
 •  "The PhoSim PSF profiles ... with non-perturbed LSST telescope ... "  Can you run phoSim with an ideal telescope instead of just a non-perturbed telescope?  It's probably a small effect, but I suppose the FWHM from the LSST optics design must imprint the structure function at some level.
 
 Our Response:
-Our understanding of this question is that you want us to look at the PSF size structure function without the atmosphere, and see how much spatial correlation in PSF size is due to the optical design. (The differece between the "non-perturbed telescope" and the "optical design" should be that one is with atmosphere, the other without. That is how we understand it.)
+Our understanding of this question is that you want us to look at the PSF size structure function without the atmosphere, and see how much spatial correlation in PSF size is due to the optical design. (The difference between the "non-perturbed telescope" and the "optical design" should be that one is with atmosphere, the other without. That is how we understand it.)
 We do not think this is necessary - as we stated in the paper, we consider more detailed analysis using PhoSim to be out of the scope of this paper. Also, we note that the optical design PSF has a average FWHM of 80mas, while the LSST fiducial atmosphere is 600mas.
 
 •  Could you also compare here PhoSim run with Kolmogorov screens vs. Von Karman screens to see if that makes any distinction that would support one model over the other?
@@ -132,7 +124,10 @@ This is Racine, R. 1996, PASP, 108, 372. The temporal behavior is discussed in S
 • What is the motivation for using the "structure-function-like quantity" as opposed to the actual structure function?
 
 Our Response:
-Zeljko will answer this....
+We followed Racine, as one of the leaders in the field. Why he used that form, instead of the standard
+form we don’t really know, but our best guess is that his form is more robust to outliers since it’s based
+on absolute value rather than the square of variation. 
+
 
 • Fig 8.  Right panel. I think it would be better to just leave the points for runs shorter than 20 minutes out, rather than placing them at tau=0.
 

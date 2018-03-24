@@ -6,7 +6,8 @@ Bo etal,
  # "It is known that the I-band PSF has stronger tails..."   - you need a reference for this factoid, even if it is only personal communication.
 
 Our Response:
-Zeljko will address this.
+We added priv. comm. reference to Jim Gunn.
+
 
  # Figure 1 - hard to see the small differences in the left-hand side.  Data in Fig. 2 only goes out to 30 arcsec, so you could do the same here and zoom in on the tail for more clarity.
 
@@ -26,7 +27,11 @@ We have added the instrumental PSFs on Fig. 2.
  # Figure 3.  None of these look like good fits to the data, even with dropping z-band.  I think you need to comment on that.  And, your conclusion that the data favors a power of -0.3 instead of -0.2 is then hard to support, given that you've cut out data in this way.
 
 Our Response:
-Zeljko, please add comments on the rationale for dropping camcol 1 and 6, and z-band.
+Dropping the z band reduces the wavelength range where the power law 
+fit is applicable, and we clearly state so. However, after the z band
+is removed, we believe that the four remaining data points (in fig. 3,
+except for column 6) are statistically consistent (chi2dof ~ 1) with 
+a power-law model. 
 
  # Columns used:  You argue to drop camcol=6 based on difference in its fit vs. wavelength and z-band based on the quality of the fit.  Find.  But then I don't understand why you use camcol=6 for any other studies in the paper?
 
@@ -36,12 +41,9 @@ Our understanding is that what affects the FWHM variation across the bands is no
  # Next Fig 4. says it uses data in columns 2-5 Why is Col=1 dropped here?
 
 Our Response:
-Bo has asked Zeljko to clarify. Please see above.
+We clarified the text - we removed both edge columns.
 
  # You may be interested to look at our paper [http://adsabs.harvard.edu/abs/2016SPIE.9906E..42S]. on the temporal PSD using GPI & Gemini South - its looking at a much different freq range, but is interesting to compare.
 
 Our Response:
-Thanks. We read your paper in 2016 soon after it came out. It is interesting to compare the results.
-To Zeljko - the slope they measured from their data is steeper. But it is very high frequency. What do you think about the comparison?
-
-
+Thanks! We added a reference to this paper.  
