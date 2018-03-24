@@ -72,7 +72,7 @@ because the PSF tails in the optical bands can be
 different due to the properties of the CCDs.
 The SDSS $u$-, $g$-, $r$-, and $z$-bands differ only slightly due to
 changing conversion depth. It is known that the $i$-band PSF has ``stronger tails''
-because of scattering in the CCD.  The Si is transparent at long $i$-band wavelengths 
+because of scattering in the CCD (J.E. Gunn, priv. comm.). The Si is transparent at long $i$-band wavelengths 
 so light goes all the way through the chip and is reflected off the solder, and passes 
 back up through the Si. This effect is not visible in the $z$-band because in this case
 thick front-side illuminated chips are used (in all other bands, thin back-side chips are used). 
@@ -101,10 +101,10 @@ Meanwhile, since $\textrm{PSF}_{\textrm{inst}}$ is a convolution
 kernel, we can use a narrow Gaussian to describe its central core.
 We define the functional form of the instrumental PSF as
 \begin{equation}
-        \textrm{PSF}_{\textrm{inst}} = \exp(-\frac{r^2}{2\sigma^2}) + 10^p,
+        \textrm{PSF}_{\textrm{inst}} = \exp(-\frac{r^2}{2\sigma^2}) + 10^{p(r)},
 \label{eq:psfinst}
 \end{equation} 
-where $p$ is a second order polynomial.
+where $p(r)$ is a second order polynomial.
 The standard deviation of the Gaussian, $\sigma$, cannot be
 too wide because the \vk~term already well describes the core of the
 PSF.
@@ -112,7 +112,7 @@ We found that $\sigma = 0.1$ arcsec is an acceptable choice.
 
 We define the second order polynomial $p$ as
 \begin{equation}
-        p = \eta(ar^2+br+1).
+        p(r) = \eta(ar^2+br+1).
 \label{eq:psfinstp}
 \end{equation} 
 Because the shape of the instrumental PSF tail should not vary with
