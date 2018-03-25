@@ -12,17 +12,18 @@ We added priv. comm. reference to Jim Gunn.
  # Figure 1 - hard to see the small differences in the left-hand side.  Data in Fig. 2 only goes out to 30 arcsec, so you could do the same here and zoom in on the tail for more clarity.
 
 Our Response:
-Jim made the excellent suggestion that we use log(radius) as the x-axis. This allows readers to see more detail in the left-hand side. We also changed the range of the radius from 50 arcsec to 30 arcsec.
+Jim made the excellent suggestion that we use log(radius) as the x-axis. This allows readers to see more detail in the left-hand side. We also added two lower panels to Fig. 1, which shows the ratios of the profiles.
+We decided not to changed the range of the radius from 50 arcsec to 30 arcsec. Although Fig. 2 goes out to 30 arcsec. Fig. 1 shows the template of the fits, which gets compressed radially in some of the fits.
 
  # Is Figure 2 for one star, or all stars in a column from that run? - guess the latter, but you should specify
 
 Our Response:
-As we mention in Sec 1, paragraph 4, there is one PSF estimate per field. Therefore, each subpanel in Figure 2 is for one band and one camcol in a specific run. Let us know if you still think this is not clear, in which case we can add more clarification.
+As we mention in Sec 1, paragraph 4, there is one PSF estimate per field. Therefore, each subpanel in Figure 2 is for one field in a specific band and camcol, in a specific run. Let us know if you still think this is not clear, in which case we can add more clarification.
 
  # Would be helpful to show a plot of the VonKarman shape and the 'instrumental PSF' overlaid.
 
 Our Response:
-We have added the instrumental PSFs on Fig. 2.
+Great suggestion. We have added the instrumental PSFs on Fig. 2.
 
  # Figure 3.  None of these look like good fits to the data, even with dropping z-band.  I think you need to comment on that.  And, your conclusion that the data favors a power of -0.3 instead of -0.2 is then hard to support, given that you've cut out data in this way.
 
@@ -30,7 +31,7 @@ Our Response:
 Dropping the z band reduces the wavelength range where the power law 
 fit is applicable, and we clearly state so. However, after the z band
 is removed, we believe that the four remaining data points (in fig. 3,
-except for column 6) are statistically consistent (chi2dof ~ 1) with 
+except for column 6) are statistically consistent (chi2/dof ~ 1) with 
 a power-law model. 
 
  # Columns used:  You argue to drop camcol=6 based on difference in its fit vs. wavelength and z-band based on the quality of the fit.  Find.  But then I don't understand why you use camcol=6 for any other studies in the paper?

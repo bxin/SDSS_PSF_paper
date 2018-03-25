@@ -11,6 +11,11 @@
 \bibitem[{{Borgnino}(1990)}]{vk1}
 {Borgnino}, J. 1990, \ao, 29, 1863, \dodoi{10.1364/AO.29.001863}
 
+\bibitem[{{Dunkley} {et~al.}(2005){Dunkley}, {Bucher}, {Ferreira}, {Moodley},
+  \& {Skordis}}]{Dunkley2005}
+{Dunkley}, J., {Bucher}, M., {Ferreira}, P.~G., {Moodley}, K., \& {Skordis}, C.
+  2005, \mnras, 356, 925, \dodoi{10.1111/j.1365-2966.2004.08464.x}
+
 \bibitem[{{Gunn} {et~al.}(2006){Gunn}, {Siegmund}, {Mannery}, {Owen}, {Hull},
   {Leger}, {Carey}, {Knapp}, {York}, {Boroski}, {Kent}, {Lupton}, {Rockosi},
   {Evans}, {Waddell}, {Anderson}, {Annis}, {Barentine}, {Bartoszek}, {Bastian},
@@ -101,6 +106,11 @@ Peterson~et al., J.~R. 2015, ApJS, 218, 14
   Berk}}]{Sesar2007}
 {Sesar}, B., {Ivezi{\'c}}, {\v Z}., {Lupton}, R.~H., {et~al.} 2007, \aj, 134,
   2236, \dodoi{10.1086/521819}
+
+\bibitem[{{Snyder} {et~al.}(2016){Snyder}, {Srinath}, {Macintosh}, \&
+  {Roodman}}]{2016SPIE.9906E..42S}
+{Snyder}, A., {Srinath}, S., {Macintosh}, B., \& {Roodman}, A. 2016, in
+  \procspie, Vol. 9906, Ground-based and Airborne Telescopes VI, 990642
 
 \bibitem[{{Stoughton} {et~al.}(2002){Stoughton}, {Lupton}, {Bernardi},
   {Blanton}, {Burles}, {Castander}, {Connolly}, {Eisenstein}, {Frieman},

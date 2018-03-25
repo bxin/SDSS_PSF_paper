@@ -46,9 +46,8 @@ Yes, we used a oversampling factor of 5 for the integration over a pixel (25 in 
 • I'm curious what it would take to actually fit r0 (and potentially L0) for each PSF.  GalSim recently gain a VonKarman PSF model, which on my laptop takes about 100 ms to create and then render a 1 arcmin by 1 arcmin image, including integration over pixels (or ~80ms without pixel integration).  For your ~10^6 PSFs, if we assume ~100 iterations per fit, that adds up to about 3000 core-hours, which would be inconvenient on a laptop I suppose, but easy on a small cluster.
 
 Our Response:
-First, we want to point out that Fig. 1 and the surrounding text demonstrate that the impact of L0 on the PSF shape is small, and that stretching/compressing the 0.5/2.0 arcsec PSFs into FWHM of 1.0 arcsec produces negligible difference from generating the profile using a r0 value corresponding to FWHM of 1.0 arcsec. So adding this additional computation is not justified.
-Second, how exactly does GalSim calculate the von Karman PSF? Most likely we are using different methods. Do you generate a phase screen directly from the power spectrum? How do you integrate over time? can you point us to a reference?
-As described in the paper, we use Eq 18 in Tokovinin 2002, and calculate the PSF through the OTF. Of course, the estimation of the computation needed also depends on factors such as the padding around the pupil, the size of the PSF stamp, the oversampling factor for pixel integration, and the computer being used. Our estimated time is about 50 times longer than your estimates.
+From our conversations at the SE/DM JTM, there are differences in how we calculate the von Karman PSF. Notably, most of our calculations, including those related to the atmosphere structure function and OTF, happen in 2D space. We only go to 1D at the end by taking a slice of the PSF through its center. While you have a way to operate in 1D early on. We should communicate more offline, on how exactly you do it in GalSim. But meanwhile, as we both agreed, this is not crucial to this paper, because of the following facts. Fig. 1 and the surrounding text demonstrate that the impact of L0 on the PSF shape is small, and that stretching/compressing the 0.5/2.0 arcsec PSFs into FWHM of 1.0 arcsec produces negligible difference from generating the profile using a r0 value corresponding to FWHM of 1.0 arcsec. So adding this additional computation is not justified.
+
 
 § 3.1  Instrumental PSF
 • "... there is only one free parameter in the fit ... "  I think it would be helpful to state here that the FWHM from step 1 remains fixed during step 2.
@@ -75,7 +74,7 @@ Done.
 
 Our Response:
 Our understanding of this question is that you want us to look at the PSF size structure function without the atmosphere, and see how much spatial correlation in PSF size is due to the optical design. (The difference between the "non-perturbed telescope" and the "optical design" should be that one is with atmosphere, the other without. That is how we understand it.)
-We do not think this is necessary - as we stated in the paper, we consider more detailed analysis using PhoSim to be out of the scope of this paper. Also, we note that the optical design PSF has a average FWHM of 80mas, while the LSST fiducial atmosphere is 600mas.
+We do not think this is necessary - as we stated in the paper, we consider more detailed analysis using PhoSim to be out of the scope of this paper. Also, we note that the optical design PSF has an average FWHM of 80mas, while the LSST fiducial atmosphere is 600mas.
 
 •  Could you also compare here PhoSim run with Kolmogorov screens vs. Von Karman screens to see if that makes any distinction that would support one model over the other?
 
@@ -106,9 +105,11 @@ We looked again. We do not see anything wrong with this reference. This is Racin
 • I suspect the hybrid PSD model you're looking for may be something like what's in Dunkley et al. (2005) MNRAS 356 eq 19 (in a completely different context), which I think is a generalization of your equation (9).  I'd be very interested to see what characteristic times that parameterization would yield.
 
 Our Response:
-Following your suggestion, we tried to fit the PSDs to Eq. 9 of Dunkley et al. (2005) MNRAS 356, which is simply to make the 2 on the power as in the random walk model into a free parameter. The result of the fits is shown as solid black curves in
+Following your suggestion, we tried to fit the PSDs to Eq. 19 of Dunkley et al. (2005) MNRAS 356, which is simply to make the 2 on the power as in the random walk model into a free parameter. The result of the fits is shown as solid black curves in
 https://github.com/bxin/SDSS_PSF_paper/blob/master/FIGURES/temporalPSD_p3.png
 As can be seen in the plots, the power index is very close to the the values we get from fitting to a simple power law. This is not surprising, because most the data points are on the high-frequency slope. Compared to the fits with the random walk model, this parameterization has 3 free parameters instead of 2. As the result, the uncertainties on the characteristic times is much larger. Therefore these fits are not very useful in telling us much about the characteristic timescale.
+
+We did take note of this, and added a short discussion on this model to the paper though. The fits are not included in the figure, because that makes the figure a bit busy, and may confuse a reader on which fits we derive our main results from. Thanks!
 
 • Fig 7.  It would be helpful to add a vertical line to the left panel at 6 hours to indicate the 12 points you believe are long enough to not have biased tau measurements.
 

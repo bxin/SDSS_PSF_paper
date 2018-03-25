@@ -18,6 +18,7 @@ Fig. 1: These plots really don't show much difference between the profiles.  Wou
 
 Our Response:
 Great suggestion. We now use log(radius) as the x-axis.
+To give the readers' a better sense of the quantitative differences here, we also added two more panels to show the ratios between the profiles.
 
 Section 3
 ---------
@@ -31,7 +32,7 @@ Instead of "profile", we now use "radial profile" at those a few places where it
 Section 3, paragraph 4: I don't have the necessary background to judge whether the approximation described here is an appropriate one, but it does seem that the entire analysis rests on it.  I'd like to confirm that one of the other internal reviewers of the paper is qualified to comment more authoritatively on it.  It would be even better if the authors could directly demonstrate with some analysis on a small subset of the data that this approximation does not significantly affect their results.
 
 Our Response:
-The justification for this approximation is provided in Fig. 1. Fig. 1 (left) shows that "the impact of the exact value of L0 on the profile shape is small", while Fig. 1 (right) shows that the von Karman radial profile generated with FWHM=1.0" differs negligibly from those "stretched or compressed" to FWHM=1.0". Hopefully after the above clarifications with the "radial PSF profile", and the remaking of Fig. 1, this message should be clearer. As we also point out at the end of Sec. 5, paragraph 2, the radial profile itself is insufficent for determining the value of L0. Rather, only when we look at FWHM measurements across the optical bands, it is the wavelength dependence of the FWHM that is more consistent with the von Karman model than the Kolmogorov.
+The justification for this approximation is provided in Fig. 1. Fig. 1 (a) and (c) show that "the impact of the exact value of L0 on the profile shape is small", while Fig. 1 (b) and (d) show that the von Karman radial profile generated with FWHM=1.0" differs negligibly from those "stretched or compressed" to FWHM=1.0". Hopefully after the above clarifications with the "radial PSF profile", and the remaking of Fig. 1, this message should be clearer. As we also point out at the end of Sec. 5, paragraph 2, the radial profile itself is insufficent for determining the value of L0. Rather, only when we look at FWHM measurements across the optical bands, it is the wavelength dependence of the FWHM that is more consistent with the von Karman model than the Kolmogorov.
 
 Section 3.1, paragraph 1: I don't understand the need for the Gaussian core being "too much widening power...".  If you added that term after an attempt to fit without it failed, it might be clearer if you tell that story.
 

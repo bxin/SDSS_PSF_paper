@@ -233,13 +233,28 @@ for run 4874. Making the same fits for all the 108 runs in Stripe 82, we obtaine
 $\beta$ distribution vs. the duration of each run shown in Fig.~\ref{fig:hist} (right).
 The shorter runs give $\beta$ values with a larger variance, but nevertheless it is 
 clear that for most runs the high-frequency behavior can be described with a 
-power-law index in the range $-1.5$ to $-1.0$. On the other hand, a single 
+power-law index in the range $-1.5$ to $-1.0$. 
+We note that \cite{2016SPIE.9906E..42S} measured steeper slopes,
+though at much higher frequencies.
+On the other hand, a single 
 power law cannot explain the turnover at low frequencies. 
 
 Therefore, neither model provides a satifactory fit over the entire frequency range: 
 the power law fit systematically over predicts the low-frequency part of the PSD,
 while the $1/f^2$ high-frequency behavior of damped random walk model is too 
-steep. It is likely that a hybrid model would work, but we leave detailed analysis,
+steep. It is likely that a hybrid model would work, for example, a simple
+generalization of the random walk model
+(see Eq. (19) in \cite{Dunkley2005}), 
+\begin{equation}
+\textrm{PSD}(f) = \frac{\tau^\alpha SF^2_{\infty}}{1+(2\pi f
+  \tau)^\alpha}.
+\label{eq:hybrid}
+\end{equation}
+Performing fits to our data using this model did not yield useful
+results on the characteristic timescale, due to our lack of data
+points at low frequency, and therefore the incapability in
+constraining one additional parameter ($\alpha$ in Eq.~(\ref{eq:hybrid})).
+We leave more detailed analysis,
 perhaps informed by the PhoSim modeling, for future work. 
 
 
