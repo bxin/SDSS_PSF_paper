@@ -147,6 +147,7 @@ in the tails. The addition of the instrumental PSF
 (dot-dashed lines in Fig.~\ref{fig:psffit})
 significantly improves the fit quality, 
 especially in the $i$-band. 
+Its impact on the encircled energy profile is shown in Fig.~\ref{fig:ee}.
 
 Fig.~\ref{fig:psffit} also shows the original SDSS ``double Gaussian plus power-law wing'' fits,
 described by Eq.~\ref{eq:SDSSPSF}. They sometimes fail catastrophically; our analysis revealed
@@ -160,22 +161,6 @@ There are a total of 108 runs in the SDSS Stripe 82 dataset. Among them, run 487
 with 981 fields. In the rest of this paper, whenever we illustrate results from a single run, 
 we always use run 4874 as the fiducial example run. 
 
-
-\begin{figure}[th]
-\centering
-\includegraphics[width=1.0\textwidth]{FIGURES/psffit.png}
-\vskip -0.3in
-\caption{Fits to the PSF radial profiles from run 4874, field 121. Symbols are SDSS data. 
-  Red dashed curves are the best one-parameter \vk~fits. Black solid curves are the red
-  curve convolved with the instrumental PSF (green dot-dashed lines), where the scaling factor
-  (relative normalization) 
-  for the tail component is allowed to vary. 
-As a reference, the original ``SDSS double Gaussian plus power-law wing'' fits,
-described by eq.~\ref{eq:SDSSPSF}, 
- are shown in blue dotted lines -- they sometimes fail catastrophically (see text). 
-Note that the y-axis is shown on the logarithmic scale.
-\label{fig:psffit}}
-\end{figure}
 
 
 \begin{table}[th]
@@ -199,3 +184,33 @@ Note that the y-axis is shown on the logarithmic scale.
 \end{tabular}
 \end{center}
 \end{table}
+
+
+\begin{figure}[th]
+\centering
+\includegraphics[width=1.0\textwidth]{FIGURES/psffit.png}
+\vskip -0.3in
+\caption{Fits to the PSF radial profiles from run 4874, field 121. Symbols are SDSS data. 
+  Red dashed curves are the best one-parameter \vk~fits. Black solid curves are the red
+  curve convolved with the instrumental PSF (green dot-dashed lines), where the scaling factor
+  (relative normalization) 
+  for the tail component is allowed to vary. 
+As a reference, the original ``SDSS double Gaussian plus power-law wing'' fits,
+described by eq.~\ref{eq:SDSSPSF}, 
+ are shown in blue dotted lines -- they sometimes fail catastrophically (see text). 
+Note that the y-axis is shown on the logarithmic scale.
+\label{fig:psffit}}
+\end{figure}
+
+
+\begin{figure}[th]
+\centering
+\includegraphics[width=0.5\textwidth]{FIGURES/photometry.png}
+%\vskip -0.3in
+\caption{Encirlced energy distributions for PSF profiles from run
+  4874, field 121, $r$-band, camera column 3. The black solid curve is
+  for the delivered PSF with contributions from atmosphere and
+  instrument.
+The red dashed curve is for atmosphere only.
+\label{fig:ee}}
+\end{figure}
