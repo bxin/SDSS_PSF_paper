@@ -392,8 +392,9 @@ class sdsspsf(object):
             self.tailEta = popt[0]
             self.tailA = popt[1]
             self.tailB = popt[2]
-            print('From fit: tailA = %.1f, tailB = %.1f\n'%(self.tailA*1e4, self.tailB*1e2))
-
+            print('From fit: tailA = %.1e, tailB = %.1e\n'%(self.tailA, self.tailB))
+            print('uncertainties: tailA = %.1e, tailB = %.1e\n'%(np.sqrt(pcov[1,1]), np.sqrt(pcov[2,2])))
+            
             newN = convVonKAB2D(vonK2D, grid1d, self.scaleR,
                               self.scaleV, self.tailEta, self.tailA, self.tailB)
             m = int((len(grid1d) - 1) / 2)
@@ -402,6 +403,10 @@ class sdsspsf(object):
             m2 = max(np.argmax(newN == np.max(newN), axis=1))
             self.vv = newN[m1, m2:m2 + m + 1]
 
+            G12d = 10**(self.tailEta*(self.tailA*self.vR*self.vR+self.tailB*self.vR+1))
+            sigma = 0.1
+            self.vtail = np.exp(-(self.vR**2) / 2 / sigma**2) + G12d
+            
             yy = logConvVonKAB(vonK2D, grid1d, self.OKprofRadii, self.scaleR, self.scaleV,
                           self.tailEta, self.tailA, self.tailB)
             self.chi2 = sum(((yy - self.OKprofile) / errLog)

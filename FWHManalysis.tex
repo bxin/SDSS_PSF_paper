@@ -10,7 +10,7 @@ the $i$ band behavior, do not matter here because we focus only on the FWHM beha
 \subsection{The FWHM dependence on wavelength} 
 
 The Kolmogorov turbulence theory gives a standard formula for the FWHM of a long-exposure
-seeing-limited PSF in a large telescope,
+seeing-limited PSF in a large telescope~\citep{Roddier1981},
 \begin{equation}
 \textrm{FWHM}^{\rm Kolm}(\lambda, X) = \frac{0.976\lambda}{r_0(\lambda,X)},
 \label{eq:fwhmkolm}
@@ -113,7 +113,7 @@ The data points are overlaid with curves predicted by the
 \vk~model, with $L_0$ varying from 2 m to infinity.
 The data clearly deviate from the Kolmogorov model prediction, which is
 the horizontal line at $\alpha = -0.20$, with an infinite $L_0$.
-For example, for LSST's fiducial FWHM of 0.6 arcsec and the commonly assumed 
+For LSST's fiducial FWHM of 0.6 arcsec and the commonly assumed 
 $L_0 = 30$ m, the \vk~model predicts an $\alpha$ value close to $-0.31$.
 
 
@@ -281,7 +281,7 @@ is larger than the value appropriate for damped random walk ($\beta = -2$).
 \begin{figure}[th]
 \centering
 \includegraphics[width=0.7\textwidth]{FIGURES/fdt.png}
-\caption{Left: The average normalized seeing difference, $<f(\Delta t)>$, as
+\caption{Left: The average normalized seeing difference, $\langle f(\Delta t)\rangle$, as
   a function of the time separation, $\Delta t$, for run 4874, camera
    column 1, in the $r$-band. The fit to Eq.~(\ref{eq:fdt}) gives $f(\Delta t) ^\infty =  
    0.088\pm0.005$, $\tau = 45.1\pm10.3$ minutes and $\gamma$ =
@@ -306,7 +306,7 @@ structure-function-like quantity
 \end{equation} 
 where $\theta$ is seeing. We then fit the mean value of $f(\Delta t)$ to 
 \begin{equation}
-    < f(\Delta t) > =  f(\Delta t) ^\infty \, \left( 1 - \exp[-(\Delta
+    \langle f(\Delta t) \rangle =  f(\Delta t) ^\infty \, \left( 1 - \exp[-(\Delta
       t/\tau)^\gamma] \right)^{1/2},
 \label{eq:fdt}
 \end{equation} 

@@ -63,7 +63,7 @@ def main():
     if args.fitab:
         outputFile = 'data/tailPar.txt'
         fidw = open(outputFile, 'w')
-    for camcol in range(1, nCamcol + 1): #(2,3): #
+    for camcol in  range(1, nCamcol + 1): ## range(2,3): #
         print('running on camcol#%d' % camcol)
         datafile = outdir + "photoField-%06d-%d.fits" % (run, camcol)
 
@@ -75,7 +75,7 @@ def main():
             sys.exit()
         hdu1 = hdulist[1].data
 
-        for iBand in range(0, nBand): # (3,4): #
+        for iBand in range(0, nBand): # range(3,4):# 
 
             psf = sdsspsf(hdu1, args.ifield, iBand, run, camcol)
             psf.tailP = tailPar[iBand*nCamcol + camcol-1]
@@ -123,8 +123,12 @@ def main():
                 lower_error = 10**(psf.OKprofile)-10**(psf.OKprofile-psf.OKprofileErr)
                 upper_error = 10**(psf.OKprofile+psf.OKprofileErr)-10**(psf.OKprofile)
                 asymmetric_error = [lower_error, upper_error]
-                ax1[iBand, camcol - 1].errorbar(psf.OKprofRadii, 10**psf.OKprofile,
-                                                asymmetric_error, fmt='ok')
+                ax1[iBand, camcol - 1].errorbar(psf.OKprofRadii[:4], 10**psf.OKprofile[:4],
+                                                [lower_error[:4], upper_error[:4]],fmt='ok')
+                                                    
+                ax1[iBand, camcol - 1].errorbar(psf.OKprofRadii[4:], 10**psf.OKprofile[4:],
+                                                [lower_error[4:], upper_error[4:]],
+                                                marker='o',linewidth = 0, color='k',markersize = 5, markeredgewidth=1, markerfacecolor='none')
                 if args.yscale == 'log':
                     ax1[iBand, camcol - 1].set_xlim(0, 30.0)
                     ax1[iBand, camcol - 1].set_ylim(1e-6, 10**0.5)

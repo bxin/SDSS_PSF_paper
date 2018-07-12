@@ -262,7 +262,7 @@ def main():
                     #        (run, sdss.band[band], camcol))
                     ax0.grid()
                     ax0.set_xlabel(r'$\Delta t$ (minutes)')
-                    ax0.set_ylabel(r'$<f(\Delta t)>$')
+                    ax0.set_ylabel(r'$\langle f(\Delta t) \rangle$')
                     # plt.show()
 
         w = 1/tauerrAll**2
@@ -286,11 +286,14 @@ def main():
         totalT = a[:, 1]*36/60
         tau = a[:, 2]
         tauerr = a[:, 3]
+        gamma = a[:, 4]
+        gammaerr = a[:, 5]
         
-        idx = (totalT>0) * (1.5*tau < totalT) * (tau != 0)
+        idx = (totalT>0) * ~np.isnan(tau) * (tau != 0) *(gamma != 0)  * (1.5*tau < totalT) * (tau<120)
 
         #plot tau
-        ax1.scatter(totalT[idx], tau[idx], s=10, c='r', edgecolors='r')
+        #ax1.scatter(totalT[idx], tau[idx], s=10, c='r', edgecolors='r')
+        ax1.errorbar(totalT[idx], tau[idx],  [tauerr[idx], tauerr[idx]], fmt='or', markersize=5)
         ax1.grid()
         ax1.set_ylabel(r'$\tau$ (minutes)', {'fontsize': 16})
         ax1.set_xlabel('Duration of run (minutes)', {'fontsize': 16})
