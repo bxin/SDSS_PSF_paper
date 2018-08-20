@@ -130,7 +130,8 @@ $L_0 = 30$ m, the \vk~model predicts an $\alpha$ value close to $-0.31$.
 \end{figure}
 
 To examine the angular (spatial) correlation of the FWHM, we compute the angular
-structure function using PSF measurements from all 6 camera columns.
+structure function using PSF measurements from all 6 camera columns (always evaluated at 
+the field center using the K-L expansion). 
 Our structure function is defined as the root-mean-square scatter of the PSF size 
 differences of pairs of stars in the same distance bin along the direction perpendicular
 to the scanning direction\footnote{The adopted form 
@@ -284,15 +285,15 @@ is larger than the value appropriate for damped random walk ($\beta = -2$).
 \caption{Left: The average normalized seeing difference, $\langle f(\Delta t)\rangle$, as
   a function of the time separation, $\Delta t$, for run 4874, camera
    column 1, in the $r$-band. The fit to Eq.~(\ref{eq:fdt}) gives $f(\Delta t) ^\infty =  
-   0.088\pm0.005$, $\tau = 45.1\pm10.3$ minutes and $\gamma$ =
+   0.088\pm0.005$, $\tau^\ast = 45.1\pm10.3$ minutes and $\gamma$ =
    1.016$\pm$0.102. 
 A damped random walk model has $\gamma=1$.
 %The dashed line is the 
 %   structure function predicted by damped random walk model with the same 
 %   $f(\Delta t) ^\infty$ and $\tau$. 
-Right: The timescale $\tau$ vs. the duration of each run.
- Note that for most runs $\tau$ is in the range 5-30 minutes
-    (runs shorter than 20 minutes or where the fitted $\tau$ is longer than 2/3 of the duration
+Right: The timescale $\tau^\ast$ vs. the duration of each run.
+ Note that for most runs $\tau^\ast$ is in the range 5-30 minutes
+    (runs shorter than 20 minutes or where the fitted $\tau^\ast$ is longer than 2/3 of the duration
     of the run are left out).  
 \label{fig:fdt}}
 \end{figure}
@@ -304,13 +305,13 @@ structure-function-like quantity
 \begin{equation}
        f(\Delta t) = {| \theta(t+\Delta t) - \theta(t)| \over  \theta(t+\Delta t) + \theta(t) },
 \end{equation} 
-where $\theta$ is seeing. We then fit the mean value of $f(\Delta t)$ to 
+where $\theta$ is seeing. We then fit the mean value of $f(\Delta t)$ with the following function
 \begin{equation}
     \langle f(\Delta t) \rangle =  f(\Delta t) ^\infty \, \left( 1 - \exp[-(\Delta
-      t/\tau)^\gamma] \right)^{1/2},
+      t/\tau^\ast)^\gamma] \right)^{1/2},
 \label{eq:fdt}
 \end{equation} 
-with $f(\Delta t) ^\infty$, $\tau$ and $\gamma$ as free parameters.
+with $f(\Delta t) ^\infty$, $\tau^\ast$ and $\gamma$ as free parameters.
 Fig.~\ref{fig:fdt} (left) shows one example of such fits. This functional form is 
 somewhat inspired by damped random walk model, where $\gamma=1$ and the 
 term in brackets is raised to the power of a half. 
@@ -320,13 +321,13 @@ For this particular fit in Fig.~\ref{fig:fdt} (left), $\gamma$ is very close to 
 %and $\tau$. 
 
 The best-fit $\gamma$ is found to be mostly in the range 0.5 -1.5. 
-The distribution of $\tau$ vs. 
+The distribution of $\tau^\ast$ vs. 
 the duration of each run is shown in Fig.~\ref{fig:fdt} (right) (somewhat 
 arbitrarily,
-runs shorter than 20 minutes and those where the fitted $\tau$ is longer than 2/3 of the duration
+runs shorter than 20 minutes and those where the fitted $\tau^\ast$ is longer than 2/3 of the duration
     of the run are deemed unreliable and not shown).  
 %While the short runs show a larger variance in $\tau$, 
 It is evident that 
-for most runs the timescale $\tau$ is in the range 5-30 minutes.
+for most runs the timescale $\tau^\ast$ is in the range 5-30 minutes.
 Therefore, this analysis seems more robust at constraining the characteristic time
 scale than fitting a damped random walk model to empirical PSD. 

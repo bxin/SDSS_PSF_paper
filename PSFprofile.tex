@@ -170,7 +170,9 @@ especially in the $i$-band.
 Its impact on the encircled energy profile is shown in Fig.~\ref{fig:ee}.
 
 Fig.~\ref{fig:psffit} also shows the original SDSS ``double Gaussian plus power-law wing'' fits,
-described by Eq.~\ref{eq:SDSSPSF}. They sometimes fail catastrophically; our analysis revealed
+described by Eq.~\ref{eq:SDSSPSF}. They sometimes fail catastrophically (``catastrophic'' here 
+means many-$\sigma$ deviation which is statistically improbable given the data 
+set size); our analysis revealed
 two kinds of failures: one case is characterized by $p_0 =10^{-7}$ and
 another by $\beta$=3 or 10.
 For the sample of 947,400 PSF fits analyzed here, each failure case occurs with a frequency of about 12\%. 
@@ -211,8 +213,9 @@ we always use run 4874 as the fiducial example run.
 \includegraphics[width=1.0\textwidth]{FIGURES/psffit.png}
 \vskip -0.3in
 \caption{Fits to the PSF radial profiles from run 4874, field
-  121. Symbols are SDSS data. 
-We use filled circles for the first four data points which are used in
+  121. Symbols are SDSS radial profile data, extracted as described
+in \S\ref{sec:PSFdata} (the profile uncertainties are smaller than the 
+symbol size).  We use filled circles for the first four data points which are used in
 the FWHM fits, and open circles for the rest at larger radii.
   Red dashed curves are the best one-parameter \vk~fits. Black solid curves are the red
   curve convolved with the instrumental PSF (green dot-dashed lines), where the scaling factor

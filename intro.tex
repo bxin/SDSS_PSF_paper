@@ -34,7 +34,8 @@ columns produces a 13.5 arcmin wide scan; the scans are split into ``fields'' 9.
 to 36 seconds of time (the exposure time is 54.1 seconds because the sensor size is 2k by 2k pixels,
 with 0.396 arcsec per pixel). 
 The point-spread function (PSF) is estimated as a function of position
-within each field, although we only use one estimate per field, and in each bandpass - there are about 
+within each field, although we only use one estimate per field (always evaluated at the field center), 
+and in each bandpass - there are about 
 148 seeing estimates for each square degree of scanned sky. As a result, the SDSS measurements can
 be used to explore the seeing dependence on time (on time scales from 1 minute to 10 hours) and 
 wavelength (from the UV to the near-IR), as well as its angular correlation on the sky on scales from 

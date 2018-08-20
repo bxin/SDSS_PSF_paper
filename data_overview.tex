@@ -21,7 +21,7 @@ December). Astrometric and photometric aspects of this dataset have been discuss
 \cite{Ivezic2007} and \cite{Sesar2007}. 
 
 
-\subsection{The treatment of seeing in SDSS}
+\subsection{The treatment of seeing in SDSS \label{sec:PSFdata}}
  
 Even in the absence of atmospheric inhomogeneities, the SDSS telescope delivers images whose 
 FWHMs vary by up to 15\% from one side of a CCD to the other; the worst effects are seen in 
@@ -44,10 +44,13 @@ files\footnote{https://data.sdss.org/datamodel/files/PHOTO\_REDUX/RERUN/RUN/objc
 The status parameter flag for each field indicates the success of the K-L decomposition.
 
 In addition to the K-L decomposition, the SDSS processing pipeline computes parameters of the 
-best-fit circular double Gaussian, evaluated at the center of each field. The measured PSF profiles are 
-extended to $\sim$30 arcsec using observations of bright stars and at such large radii 
-double Gaussian fits underpredict the measured profiles. For this reason, the fits are extended 
-to include the so-called ``power-law wings'', which is reminiscent of
+best-fit circular double Gaussian to a PSF radial profile evaluated at the center of each field. 
+The PSF radial profile is extracted by measuring the K-L image flux in a set of annuli, spaced 
+approximately exponentially. Each annulus is divided into twelve 30$^\circ$ cells, and the 
+variation of extracted counts is used to estimate the profile uncertainty in each annulus.  
+The measured PSF profiles are extended to $\sim$30 arcsec using observations of bright stars 
+and at such large radii double Gaussian fits underpredict the measured profiles. For this reason, 
+the fits are extended to include the so-called ``power-law wings'', which is reminiscent of
 the Moffat function,
 \begin{equation}
 \label{eq:SDSSPSF}
