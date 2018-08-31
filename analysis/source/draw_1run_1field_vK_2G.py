@@ -43,11 +43,15 @@ def main():
 
     vdata = np.loadtxt('data/r_vonK_Kolm.txt',
                        unpack='True')
+    #vdata = np.loadtxt('data/r_vonK_2.0.txt',
+    #                   unpack='True')
     radius = vdata[0]
     vonK = vdata[1]
     vonK1arcsec = np.vstack((radius, vonK))
     grid1d = np.linspace(-50, 50, 1001)
     vonK2D = np.loadtxt('data/vonK1.0.txt')
+    #vonK2D = np.loadtxt('data/vonK0.5_Stretch.txt')
+    #vonK2D = np.loadtxt('data/vonK2.0_Squeeze.txt')
     if args.fitab:
         tailPar = np.loadtxt('data/tailPar0.txt')
     else:
@@ -104,8 +108,11 @@ def main():
                 psf.fit2conv_curve_fit(vonK2D, grid1d)  #initially used this
                 # psf.fit2conv_curve_fit_log(vonK2D, grid1d)  #fit in log space
                 # psf.fit2conv_curve_fit_log_ab(vonK2D, grid1d)  #use fitted a/b values
-                
-            print('eta = %.2f\n'%psf.tailEta)
+
+            print('%d \t %d \t %d \t %5.3f \t %.3f \t ' % (
+                        args.ifield, camcol, iBand, psf.scaleR * 1.222,
+                        psf.tailEta))                
+            # print('eta = %.2f\n'%psf.tailEta)
             if args.fitab:
                 fidw.write('%d \t %d \t %.8f \t %.8f \t %.8f\n'%(
                     iBand, camcol, psf.tailA, psf.tailB, psf.tailEta))
